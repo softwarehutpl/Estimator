@@ -93,7 +93,11 @@ export interface Comment {
 
 export enum Role {
     Empty = "",
-    Fd = "FD",
+    FD = "FD",
+    BD = "BD",
+    MD = "MD",
+    UD = "UD",
+    DO = "DO",
 }
 
 export enum Type {
