@@ -136,6 +136,7 @@
                                 },
                                 {
                                     "id": 2,
+                                    "type": "task",
                                     "name": "Subtask 2",
                                     "role": "FD",
                                     "minMd": 0,
