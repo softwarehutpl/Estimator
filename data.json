@@ -202,7 +202,7 @@
                     ]
                 },
                 {
-                    "section_id": "B",
+                    "sectionId": "B",
                     "name": "Backend development",
                     "minMd": 10.25,
                     "minMdFormula": "",
@@ -215,7 +215,7 @@
                     "tasks": [] 
                 },
                 {
-                    "section_id": "M",
+                    "sectionId": "M",
                     "name": "Mobile development",
                     "minMd": 0,
                     "minMdFormula": "",
@@ -228,7 +228,7 @@
                     "tasks": [] 
                 },
                 {
-                    "section_id": "U",
+                    "sectionId": "U",
                     "name": "Design / UX / UI",
                     "minMd": 0,
                     "minMdFormula": "",
@@ -241,7 +241,7 @@
                     "tasks": [] 
                 },
                 {
-                    "section_id": "C",
+                    "sectionId": "C",
                     "name": "Configuration / Setup / Deployment ",
                     "minMd": 10,
                     "minMdFormula": "",
@@ -254,7 +254,7 @@
                     "tasks": [] 
                 }
             ],
-            "raw_development_effort_sum": {
+            "rawDevelopmentEffortSum": {
                 "name": "Raw development effort sum",
                 "main": {
                     "minMd": 39.5,
@@ -325,7 +325,7 @@
                 },
                 {
                     "name": "Est. Delivery Date:",
-                    "est_delivery_date": ""
+                    "estDeliveryDate": ""
                 }
             ],
             "assumptions": [
