@@ -1,7 +1,8 @@
 import React from "react";
 import Nav from "./components/Navigaton/Nav";
 import Home from "./views/Home/Home";
-import DataView from "./views/DataView/DataView";
+import Project from "./views/Project/Project";
+import NotFound404 from "./views/NotFound404/NotFound404";
 import { Route, Switch } from "react-router-dom";
 
 function App() {
@@ -9,11 +10,14 @@ function App() {
     <div>
       <Nav />
       <Switch>
-        <Route path="/home">
+        <Route exact path="/">
           <Home />
         </Route>
         <Route path="/project">
-          <DataView />
+          <Project />
+        </Route>
+        <Route path="*">
+          <NotFound404 />
         </Route>
       </Switch>
     </div>
