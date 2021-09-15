@@ -1,0 +1,8 @@
+@import "../../styles//colors";
+@import "../../styles//variables";
+
+.sleect {
+  color: $text-light;
+  padding: $btn-y $btn-x;
+  background-color: $btn-bgc;
+}

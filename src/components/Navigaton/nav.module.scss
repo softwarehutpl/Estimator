@@ -1,5 +1,12 @@
+@import "../../styles/variables";
+@import "../../styles//colors";
+
 .nav {
   text-align: center;
-  color: red;
-  border: 2px solid yellowgreen;
+  background-color: $nav-bgc;
+  padding: $main-pad;
+}
+
+.logo {
+  color: $text-light;
 }
