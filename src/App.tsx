@@ -56,7 +56,10 @@ export default function App() {
       <button
         onClick={() => {
           dispatch(
-            addProject({ projectName: projectName, estimatedBy: estimatedBy })
+            addProject({
+              projectName: projectName,
+              estimatedBy: estimatedBy,
+            })
           );
           setProjectName("");
           setEstimatedBy("");

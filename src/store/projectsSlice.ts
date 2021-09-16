@@ -159,58 +159,30 @@ const projectSlice = createSlice({
           );
     },
     addTask: (state, action: PayloadAction<any>) => {
-      state.projects.find(
-        (project) => project.projectName === action.payload.projectName
-      )
-        ? console.log("Probably i make add")
-        : console.log(
-            `Dont find project with name "${action.payload.projectName}" ! soo.. i dont make add this that :(`
-          );
+      const newState: Project[] = [...state.projects].map((project) =>
+        project.projectName === action.payload.projectName
+          ? {
+              ...project,
+              sections: project.sections
+                ? [...project.sections].map((section) =>
+                    section.name === action.payload.sectionName
+                      ? { ...section, tasks: section.tasks.concat(initialTask) }
+                      : section
+                  )
+                : [],
+            }
+          : project
+      );
+
+      //   const pidx = state.projects.findIndex((project) =>
+      //   project.projectName === action.payload.projectName);
+      //   const sidx = state.projects[pidx].sections?.findIndex((section) =>
+      //   section.name === action.payload.sectionName);
+
+      state.projects = newState;
     },
-    // addTask: (state, action: PayloadAction<any>) => {
-    //   //   const project = getProject(state.projects, action.payload.projectName);
-    //   //   const section = getSection(project, action.payload.sectionName);
-    //   //   //   state.projects.push(newProject);
-    //   //   const newProject = Object.assign({}, initialProject, {
-    //   //     projectName: action.payload.projectName,
-    //   //     estimatedBy: action.payload.estimatedBy,
-    //   //     estimationDate: shortDate(),
-    //   //   });
-    //   //   console.log(current(section));
-    //   ///------------
-    //   //   const newState = [...state.projects].map((project) =>
-    //   //     project.projectName === action.payload.projectName
-    //   //       ? { ...project, sections: [...project.sections] }
-    //   //       : project
-    //   //   );
-    // },
   },
 });
-
-// const getProject = (projects: Project[], chosenProject: any) => {
-//   const project = projects.find(
-//     (project) => project.projectName === chosenProject
-//   );
-//   return project
-//     ? project
-//     : console.log(
-//         `Dont find project with name "${chosenProject}" ! soo.. i dont make add this that :(`
-//       );
-// };
-
-// const getSection = (project: any, sectionName: string) => {
-//   if (!project) {
-//     return;
-//   }
-//   const section = project.sections.find(
-//     (sec: { name: string }) => sec.name === sectionName
-//   );
-//   return section
-//     ? section
-//     : console.log(
-//         `Dont find section with name "${section}" ! soo.. i dont make add this that :(`
-//       );
-// };
 
 // Action creators are generated for each case reducer function
 export const {
