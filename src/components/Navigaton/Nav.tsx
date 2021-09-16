@@ -1,49 +1,149 @@
-import { FC, useState } from 'react';
+import { FC, useState } from "react";
 //Components
-import { Toolbar } from 'primereact/toolbar';
-import { Button } from 'primereact/button';
-import { Dropdown, DropdownChangeParams } from 'primereact/dropdown';
-import { Link } from 'react-router-dom';
+import { Toolbar } from "primereact/toolbar";
+import { Button } from "primereact/button";
+import { Dropdown, DropdownChangeParams } from "primereact/dropdown";
+import { Dialog } from "primereact/dialog";
+import { Link } from "react-router-dom";
+import ImportDialog from "../Dialogs/ImportDialog";
+import ExportDialog from "../Dialogs/ExportDialog";
+import InviteDialog from "../Dialogs/InviteDialog";
+import JoinDialog from "../Dialogs/JoinDialog";
+import TerminateDialog from "../Dialogs/TerminateDialog";
 
-import styles from './nav.module.scss';
+import styles from "./nav.module.scss";
 
 interface Props {}
 
 const Nav: FC<Props> = () => {
-	const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [importDialog, setImportDialog] = useState(false);
+  const [exportDialog, setExportDialog] = useState(false);
+  const [inviteDialog, setInviteDialog] = useState(false);
+  const [joinDialog, setJoinDialog] = useState(false);
+  const [terminateDialog, setTerminateDialog] = useState(false);
 
-	const projectTitles = [
-		{ label: 'Project A', value: 'A' },
-		{ label: 'Project B', value: 'B' },
-		{ label: 'Project C', value: 'C' },
-	];
+  const projectTitles = [
+    { label: "Project A", value: "A" },
+    { label: "Project B", value: "B" },
+    { label: "Project C", value: "C" },
+  ];
 
-	const selectHandler = (e: DropdownChangeParams) => setSelectedProject(e.target.value);
+  const selectHandler = (e: DropdownChangeParams) =>
+    setSelectedProject(e.target.value);
 
-	const leftContents = (
-		<>
-			<Button label='Import' className='p-mr-2' />
-			<Button label='Export' className='p-button-success' />
-			<Button label='Invite' className='p-button-success' />
-			<Button label='Join' className='p-button-success' />
-		</>
-	);
+  const dialogFooter = (
+    <div>
+      <Button
+        label="No"
+        icon="pi pi-times"
+        onClick={() => setImportDialog(false)}
+        className="p-button-text"
+      />
+      <Button
+        label="Yes"
+        icon="pi pi-check"
+        onClick={() => setImportDialog(false)}
+        autoFocus
+      />
+    </div>
+  );
 
-	const rightContents = (
-		<>
-			<Link to='/project'>Project</Link>
-			<Link to='/'>Home</Link>
-			<Button label='Terminate' />
-			<Dropdown
-				className={styles.select}
-				placeholder='Select project'
-				value={selectedProject}
-				options={projectTitles}
-				onChange={selectHandler}
-			/>
-		</>
-	);
-	return <Toolbar className={styles.nav} left={leftContents} right={rightContents} />;
+  const leftContents = (
+    <>
+      <Button
+        label="Import"
+        className="p-mr-2"
+        onClick={() => setImportDialog(true)}
+      />
+      <Button
+        label="Export"
+        className="p-button-success"
+        onClick={() => setExportDialog(true)}
+      />
+      <Button
+        label="Invite"
+        className="p-button-success"
+        onClick={() => setInviteDialog(true)}
+      />
+      <Button
+        label="Join"
+        className="p-button-success"
+        onClick={() => setJoinDialog(true)}
+      />
+      <Dialog
+        header="Import from file"
+        visible={importDialog}
+        onHide={() => setImportDialog(false)}
+        modal
+        footer={dialogFooter}
+      >
+        <ImportDialog />
+      </Dialog>
+      <Dialog
+        header="Export to file"
+        visible={exportDialog}
+        onHide={() => setExportDialog(false)}
+        modal
+        footer={dialogFooter}
+      >
+        <ExportDialog />
+      </Dialog>
+      <Dialog
+        header="Invite from file"
+        visible={inviteDialog}
+        onHide={() => setInviteDialog(false)}
+        modal
+        footer={dialogFooter}
+      >
+        <InviteDialog />
+      </Dialog>
+      <Dialog
+        header="Join from file"
+        visible={joinDialog}
+        onHide={() => setJoinDialog(false)}
+        modal
+        footer={dialogFooter}
+      >
+        <JoinDialog />
+      </Dialog>
+    </>
+  );
+
+  const rightContents = (
+    <>
+      <Link to="/project">Project</Link>
+      <Link to="/">Home</Link>
+      <Button label="Terminate" onClick={() => setTerminateDialog(true)} />
+      <Dropdown
+        className={styles.select}
+        placeholder="Select project"
+        value={selectedProject}
+        options={projectTitles}
+        onChange={selectHandler}
+      />
+      <Dialog
+        header="Are you sure you want to terminate connection
+        ?"
+        visible={terminateDialog}
+        onHide={() => setTerminateDialog(false)}
+        modal
+        footer={dialogFooter}
+      >
+        <TerminateDialog />
+      </Dialog>
+    </>
+  );
+
+  return (
+    <>
+      <Toolbar
+        className={styles.nav}
+        left={leftContents}
+        right={rightContents}
+      />
+    </>
+  );
 };
 
 export default Nav;
