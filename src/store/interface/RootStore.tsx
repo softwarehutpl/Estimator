@@ -23,7 +23,13 @@ export default function RootStore() {
   }, [projects]);
 
   return (
-    <div>
+    <div
+      style={{
+        border: "2px solid black",
+        padding: "20px",
+        backgroundColor: "#E6E6E6",
+      }}
+    >
       <p>---------- INITIAL PROJECTS ----------</p>
       <button onClick={() => dispatch(initialProjects())}>
         initialProjects
