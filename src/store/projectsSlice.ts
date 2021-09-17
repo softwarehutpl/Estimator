@@ -9,7 +9,7 @@ const initialState: Projects = {
 const initialProject: Project = {
   projectName: "",
   estimatedBy: "",
-  estimationDate: [],
+  estimationDate: "",
   verifiedBy: "",
   verificationDate: "",
   estStart: "",
@@ -159,6 +159,9 @@ const projectSlice = createSlice({
           );
     },
     addTask: (state, action: PayloadAction<any>) => {
+      const newTask = Object.assign({}, initialTask, {
+        name: action.payload.taskName,
+      });
       const newState: Project[] = [...state.projects].map((project) =>
         project.projectName === action.payload.projectName
           ? {
@@ -166,18 +169,13 @@ const projectSlice = createSlice({
               sections: project.sections
                 ? [...project.sections].map((section) =>
                     section.name === action.payload.sectionName
-                      ? { ...section, tasks: section.tasks.concat(initialTask) }
+                      ? { ...section, tasks: section.tasks.concat(newTask) }
                       : section
                   )
                 : [],
             }
           : project
       );
-
-      //   const pidx = state.projects.findIndex((project) =>
-      //   project.projectName === action.payload.projectName);
-      //   const sidx = state.projects[pidx].sections?.findIndex((section) =>
-      //   section.name === action.payload.sectionName);
 
       state.projects = newState;
     },
@@ -197,7 +195,7 @@ export const {
 const projectReducer = projectSlice.reducer;
 
 export default projectReducer;
-//add task
+//add task -> done
 //add sub
 //del task
 //del sub

@@ -114,6 +114,7 @@ export default function App() {
           );
           setSectionName("");
           setProjectName("");
+          setTaskName("");
         }}
       >
         addTask
