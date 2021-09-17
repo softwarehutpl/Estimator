@@ -44,9 +44,7 @@ const projectSlice = createSlice({
       );
       state.projects = newState;
     },
-    delTask: (state, action: PayloadAction<any>) => {
-      console.log(action);
-    },
+    delTask: (state, action: PayloadAction<any>) => {},
   },
 });
 
