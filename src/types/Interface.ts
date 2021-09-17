@@ -16,7 +16,7 @@ export interface Project {
 	timeBudget: number;
 	effort: number;
 	sections: Section[];
-	raw_development_effort_sum: RawDevelopmentEffortSum;
+	rawDevelopmentEffortSum: RawDevelopmentEffortSum;
 	summary: Main[];
 	assumptions: Assumption[];
 }
@@ -42,7 +42,7 @@ export interface Main {
 	risk?: number;
 	riskFormula?: string;
 	name?: string;
-	est_delivery_date?: string;
+	estDeliveryDate?: string;
 }
 
 export interface Part {
@@ -69,7 +69,7 @@ export interface Section {
 	risk: number;
 	riskFormula: string;
 	tasks: Task[];
-	section_id?: string;
+	// sectionId?: string;
 }
 
 export interface Task {

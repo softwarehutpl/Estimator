@@ -17,7 +17,7 @@ tr {
 	background-color: black;
 } */
 
-.fa-grip-horizontal {
+/* .fa-grip-horizontal {
 	opacity: 0;
 	transition: 0.3s;
 }
@@ -25,4 +25,4 @@ tr {
 tr:hover .fa-grip-horizontal {
 	opacity: 1;
 	cursor: move;
-}
+} */

@@ -25,9 +25,9 @@
 					"riskFormula": "",
 					"tasks": [
 						{
-							"id": 1,
+							"id": "t1",
 							"type": "task",
-							"name": "Business feature",
+							"name": "task1",
 							"role": "FD",
 							"minMd": 10,
 							"maxMd": 30,
@@ -41,9 +41,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 2,
+							"id": "t2",
 							"type": "task",
-							"name": "Another business feature",
+							"name": "task2",
 							"role": "FD",
 							"minMd": 3,
 							"maxMd": 4,
@@ -57,9 +57,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 3,
+							"id": "t3",
 							"type": "task",
-							"name": "Another task",
+							"name": "task3",
 							"role": "FD",
 							"minMd": 5,
 							"maxMd": 9,
@@ -73,9 +73,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 4,
+							"id": "t4",
 							"type": "task",
-							"name": "Another task",
+							"name": "task4",
 							"role": "FD",
 							"minMd": 0.25,
 							"maxMd": 1.25,
@@ -89,9 +89,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 5,
+							"id": "t5",
 							"type": "task",
-							"name": "Another task",
+							"name": "task5",
 							"role": "FD",
 							"minMd": 1,
 							"maxMd": 12,
@@ -105,9 +105,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 6,
+							"id": "t6",
 							"type": "group",
-							"name": "Task with subtasks",
+							"name": "group6-1",
 							"role": "",
 							"minMd": null,
 							"maxMd": null,
@@ -120,9 +120,9 @@
 							},
 							"subtasks": [
 								{
-									"id": 1,
+									"id": "s1",
 									"type": "task",
-									"name": "Subtask 1",
+									"name": "Subtask1",
 									"role": "FD",
 									"minMd": 0,
 									"maxMd": 0,
@@ -135,9 +135,9 @@
 									}
 								},
 								{
-									"id": 2,
+									"id": "s2",
 									"type": "task",
-									"name": "Subtask 2",
+									"name": "Subtask2",
 									"role": "FD",
 									"minMd": 0,
 									"maxMd": 0,
@@ -152,9 +152,9 @@
 							]
 						},
 						{
-							"id": 7,
+							"id": "t7",
 							"type": "task",
-							"name": "Another task",
+							"name": "task7",
 							"role": "FD",
 							"minMd": 0,
 							"maxMd": 0,
@@ -168,9 +168,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 8,
+							"id": "t8",
 							"type": "task",
-							"name": "Another task",
+							"name": "task8",
 							"role": "FD",
 							"minMd": 0,
 							"maxMd": 0,
@@ -184,9 +184,9 @@
 							"subtasks": []
 						},
 						{
-							"id": 9,
+							"id": "t9",
 							"type": "task",
-							"name": "Another task",
+							"name": "task9",
 							"role": "FD",
 							"minMd": 0,
 							"maxMd": 0,
