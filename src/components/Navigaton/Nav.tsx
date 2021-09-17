@@ -50,25 +50,26 @@ const Nav: FC<Props> = () => {
   );
 
   const leftContents = (
-    <>
+    <div className="p-d-flex">
+      <div className={`${styles.estimator} p-text-center`}>Estimator</div>
       <Button
         label="Import"
-        className="p-mr-2"
+        className="p-mx-2 p-my-auto"
         onClick={() => setImportDialog(true)}
       />
       <Button
         label="Export"
-        className="p-button-success"
+        className="p-button-success p-mx-2 p-my-auto"
         onClick={() => setExportDialog(true)}
       />
       <Button
         label="Invite"
-        className="p-button-success"
+        className="p-button-success p-mx-2 p-my-auto"
         onClick={() => setInviteDialog(true)}
       />
       <Button
         label="Join"
-        className="p-button-success"
+        className="p-button-success p-mx-2 p-my-auto"
         onClick={() => setJoinDialog(true)}
       />
       <Dialog
@@ -107,16 +108,18 @@ const Nav: FC<Props> = () => {
       >
         <JoinDialog />
       </Dialog>
-    </>
+    </div>
   );
 
   const rightContents = (
     <>
-      <Link to="/project">Project</Link>
-      <Link to="/">Home</Link>
-      <Button label="Terminate" onClick={() => setTerminateDialog(true)} />
+      <Button
+        className="p-mx-2"
+        label="Terminate"
+        onClick={() => setTerminateDialog(true)}
+      />
       <Dropdown
-        className={styles.select}
+        className={`${styles.select} p-mx-2`}
         placeholder="Select project"
         value={selectedProject}
         options={projectTitles}
@@ -136,13 +139,7 @@ const Nav: FC<Props> = () => {
   );
 
   return (
-    <>
-      <Toolbar
-        className={styles.nav}
-        left={leftContents}
-        right={rightContents}
-      />
-    </>
+    <Toolbar className={styles.nav} left={leftContents} right={rightContents} />
   );
 };
 
