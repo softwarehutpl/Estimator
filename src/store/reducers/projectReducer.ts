@@ -42,8 +42,10 @@ const projectSlice = createSlice({
         action.payload.sectionName,
         action.payload.taskName
       );
-
       state.projects = newState;
+    },
+    delTask: (state, action: PayloadAction<any>) => {
+      console.log(action);
     },
   },
 });
@@ -56,6 +58,7 @@ export const {
   addProject,
   delProject,
   addTask,
+  delTask,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
