@@ -6,7 +6,8 @@ export interface Projects {
 
 export interface Project {
   projectName: string;
-  estimatedBy: string;
+  projectId?: number;
+  estimatedBy?: string;
   estimationDate?: Object;
   verifiedBy?: string;
   verificationDate?: string;
@@ -72,7 +73,7 @@ export interface Section {
 }
 
 export interface Task {
-  id: number;
+  id: string;
   type?: Type;
   name: string;
   role: Role;
