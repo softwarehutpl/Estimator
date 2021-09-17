@@ -130,13 +130,15 @@ const Nav: FC<Props> = () => {
         />
       ) : null}
 
-      <Dropdown
-        className={`${styles.select} p-mx-2`}
-        placeholder="Select project"
-        value={selectedProject}
-        options={projectTitles}
-        onChange={selectHandler}
-      />
+      <Route path="/project">
+        <Dropdown
+          className={`${styles.select} p-mx-2`}
+          placeholder="Select project"
+          value={selectedProject}
+          options={projectTitles}
+          onChange={selectHandler}
+        />
+      </Route>
       <Dialog
         header="Are you sure you want to terminate connection
         ?"
