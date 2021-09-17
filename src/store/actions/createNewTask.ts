@@ -1,6 +1,12 @@
 import { Project } from "../../types/Interface";
 import initialTask from "../initials/initialTask";
 
+export default interface AddTaskInterface {
+  projectName: string;
+  sectionName: string;
+  taskName: string;
+}
+
 export default function createNewTask(
   projects: any,
   projectName: any,

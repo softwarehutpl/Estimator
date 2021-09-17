@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import data from "../../data.json";
 import { Project } from "../../types/Interface";
+import AddTaskInterface from "../actions/createNewTask";
 import initialState from "../initials/initialState";
 import createNewProject from "../actions/createNewProject";
 import createNewTask from "../actions/createNewTask";
@@ -26,7 +27,7 @@ const projectSlice = createSlice({
       );
       state.projects.push(newProject);
     },
-    delProject: (state, action: PayloadAction<any>) => {
+    delProject: (state, action: PayloadAction<Project>) => {
       state.projects.find(
         (project) => project.projectName === action.payload.projectName
       )
@@ -37,7 +38,7 @@ const projectSlice = createSlice({
             `Dont find project with name "${action.payload.projectName}"`
           );
     },
-    addTask: (state, action: PayloadAction<any>) => {
+    addTask: (state, action: PayloadAction<AddTaskInterface>) => {
       const newState = createNewTask(
         state.projects,
         action.payload.projectName,

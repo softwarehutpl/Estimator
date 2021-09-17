@@ -6,7 +6,7 @@ export interface Projects {
 
 export interface Project {
   projectName: string;
-  estimatedBy: string;
+  estimatedBy?: string;
   estimationDate?: Object;
   verifiedBy?: string;
   verificationDate?: string;
