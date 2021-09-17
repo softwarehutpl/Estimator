@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "./hooks";
+import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   initialProjects,
   clearProjects,
@@ -7,7 +7,7 @@ import {
   delProject,
   getProjectNames,
   addTask,
-} from "./projectsSlice";
+} from "../reducers/projectReducer";
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
