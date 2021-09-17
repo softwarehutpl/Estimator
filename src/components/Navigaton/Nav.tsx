@@ -9,6 +9,7 @@ import ExportDialog from "../Dialogs/ExportDialog";
 import InviteDialog from "../Dialogs/InviteDialog";
 import JoinDialog from "../Dialogs/JoinDialog";
 import TerminateDialog from "../Dialogs/TerminateDialog";
+import { Route } from "react-router-dom";
 
 import styles from "./nav.module.scss";
 
@@ -23,7 +24,6 @@ const Nav: FC<Props> = () => {
   const [joinDialog, setJoinDialog] = useState(false);
   const [terminateDialog, setTerminateDialog] = useState(false);
   //Buttons state
-  const [mainScreen, setMainScreen] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
 
   const projectTitles = [
@@ -60,7 +60,7 @@ const Nav: FC<Props> = () => {
         className="p-mx-2 p-my-auto"
         onClick={() => setImportDialog(true)}
       />
-      {mainScreen ? null : (
+      <Route path="/project">
         <>
           <Button
             label="Export"
@@ -73,7 +73,7 @@ const Nav: FC<Props> = () => {
             onClick={() => setInviteDialog(true)}
           />
         </>
-      )}
+      </Route>
 
       <Button
         label="Join"
