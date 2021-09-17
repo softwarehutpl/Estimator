@@ -9,7 +9,7 @@ import {
   addTask,
 } from "./projectsSlice";
 
-export default function Actions() {
+export default function RootStore() {
   const [projectName, setProjectName] = useState("");
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
