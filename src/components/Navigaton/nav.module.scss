@@ -1,0 +1,16 @@
+@import "../../styles/variables";
+@import "../../styles//colors";
+
+.nav {
+  text-align: center;
+  background-color: $nav-bgc;
+  padding: $main-pad;
+}
+
+.logo {
+  color: $text-light;
+}
+.select {
+  background-color: $btn-bgc;
+  color: $text-light;
+}
