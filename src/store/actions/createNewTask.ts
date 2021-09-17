@@ -1,5 +1,6 @@
 import { Project } from "../../types/Interface";
 import initialTask from "../initials/initialTask";
+import { v4 as uuidv4 } from "uuid";
 
 export default interface AddTaskInterface {
   projectName: string;
@@ -15,6 +16,7 @@ export default function createNewTask(
 ) {
   const newTask = Object.assign({}, initialTask, {
     name: taskName,
+    id: uuidv4(),
   });
   const newState: Project[] = [...projects].map((project) =>
     project.projectName === projectName

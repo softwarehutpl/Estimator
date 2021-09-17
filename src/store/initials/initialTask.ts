@@ -1,7 +1,7 @@
 import { Role, Task, Type } from "../../types/Interface";
 
 const initialTask: Task = {
-  id: 0,
+  id: "",
   type: Type.Group,
   name: "",
   role: Role.Empty,

@@ -39,12 +39,6 @@ export default function RootStore() {
         onChange={(event) => setProjectName(event.target.value)}
         placeholder="Project Name"
       />
-      <input
-        type="text"
-        value={estimatedBy}
-        onChange={(event) => setEstimatedBy(event.target.value)}
-        placeholder="Estimated By"
-      />
       <button
         onClick={() => {
           dispatch(

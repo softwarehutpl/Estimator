@@ -21,10 +21,7 @@ const projectSlice = createSlice({
       state.projects.map((project) => console.log(project.projectName));
     },
     addProject: (state, action: PayloadAction<Project>) => {
-      const newProject = createNewProject(
-        action.payload.projectName,
-        action.payload.estimatedBy
-      );
+      const newProject = createNewProject(action.payload.projectName);
       state.projects.push(newProject);
     },
     delProject: (state, action: PayloadAction<Project>) => {

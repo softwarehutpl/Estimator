@@ -2,6 +2,7 @@ import { Project } from "../../types/Interface";
 
 const initialProject: Project = {
   projectName: "",
+  projectId: 0,
   estimatedBy: "",
   estimationDate: "",
   verifiedBy: "",
