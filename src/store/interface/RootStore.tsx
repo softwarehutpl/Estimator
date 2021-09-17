@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAppSelector, useAppDispatch } from "./hooks";
+import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   initialProjects,
   clearProjects,
@@ -7,9 +7,9 @@ import {
   delProject,
   getProjectNames,
   addTask,
-} from "./projectsSlice";
+} from "../reducers/projectReducer";
 
-export default function Actions() {
+export default function RootStore() {
   const [projectName, setProjectName] = useState("");
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
@@ -38,12 +38,6 @@ export default function Actions() {
         value={projectName}
         onChange={(event) => setProjectName(event.target.value)}
         placeholder="Project Name"
-      />
-      <input
-        type="text"
-        value={estimatedBy}
-        onChange={(event) => setEstimatedBy(event.target.value)}
-        placeholder="Estimated By"
       />
       <button
         onClick={() => {

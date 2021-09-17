@@ -15,12 +15,16 @@ import styles from "./nav.module.scss";
 interface Props {}
 
 const Nav: FC<Props> = () => {
+  //Dialogs state
   const [selectedProject, setSelectedProject] = useState(null);
   const [importDialog, setImportDialog] = useState(false);
   const [exportDialog, setExportDialog] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
   const [joinDialog, setJoinDialog] = useState(false);
   const [terminateDialog, setTerminateDialog] = useState(false);
+  //Buttons state
+  const [mainScreen, setMainScreen] = useState(true);
+  const [isConnected, setIsConnected] = useState(false);
 
   const projectTitles = [
     { label: "Project A", value: "A" },
@@ -56,19 +60,24 @@ const Nav: FC<Props> = () => {
         className="p-mx-2 p-my-auto"
         onClick={() => setImportDialog(true)}
       />
-      <Button
-        label="Export"
-        className="p-button-success p-mx-2 p-my-auto"
-        onClick={() => setExportDialog(true)}
-      />
-      <Button
-        label="Invite"
-        className="p-button-success p-mx-2 p-my-auto"
-        onClick={() => setInviteDialog(true)}
-      />
+      {mainScreen ? null : (
+        <>
+          <Button
+            label="Export"
+            className="p-mx-2 p-my-auto"
+            onClick={() => setExportDialog(true)}
+          />
+          <Button
+            label="Invite"
+            className="p-mx-2 p-my-auto"
+            onClick={() => setInviteDialog(true)}
+          />
+        </>
+      )}
+
       <Button
         label="Join"
-        className="p-button-success p-mx-2 p-my-auto"
+        className="p-mx-2 p-my-auto"
         onClick={() => setJoinDialog(true)}
       />
       <Dialog
@@ -112,11 +121,14 @@ const Nav: FC<Props> = () => {
 
   const rightContents = (
     <>
-      <Button
-        className="p-mx-2"
-        label="Terminate"
-        onClick={() => setTerminateDialog(true)}
-      />
+      {isConnected ? (
+        <Button
+          className="p-mx-2"
+          label="Terminate"
+          onClick={() => setTerminateDialog(true)}
+        />
+      ) : null}
+
       <Dropdown
         className={`${styles.select} p-mx-2`}
         placeholder="Select project"
