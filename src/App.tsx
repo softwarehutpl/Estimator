@@ -1,4 +1,5 @@
 import React from "react";
+import Actions from "./store/Actions";
 import Nav from "./components/Navigaton/Nav";
 import Home from "./views/Home/Home";
 import Project from "./views/Project/Project";
@@ -15,6 +16,9 @@ function App() {
         </Route>
         <Route path="/project">
           <Project />
+        </Route>
+        <Route path="/root">
+          <Actions />
         </Route>
         <Route path="*">
           <NotFound404 />
