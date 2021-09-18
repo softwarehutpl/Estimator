@@ -1,0 +1,14 @@
+.tableRow {
+	position: relative;
+	display: flex;
+	padding: 5px;
+	margin-bottom: 10px;
+}
+
+.tableHeader {
+	background-color: var(--blue-400);
+	color: white;
+	border-radius: 5px 5px 0 0;
+	font-weight: 700;
+	margin-bottom: 50px;
+}

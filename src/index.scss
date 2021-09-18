@@ -1,0 +1,14 @@
+*,
+*::after,
+*::before {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+//reset default Panel component styles
+.p-panel .p-panel-content {
+	border: none;
+	padding: 0;
+	background-color: var(--surface-100);
+}
