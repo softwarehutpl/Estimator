@@ -11,7 +11,7 @@ interface IProps {
 
 const DraggableWrapper: FC<IProps> = ({ children, draggableId, index }) => {
 	return (
-		<Draggable draggableId={draggableId} index={index}>
+		<Draggable key={draggableId} draggableId={draggableId} index={index}>
 			{(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
 				return (
 					<div

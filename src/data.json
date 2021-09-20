@@ -1,347 +1,347 @@
 {
-  "projects": [
-    {
-      "projectName": "Test project",
-      "estimatedBy": "Hortensjo Pisuarez",
-      "estimationDate": "30.11.2020",
-      "verifiedBy": "Wieńczysław Należyty",
-      "verificationDate": "",
-      "estStart": "01.01.2021",
-      "estEns": "01.03.2021",
-      "teamSize": 4,
-      "timeBudget": 160,
-      "effort": 12,
-      "sections": [
-        {
-          "sectionId": "F",
-          "name": "Frontend development",
-          "minMd": 19.25,
-          "minMdFormula": "",
-          "maxMd": 56.25,
-          "maxMdFormula": "",
-          "predictedMd": 46.25,
-          "predictedMdFormula": "",
-          "risk": 21.62,
-          "riskFormula": "",
-          "tasks": [
-            {
-              "id": 1,
-              "type": "task",
-              "name": "Business feature",
-              "role": "FD",
-              "minMd": 10,
-              "maxMd": 30,
-              "predictedMd": 25,
-              "predictedMdFormula": "",
-              "risk": "H",
-              "comment": {
-                "text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
-                "isImportant": false
-              },
-              "subtasks": []
-            },
-            {
-              "id": 2,
-              "type": "task",
-              "name": "Another business feature",
-              "role": "FD",
-              "minMd": 3,
-              "maxMd": 4,
-              "predictedMd": 3.5,
-              "predictedMdFormula": "",
-              "risk": "L",
-              "comment": {
-                "text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
-                "isImportant": true
-              },
-              "subtasks": []
-            },
-            {
-              "id": 3,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 5,
-              "maxMd": 9,
-              "predictedMd": 7.5,
-              "predictedMdFormula": "",
-              "risk": "M",
-              "comment": {
-                "text": "",
-                "isImportant": false
-              },
-              "subtasks": []
-            },
-            {
-              "id": 4,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 0.25,
-              "maxMd": 1.25,
-              "predictedMd": 0.75,
-              "predictedMdFormula": "",
-              "risk": "L",
-              "comment": {
-                "text": "",
-                "isImportant": false
-              },
-              "subtasks": []
-            },
-            {
-              "id": 5,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 1,
-              "maxMd": 12,
-              "predictedMd": 9.5,
-              "predictedMdFormula": "",
-              "risk": "H",
-              "comment": {
-                "text": "texts are added by inserting a row after a feature description and formatting text to italic. Important texts should be in red",
-                "isImportant": true
-              },
-              "subtasks": []
-            },
-            {
-              "id": 6,
-              "type": "group",
-              "name": "Task with subtasks",
-              "role": "",
-              "minMd": null,
-              "maxMd": null,
-              "predictedMd": null,
-              "predictedMdFormula": "",
-              "risk": "",
-              "comment": {
-                "text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
-                "isImportant": true
-              },
-              "subtasks": [
-                {
-                  "id": 1,
-                  "type": "task",
-                  "name": "Subtask 1",
-                  "role": "FD",
-                  "minMd": 0,
-                  "maxMd": 0,
-                  "predictedMd": 0,
-                  "predictedMdFormula": "",
-                  "risk": "L",
-                  "comment": {
-                    "text": "",
-                    "isImportant": false
-                  }
-                },
-                {
-                  "id": 2,
-                  "type": "task",
-                  "name": "Subtask 2",
-                  "role": "FD",
-                  "minMd": 0,
-                  "maxMd": 0,
-                  "predictedMd": 0,
-                  "predictedMdFormula": "",
-                  "risk": "L",
-                  "comment": {
-                    "text": "",
-                    "isImportant": false
-                  }
-                }
-              ]
-            },
-            {
-              "id": 7,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 0,
-              "maxMd": 0,
-              "predictedMd": 0,
-              "predictedMdFormula": "",
-              "risk": "L",
-              "comment": {
-                "text": "",
-                "isImportant": false
-              },
-              "subtasks": []
-            },
-            {
-              "id": 8,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 0,
-              "maxMd": 0,
-              "predictedMd": 0,
-              "predictedMdFormula": "",
-              "risk": "L",
-              "comment": {
-                "text": "",
-                "isImportant": false
-              },
-              "subtasks": []
-            },
-            {
-              "id": 9,
-              "type": "task",
-              "name": "Another task",
-              "role": "FD",
-              "minMd": 0,
-              "maxMd": 0,
-              "predictedMd": 0,
-              "predictedMdFormula": "",
-              "risk": "L",
-              "comment": {
-                "text": "",
-                "isImportant": false
-              },
-              "subtasks": []
-            }
-          ]
-        },
-        {
-          "sectionId": "B",
-          "name": "Backend development",
-          "minMd": 10.25,
-          "minMdFormula": "",
-          "maxMd": 25.25,
-          "maxMdFormula": "",
-          "predictedMd": 19.25,
-          "predictedMdFormula": "",
-          "risk": 31.17,
-          "riskFormula": "",
-          "tasks": []
-        },
-        {
-          "sectionId": "M",
-          "name": "Mobile development",
-          "minMd": 0,
-          "minMdFormula": "",
-          "maxMd": 0,
-          "maxMdFormula": "",
-          "predictedMd": 0,
-          "predictedMdFormula": "",
-          "risk": 0,
-          "riskFormula": "",
-          "tasks": []
-        },
-        {
-          "sectionId": "U",
-          "name": "Design / UX / UI",
-          "minMd": 0,
-          "minMdFormula": "",
-          "maxMd": 0,
-          "maxMdFormula": "",
-          "predictedMd": 0,
-          "predictedMdFormula": "",
-          "risk": 0,
-          "riskFormula": "",
-          "tasks": []
-        },
-        {
-          "sectionId": "C",
-          "name": "Configuration / Setup / Deployment ",
-          "minMd": 10,
-          "minMdFormula": "",
-          "maxMd": 11,
-          "maxMdFormula": "",
-          "predictedMd": 10.5,
-          "predictedMdFormula": "",
-          "risk": 4.76,
-          "riskFormula": "",
-          "tasks": []
-        }
-      ],
-      "rawDevelopmentEffortSum": {
-        "name": "Raw development effort sum",
-        "main": {
-          "minMd": 39.5,
-          "minMdFormula": "",
-          "maxMd": 92.5,
-          "maxMdFormula": "",
-          "predictedMd": 76,
-          "predictedMdFormula": "",
-          "risk": 21.71,
-          "riskFormula": ""
-        },
-        "parts": [
-          {
-            "name": "Tests and fixes overhead",
-            "procent": 20,
-            "role": "QA",
-            "minMd": 7.5,
-            "minMdFormula": "",
-            "maxMd": 18.5,
-            "maxMdFormula": "",
-            "predictedMd": 15,
-            "predictedMdFormula": ""
-          },
-          {
-            "name": "Communication and management",
-            "procent": 10,
-            "role": "PM",
-            "minMd": 3.5,
-            "minMdFormula": "",
-            "maxMd": 9,
-            "maxMdFormula": "",
-            "predictedMd": 7.5,
-            "predictedMdFormula": ""
-          },
-          {
-            "name": "Other risks (i.e. fixed price)",
-            "procent": 0,
-            "role": "",
-            "minMd": 0,
-            "minMdFormula": "",
-            "maxMd": 0,
-            "maxMdFormula": "",
-            "predictedMd": 0,
-            "predictedMdFormula": ""
-          }
-        ]
-      },
-      "summary": [
-        {
-          "name": "Total (MD):",
-          "minMd": 51,
-          "minMdFormula": "",
-          "maxMd": 120,
-          "maxMdFormula": "",
-          "predictedMd": 99,
-          "predictedMdFormula": "",
-          "risk": 21.11,
-          "riskFormula": ""
-        },
-        {
-          "name": "Per Team Member:",
-          "minMd": 12.75,
-          "minMdFormula": "",
-          "maxMd": 30,
-          "maxMdFormula": "",
-          "predictedMd": 24.75,
-          "predictedMdFormula": ""
-        },
-        {
-          "name": "Est. Delivery Date:",
-          "estDeliveryDate": ""
-        }
-      ],
-      "assumptions": [
-        {
-          "id": 1,
-          "text": "The features and tasks estimated here might not be complete, they reflect current state of knowledge."
-        },
-        {
-          "id": 2,
-          "text": "Any change in user requirements will invalidate this estimation. In such case the workload must be re-estimated."
-        },
-        {
-          "id": 3,
-          "text": "???"
-        }
-      ]
-    }
-  ]
+	"projects": [
+		{
+			"projectName": "Test project",
+			"estimatedBy": "Hortensjo Pisuarez",
+			"estimationDate": "30.11.2020",
+			"verifiedBy": "Wieńczysław Należyty",
+			"verificationDate": "",
+			"estStart": "01.01.2021",
+			"estEns": "01.03.2021",
+			"teamSize": 4,
+			"timeBudget": 160,
+			"effort": 12,
+			"sections": [
+				{
+					"sectionId": "F",
+					"name": "Frontend development",
+					"minMd": 19.25,
+					"minMdFormula": "",
+					"maxMd": 56.25,
+					"maxMdFormula": "",
+					"predictedMd": 46.25,
+					"predictedMdFormula": "",
+					"risk": 21.62,
+					"riskFormula": "",
+					"tasks": [
+						{
+							"id": 1,
+							"type": "task",
+							"name": "Business feature",
+							"role": "FD",
+							"minMd": 10,
+							"maxMd": 30,
+							"predictedMd": 25,
+							"predictedMdFormula": "",
+							"risk": "H",
+							"comment": {
+								"text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
+								"isImportant": false
+							},
+							"subtasks": []
+						},
+						{
+							"id": 2,
+							"type": "task",
+							"name": "Another business feature",
+							"role": "FD",
+							"minMd": 3,
+							"maxMd": 4,
+							"predictedMd": 3.5,
+							"predictedMdFormula": "",
+							"risk": "L",
+							"comment": {
+								"text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
+								"isImportant": true
+							},
+							"subtasks": []
+						},
+						{
+							"id": 3,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 5,
+							"maxMd": 9,
+							"predictedMd": 7.5,
+							"predictedMdFormula": "",
+							"risk": "M",
+							"comment": {
+								"text": "",
+								"isImportant": false
+							},
+							"subtasks": []
+						},
+						{
+							"id": 4,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 0.25,
+							"maxMd": 1.25,
+							"predictedMd": 0.75,
+							"predictedMdFormula": "",
+							"risk": "L",
+							"comment": {
+								"text": "",
+								"isImportant": false
+							},
+							"subtasks": []
+						},
+						{
+							"id": 5,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 1,
+							"maxMd": 12,
+							"predictedMd": 9.5,
+							"predictedMdFormula": "",
+							"risk": "H",
+							"comment": {
+								"text": "texts are added by inserting a row after a feature description and formatting text to italic. Important texts should be in red",
+								"isImportant": true
+							},
+							"subtasks": []
+						},
+						{
+							"id": 6,
+							"type": "group",
+							"name": "Task with subtasks",
+							"role": "",
+							"minMd": 5,
+							"maxMd": 6,
+							"predictedMd": 7,
+							"predictedMdFormula": "",
+							"risk": "",
+							"comment": {
+								"text": "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",
+								"isImportant": true
+							},
+							"subtasks": [
+								{
+									"id": 1,
+									"type": "task",
+									"name": "Subtask 1",
+									"role": "FD",
+									"minMd": 0,
+									"maxMd": 0,
+									"predictedMd": 0,
+									"predictedMdFormula": "",
+									"risk": "L",
+									"comment": {
+										"text": "",
+										"isImportant": false
+									}
+								},
+								{
+									"id": 2,
+									"type": "task",
+									"name": "Subtask 2",
+									"role": "FD",
+									"minMd": 0,
+									"maxMd": 0,
+									"predictedMd": 0,
+									"predictedMdFormula": "",
+									"risk": "L",
+									"comment": {
+										"text": "",
+										"isImportant": false
+									}
+								}
+							]
+						},
+						{
+							"id": 7,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 0,
+							"maxMd": 0,
+							"predictedMd": 0,
+							"predictedMdFormula": "",
+							"risk": "L",
+							"comment": {
+								"text": "",
+								"isImportant": false
+							},
+							"subtasks": []
+						},
+						{
+							"id": 8,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 0,
+							"maxMd": 0,
+							"predictedMd": 0,
+							"predictedMdFormula": "",
+							"risk": "L",
+							"comment": {
+								"text": "",
+								"isImportant": false
+							},
+							"subtasks": []
+						},
+						{
+							"id": 9,
+							"type": "task",
+							"name": "Another task",
+							"role": "FD",
+							"minMd": 0,
+							"maxMd": 0,
+							"predictedMd": 0,
+							"predictedMdFormula": "",
+							"risk": "L",
+							"comment": {
+								"text": "",
+								"isImportant": false
+							},
+							"subtasks": []
+						}
+					]
+				},
+				{
+					"sectionId": "B",
+					"name": "Backend development",
+					"minMd": 10.25,
+					"minMdFormula": "",
+					"maxMd": 25.25,
+					"maxMdFormula": "",
+					"predictedMd": 19.25,
+					"predictedMdFormula": "",
+					"risk": 31.17,
+					"riskFormula": "",
+					"tasks": []
+				},
+				{
+					"sectionId": "M",
+					"name": "Mobile development",
+					"minMd": 0,
+					"minMdFormula": "",
+					"maxMd": 0,
+					"maxMdFormula": "",
+					"predictedMd": 0,
+					"predictedMdFormula": "",
+					"risk": 0,
+					"riskFormula": "",
+					"tasks": []
+				},
+				{
+					"sectionId": "U",
+					"name": "Design / UX / UI",
+					"minMd": 0,
+					"minMdFormula": "",
+					"maxMd": 0,
+					"maxMdFormula": "",
+					"predictedMd": 0,
+					"predictedMdFormula": "",
+					"risk": 0,
+					"riskFormula": "",
+					"tasks": []
+				},
+				{
+					"sectionId": "C",
+					"name": "Configuration / Setup / Deployment ",
+					"minMd": 10,
+					"minMdFormula": "",
+					"maxMd": 11,
+					"maxMdFormula": "",
+					"predictedMd": 10.5,
+					"predictedMdFormula": "",
+					"risk": 4.76,
+					"riskFormula": "",
+					"tasks": []
+				}
+			],
+			"rawDevelopmentEffortSum": {
+				"name": "Raw development effort sum",
+				"main": {
+					"minMd": 39.5,
+					"minMdFormula": "",
+					"maxMd": 92.5,
+					"maxMdFormula": "",
+					"predictedMd": 76,
+					"predictedMdFormula": "",
+					"risk": 21.71,
+					"riskFormula": ""
+				},
+				"parts": [
+					{
+						"name": "Tests and fixes overhead",
+						"procent": 20,
+						"role": "QA",
+						"minMd": 7.5,
+						"minMdFormula": "",
+						"maxMd": 18.5,
+						"maxMdFormula": "",
+						"predictedMd": 15,
+						"predictedMdFormula": ""
+					},
+					{
+						"name": "Communication and management",
+						"procent": 10,
+						"role": "PM",
+						"minMd": 3.5,
+						"minMdFormula": "",
+						"maxMd": 9,
+						"maxMdFormula": "",
+						"predictedMd": 7.5,
+						"predictedMdFormula": ""
+					},
+					{
+						"name": "Other risks (i.e. fixed price)",
+						"procent": 0,
+						"role": "",
+						"minMd": 0,
+						"minMdFormula": "",
+						"maxMd": 0,
+						"maxMdFormula": "",
+						"predictedMd": 0,
+						"predictedMdFormula": ""
+					}
+				]
+			},
+			"summary": [
+				{
+					"name": "Total (MD):",
+					"minMd": 51,
+					"minMdFormula": "",
+					"maxMd": 120,
+					"maxMdFormula": "",
+					"predictedMd": 99,
+					"predictedMdFormula": "",
+					"risk": 21.11,
+					"riskFormula": ""
+				},
+				{
+					"name": "Per Team Member:",
+					"minMd": 12.75,
+					"minMdFormula": "",
+					"maxMd": 30,
+					"maxMdFormula": "",
+					"predictedMd": 24.75,
+					"predictedMdFormula": ""
+				},
+				{
+					"name": "Est. Delivery Date:",
+					"estDeliveryDate": ""
+				}
+			],
+			"assumptions": [
+				{
+					"id": 1,
+					"text": "The features and tasks estimated here might not be complete, they reflect current state of knowledge."
+				},
+				{
+					"id": 2,
+					"text": "Any change in user requirements will invalidate this estimation. In such case the workload must be re-estimated."
+				},
+				{
+					"id": 3,
+					"text": "???"
+				}
+			]
+		}
+	]
 }

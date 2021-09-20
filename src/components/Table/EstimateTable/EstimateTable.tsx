@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { projects } from '../../data.json';
+import { projects } from '../../../data.json';
 
 import TableHeader from '../TableHeader/TableHeader';
 import TableSection from '../TableSection/TableSection';
@@ -14,7 +14,12 @@ const EstimateTable: FC = () => {
 		<div className={styles.mainTable}>
 			<TableHeader />
 			{sections.map((section) => (
-				<TableSection key={section.sectionId} section={section} />
+				<TableSection
+					key={section.sectionId}
+					section={section}
+					sections={sections}
+					setSections={setSections}
+				/>
 			))}
 		</div>
 	);
