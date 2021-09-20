@@ -2,6 +2,22 @@
 	padding: 10px;
 }
 
-.flexGrowCell {
+.idCell {
+	width: 40px;
+}
+
+.taskCell {
 	flex-grow: 1;
+}
+
+.smallCell {
+	width: 55px;
+}
+
+.mediumCell {
+	width: 95px;
+}
+
+.largeCell {
+	width: 145px;
 }

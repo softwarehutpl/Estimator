@@ -1,0 +1,26 @@
+.draggableWrapper {
+	position: relative;
+	background-color: #fff;
+	margin-bottom: 10px;
+	transition: 0.3s ease;
+
+	&Active {
+		transition: 0.3s ease;
+		background-color: var(--green-200);
+	}
+
+	&Disabled {
+		transition: 0.3s ease;
+		background-color: var(--pink-100);
+	}
+}
+
+.draggableHandle {
+	position: absolute;
+	top: 50%;
+	left: 7px;
+	transform: translateY(-50%);
+	width: 15px;
+	height: 15px;
+	font-size: 14px;
+}
