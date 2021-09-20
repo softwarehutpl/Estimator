@@ -1,3 +1,11 @@
+@import "../../styles/variables";
+
 .home {
+  padding: $section-pad;
   text-align: center;
+  justify-content: space-around;
+  width: 100%;
+}
+.list {
+  padding: $main-pad;
 }
