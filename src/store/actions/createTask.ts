@@ -1,12 +1,6 @@
 import initialTask from "../initials/initialTask";
 import { v4 as uuidv4 } from "uuid";
 
-export default interface AddTaskInterface {
-  projectName: string;
-  sectionName: string;
-  taskName: string;
-}
-
 const returnRole = (sectionName: string) => {
   switch (sectionName) {
     case "Frontend development":
