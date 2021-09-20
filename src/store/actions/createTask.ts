@@ -1,4 +1,4 @@
-import { Project, Type } from "../../types/Interface";
+import { Project } from "../../types/Interface";
 import initialTask from "../initials/initialTask";
 import { v4 as uuidv4 } from "uuid";
 
@@ -34,7 +34,6 @@ export default function createTask(
   const newTask = Object.assign({}, initialTask, {
     name: taskName,
     id: uuidv4(),
-    type: Type.Task,
     role: returnRole(sectionName),
   });
   const createTask: Project[] = [...projects].map((project) =>
