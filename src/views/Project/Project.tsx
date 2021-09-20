@@ -1,15 +1,17 @@
-import React from 'react';
+import { FC } from 'react';
 import EstimateTable from '../../components/EstimateTable/EstimateTable';
+import ProjectSummary from '../../components/ProjectSummary/ProjectSummary';
+
 import styles from './project.module.scss';
 
 interface Props {}
 
-const DataView = (props: Props) => {
+const DataView: FC<Props> = () => {
 	return (
-		<div className={styles.data}>
-			<h1>Table Data component here</h1>
+		<main className={styles.contentWrapper}>
 			<EstimateTable />
-		</div>
+			<ProjectSummary />
+		</main>
 	);
 };
 
