@@ -1,4 +1,4 @@
-import { Project } from '../../types/Interface';
+import { Project, Type, Role } from '../../types/Interface';
 import createProject from './createProject';
 import createTask from './createTask';
 
@@ -19,5 +19,11 @@ test('create task', () => {
 
     expect(receivedProject.projectName).toBe(projectName);
     expect(receivedSection.name).toBe(sectionName);
+
     expect(receivedTask.name).toBe(taskName);
+    expect(receivedTask.type).toBe(Type.Task);
+    expect(receivedTask.role).toBe(Role.BD);
+    expect(receivedTask.minMd).toBe(0);
+    expect(receivedTask.maxMd).toBe(0);
+    expect(receivedTask.subtasks!.length).toBe(0);
   });
