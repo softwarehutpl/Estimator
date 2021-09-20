@@ -1,0 +1,20 @@
+.taskComment {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 5px 10px;
+	font-size: 14px;
+	color: var(--indigo-600);
+
+	&Important {
+		color: var(--pink-400);
+	}
+}
+
+.taskCommentText {
+	padding: 5px 10px;
+}
+
+.taskCommentTitle {
+	font-weight: 700;
+}
