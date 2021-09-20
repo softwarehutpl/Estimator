@@ -1,6 +1,6 @@
 import createProject from './createProject';
 
-test('create new project', () => {
+test('create project', () => {
     const result = createProject("Project A");
     expect(result.projectName).toBe("Project A");    
   });

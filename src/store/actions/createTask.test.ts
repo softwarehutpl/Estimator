@@ -2,7 +2,7 @@ import { Project } from '../../types/Interface';
 import createProject from './createProject';
 import createTask from './createTask';
 
-test('create new Task', () => {    
+test('create task', () => {    
     const projectName = "Project A"
     const sectionName = "Backend development";
     const taskName = "New task";
