@@ -13,6 +13,7 @@ export default function RootStore() {
   const [projectName, setProjectName] = useState("");
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
+  const [taskId, setTaskId] = useState("");
   const [estimatedBy, setEstimatedBy] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
@@ -136,9 +137,9 @@ export default function RootStore() {
       />
       <input
         type="text"
-        value={taskName}
-        onChange={(event) => setTaskName(event.target.value)}
-        placeholder="Task Name To Dell Task"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Dell Task"
       />
       <button
         onClick={() => {
@@ -146,12 +147,12 @@ export default function RootStore() {
             delTask({
               projectName: projectName,
               sectionName: sectionName,
-              taskName: taskName,
+              id: taskId,
             })
           );
           setSectionName("");
           setProjectName("");
-          setTaskName("");
+          setTaskId("");
         }}
       >
         delTask
