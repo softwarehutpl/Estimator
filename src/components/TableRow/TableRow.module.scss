@@ -1,0 +1,57 @@
+.tableRowDraggable {
+	background-color: white;
+	margin-bottom: 10px;
+}
+
+.tableRow {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	padding: 5px 25px;
+	border-radius: 6px;
+	box-shadow: 0 6px 4px -6px rgba(0, 0, 0, 0.5);
+
+	// &:hover::after {
+	// 	content: '';
+	// 	position: absolute;
+	// 	bottom: 0;
+	// 	left: 0;
+	// 	width: 100%;
+	// 	height: 3px;
+	// 	background-color: black;
+	// }
+}
+
+.expandableRow {
+	background-color: #fff;
+	font-weight: 700;
+}
+
+.expanderBtn {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	top: 50%;
+	left: 5px;
+	transform: translateY(-50%);
+	width: 20px;
+	height: 20px;
+	border: none;
+	border-radius: 50%;
+	background-color: transparent;
+	font-size: 10px;
+	transition: background-color 0.3s ease;
+	outline: none;
+	cursor: pointer;
+
+	&:hover {
+		background-color: var(--surface-300);
+	}
+
+	&:focus {
+		outline: 0 none;
+		outline-offset: 0;
+		box-shadow: 0 0 0 0.1rem var(--indigo-200);
+	}
+}

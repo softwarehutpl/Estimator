@@ -1,0 +1,15 @@
+.taskDroppableWrapper {
+	margin: 5px 0;
+	transition: 0.3s ease;
+}
+
+.taskDroppableActive {
+	padding: 5px 0;
+	transition: 0.3s ease;
+	background-color: var(--green-100);
+}
+
+.task {
+	border-radius: 6px;
+	box-shadow: none;
+}
