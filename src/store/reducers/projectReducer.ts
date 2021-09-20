@@ -17,9 +17,6 @@ const projectSlice = createSlice({
     clearProjects: (state) => {
       state.projects = [];
     },
-    getProjectNames: (state) => {
-      state.projects.map((project) => console.log(project.projectName));
-    },
     addProject: (state, action: PayloadAction<Project>) => {
       const newProject = createProject(action.payload.projectName);
       state.projects.push(newProject);
@@ -52,7 +49,6 @@ const projectSlice = createSlice({
 export const {
   initialProjects,
   clearProjects,
-  getProjectNames,
   addProject,
   delProject,
   addTask,
