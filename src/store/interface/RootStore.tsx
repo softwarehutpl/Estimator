@@ -7,6 +7,7 @@ import {
   delProject,
   getProjectNames,
   addTask,
+  delTask,
 } from "../reducers/projectReducer";
 
 export default function RootStore() {
@@ -22,7 +23,13 @@ export default function RootStore() {
   }, [projects]);
 
   return (
-    <div>
+    <div
+      style={{
+        border: "2px solid black",
+        padding: "20px",
+        backgroundColor: "#E6E6E6",
+      }}
+    >
       <p>---------- INITIAL PROJECTS ----------</p>
       <button onClick={() => dispatch(initialProjects())}>
         initialProjects
@@ -104,6 +111,41 @@ export default function RootStore() {
         }}
       >
         addTask
+      </button>
+      <p>--------- DEL TASK -----------</p>
+      <input
+        type="text"
+        value={projectName}
+        onChange={(event) => setProjectName(event.target.value)}
+        placeholder="Project Name To Dell Task"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Dell Task"
+      />
+      <input
+        type="text"
+        value={taskName}
+        onChange={(event) => setTaskName(event.target.value)}
+        placeholder="Task Name To Dell Task"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            delTask({
+              projectName: projectName,
+              sectionName: sectionName,
+              taskName: taskName,
+            })
+          );
+          setSectionName("");
+          setProjectName("");
+          setTaskName("");
+        }}
+      >
+        delTask
       </button>
     </div>
   );
