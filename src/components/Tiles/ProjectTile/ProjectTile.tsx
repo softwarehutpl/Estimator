@@ -1,4 +1,3 @@
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Link } from "react-router-dom";
 import styles from "./projectTile.module.scss";

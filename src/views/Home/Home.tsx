@@ -1,8 +1,6 @@
-import React from "react";
-import { Card } from "primereact/card";
-import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";
-import ProjectTile from "../../components/ProjectTile/ProjectTile";
+import ProjectTile from "../../components/Tiles/ProjectTile/ProjectTile";
+import CardTile from "../../components/Tiles/CardTile/CardTile";
 import styles from "./home.module.scss";
 
 interface Props {}
@@ -13,17 +11,17 @@ const Home = (props: Props) => {
   return (
     <>
       <div className={`${styles.home} p-d-flex`}>
-        <Card title="Create Project">
-          <Button label="Create New" />
-        </Card>
-        <Card title="Join">
-          <Button label="Join" />
-        </Card>
+        <CardTile
+          btn="Create New"
+          title="Create Project"
+          default="Create new project"
+        />
+        <CardTile btn="Join" title="Join" default="Connection Id" />
       </div>
-      <Fieldset legend="Projects" toggleable>
+      <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
           {data.map((project) => (
-            <ProjectTile title={project} />
+            <ProjectTile key={project} title={project} />
           ))}
         </ul>
       </Fieldset>
