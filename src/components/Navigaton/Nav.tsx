@@ -55,13 +55,14 @@ const Nav: FC<Props> = () => {
   const leftContents = (
     <div className="p-d-flex">
       <div className={`${styles.estimator} p-text-center`}>Estimator</div>
-      <Button
-        label="Import"
-        className="p-mx-2 p-my-auto"
-        onClick={() => setImportDialog(true)}
-      />
+
       <Route path="/project">
         <>
+          <Button
+            label="Import"
+            className="p-mx-2 p-my-auto"
+            onClick={() => setImportDialog(true)}
+          />
           <Button
             label="Export"
             className="p-mx-2 p-my-auto"
@@ -72,14 +73,14 @@ const Nav: FC<Props> = () => {
             className="p-mx-2 p-my-auto"
             onClick={() => setInviteDialog(true)}
           />
+          <Button
+            label="Join"
+            className="p-mx-2 p-my-auto"
+            onClick={() => setJoinDialog(true)}
+          />
         </>
       </Route>
 
-      <Button
-        label="Join"
-        className="p-mx-2 p-my-auto"
-        onClick={() => setJoinDialog(true)}
-      />
       <Dialog
         header="Import from file"
         visible={importDialog}
@@ -129,13 +130,15 @@ const Nav: FC<Props> = () => {
         />
       ) : null}
 
-      <Dropdown
-        className={`${styles.select} p-mx-2`}
-        placeholder="Select project"
-        value={selectedProject}
-        options={projectTitles}
-        onChange={selectHandler}
-      />
+      <Route path="/project">
+        <Dropdown
+          className={`${styles.select} p-mx-2`}
+          placeholder="Select project"
+          value={selectedProject}
+          options={projectTitles}
+          onChange={selectHandler}
+        />
+      </Route>
       <Dialog
         header="Are you sure you want to terminate connection
         ?"
