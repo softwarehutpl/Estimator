@@ -6,9 +6,18 @@
 	box-sizing: border-box;
 }
 
+html {
+	font-family: BlinkMacSystemFont, sans-serif;
+}
+
 //reset default Panel component styles
 .p-panel .p-panel-content {
 	border: none;
 	padding: 0;
 	background-color: var(--surface-100);
+}
+
+//reset default expandable button size
+.pi {
+	font-size: 10px;
 }

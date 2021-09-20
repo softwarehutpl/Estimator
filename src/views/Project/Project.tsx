@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import EstimateTable from '../../components/EstimateTable/EstimateTable';
+import ProjectSummary from '../../components/ProjectSummary/ProjectSummary';
 
 import styles from './project.module.scss';
 
@@ -7,9 +8,10 @@ interface Props {}
 
 const DataView: FC<Props> = () => {
 	return (
-		<div className={styles.tableWrapper}>
+		<main className={styles.contentWrapper}>
 			<EstimateTable />
-		</div>
+			<ProjectSummary />
+		</main>
 	);
 };
 
