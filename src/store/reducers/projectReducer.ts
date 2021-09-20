@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import data from "../../data.json";
 import { Project } from "../../types/Interface";
-import AddTaskInterface from "../actions/createNewTask";
+import AddTaskInterface from "../actions/createTask";
 import initialState from "../initials/initialState";
-import createNewProject from "../actions/createNewProject";
-import createNewTask from "../actions/createNewTask";
+import createProject from "../actions/createProject";
+import createTask from "../actions/createTask";
 
 const projectSlice = createSlice({
   name: "project",
@@ -21,7 +21,7 @@ const projectSlice = createSlice({
       state.projects.map((project) => console.log(project.projectName));
     },
     addProject: (state, action: PayloadAction<Project>) => {
-      const newProject = createNewProject(action.payload.projectName);
+      const newProject = createProject(action.payload.projectName);
       state.projects.push(newProject);
     },
     delProject: (state, action: PayloadAction<Project>) => {
@@ -36,15 +36,15 @@ const projectSlice = createSlice({
           );
     },
     addTask: (state, action: PayloadAction<AddTaskInterface>) => {
-      const newState = createNewTask(
+      const newState = createTask(
         state.projects,
         action.payload.projectName,
         action.payload.sectionName,
         action.payload.taskName
       );
-
       state.projects = newState;
     },
+    delTask: (state, action: PayloadAction<any>) => {},
   },
 });
 
@@ -56,6 +56,7 @@ export const {
   addProject,
   delProject,
   addTask,
+  delTask,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
@@ -67,3 +68,6 @@ export default projectReducer;
 //del sub
 //del proj -> done
 //add proj -> done
+//get projects -> done
+//get project
+//edit task

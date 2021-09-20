@@ -8,7 +8,7 @@ export default interface AddTaskInterface {
   taskName: string;
 }
 
-export default function createNewTask(
+export default function createTask(
   projects: any,
   projectName: any,
   sectionName: any,
@@ -18,7 +18,7 @@ export default function createNewTask(
     name: taskName,
     id: uuidv4(),
   });
-  const newState: Project[] = [...projects].map((project) =>
+  const createTask: Project[] = [...projects].map((project) =>
     project.projectName === projectName
       ? {
           ...project,
@@ -32,5 +32,5 @@ export default function createNewTask(
         }
       : project
   );
-  return newState;
+  return createTask;
 }
