@@ -3,12 +3,12 @@
 | **Function name** | **Input** | **Output** |
 | --- | --- | --- |
 | createProject | projectName | project |
-| deleteProject | Id | projects |
+| deleteProject | projects, Id | projects |
 | updateProject | project | project |
-| createTask | projectName, sectionName, taskName | task |
-| deleteTask | Id | projects |
-| updateTask | Id, {name,minMd,maxMd,risk } | task |
-| createGroup | projectName, sectionName, groupName | task (type: group) |
-| deleteGroup | Id | projects |
-| updateGroup | Id, {name} | task (type: group) |
-| updateComment | Id, {text,isImportant} | task || task (type: group) |
+| createTask | projects, projectName, sectionName, taskName | projects |
+| deleteTask | projects, Id | projects |
+| updateTask | projects, Id, {name,minMd,maxMd,risk } | projects |
+| createGroup | projects, projectName, sectionName, groupName | projects |
+| deleteGroup | projects, Id | projects |
+| updateGroup | projects, Id, {name} | projects) |
+| updateComment | projects, Id, {text,isImportant} | projects |
