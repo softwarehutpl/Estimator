@@ -18,7 +18,7 @@ const projectSlice = createSlice({
     },
     addProject: (
       state,
-      action: PayloadAction<{ projectName: string; estimatedBy: string }>
+      action: PayloadAction<{ projectName: string }>
     ) => {
       const newProject = createProject(action.payload.projectName);
       state.projects.push(newProject);
