@@ -3,12 +3,14 @@ import ProjectTile from "../../components/Tiles/ProjectTile/ProjectTile";
 import CardTile from "../../components/Tiles/CardTile/CardTile";
 import { useAppSelector } from "../../store/hooks";
 import styles from "./home.module.scss";
+import { Key } from "react";
+import { Project } from "../../types/Interface";
 
 interface Props {}
 
 const Home = (props: Props) => {
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project) =>
+    state.projects.projects.map((project: Project) =>
       Object.create({
         projectName: project.projectName,
         projectId: project.projectId,
@@ -28,7 +30,7 @@ const Home = (props: Props) => {
       </div>
       <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
-          {projectsData.map((project) => (
+          {projectsData.map((project: Project) => (
             <ProjectTile key={project.projectId} title={project.projectName} />
           ))}
         </ul>

@@ -1,12 +1,6 @@
-import { Project } from "../../types/Interface";
 import initialTask from "../initials/initialTask";
 import { v4 as uuidv4 } from "uuid";
-
-export default interface AddTaskInterface {
-  projectName: string;
-  sectionName: string;
-  taskName: string;
-}
+import { Type } from "../../types/Interface";
 
 const returnRole = (sectionName: string) => {
   switch (sectionName) {
@@ -26,29 +20,19 @@ const returnRole = (sectionName: string) => {
 };
 
 export default function createTask(
-  projects: Project[],
-  projectName: string,
   sectionName: string,
-  taskName: string
+  taskName: string,
+  type?: string
 ) {
   const newTask = Object.assign({}, initialTask, {
     name: taskName,
     id: uuidv4(),
     role: returnRole(sectionName),
+    type: type === "group" ? Type.Group : Type.Task,
+    minMd: type === "group" ? null : 0,
+    maxMd: type === "group" ? null : 0,
+    predictedMd: type === "group" ? null : 0,
+    risk: type === "group" ? "" : "L",
   });
-  const createTask: Project[] = [...projects].map((project) =>
-    project.projectName === projectName
-      ? {
-          ...project,
-          sections: project.sections
-            ? [...project.sections].map((section) =>
-                section.name === sectionName
-                  ? { ...section, tasks: section.tasks.concat(newTask) }
-                  : section
-              )
-            : [],
-        }
-      : project
-  );
-  return createTask;
+  return newTask;
 }
