@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import data from "../../data.json";
-import { Project, Projects } from "../../types/Interface";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -9,10 +7,6 @@ const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
-    initialProjects: (state) => {
-      const projects: any[] = [...data.projects];
-      state.projects = projects;
-    },
     clearProjects: (state) => {
       state.projects = [];
     },
@@ -139,7 +133,6 @@ const projectSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  initialProjects,
   clearProjects,
   addProject,
   delProject,
