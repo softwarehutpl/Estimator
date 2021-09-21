@@ -5,7 +5,7 @@ export interface Projects {
 }
 
 export interface Project {
-  projectName?: string;
+  projectName: string;
   projectId?: string;
   estimatedBy?: string;
   estimationDate?: Object;

@@ -8,6 +8,9 @@ import { useAppSelector, useAppDispatch } from "../../store/hooks";
 import { addProject } from "../../store/reducers/projectReducer";
 //Styles
 import styles from "./home.module.scss";
+import { Project } from "../../types/Interface";
+//Utils
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {}
 
@@ -16,24 +19,24 @@ const Home = (props: Props) => {
   const [projectName, setProjectName] = useState("Project name");
   const [joinId, setJoinId] = useState("Connection Id");
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map(
-      (project: { projectName: string; projectId: string }) =>
-        Object.create({
-          projectName: project.projectName,
-          projectId: project.projectId,
-        })
+    state.projects.projects.map((project: Project) =>
+      Object.create({
+        projectName: project.projectName,
+        projectId: project.projectId,
+      })
     )
   );
-  //Just for testing
-  const project = useAppSelector((state) => state);
+
+  const generatedId = uuidv4();
+  //For Web RTC conncection;
+  const remoteId = "";
 
   const createProjectHandler = () => {
     console.log("Create Project works");
-    console.log(project);
     const id = dispatch(
       addProject({
         projectName: projectName,
-        estimatedBy: "",
+        projectId: generatedId,
       })
     );
     console.log(`Project ID: `);
@@ -52,6 +55,7 @@ const Home = (props: Props) => {
           placeholder={projectName}
           action={createProjectHandler}
           change={(e) => setProjectName(e.target.value)}
+          projectId={generatedId}
         />
         <CardTile
           btn="Join"
@@ -59,18 +63,14 @@ const Home = (props: Props) => {
           placeholder={joinId}
           action={() => joinProjectHandler}
           change={(e) => setJoinId(e.target.value)}
+          projectId={remoteId}
         />
       </div>
       <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
-          {projectsData.map(
-            (project: { projectId: string; projectName: string }) => (
-              <ProjectTile
-                key={project.projectId}
-                title={project.projectName}
-              />
-            )
-          )}
+          {projectsData.map((project: Project) => (
+            <ProjectTile key={project.projectId} title={project.projectName} />
+          ))}
         </ul>
       </Fieldset>
     </>

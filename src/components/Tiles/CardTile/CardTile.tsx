@@ -11,10 +11,11 @@ interface Props {
   placeholder: string;
   action: MouseEventHandler<HTMLButtonElement>;
   change: ChangeEventHandler<HTMLInputElement>;
+  projectId: string | "";
 }
 
 const CardTile = (props: Props) => {
-  const { btn, title, action, change, placeholder } = props;
+  const { btn, title, action, change, placeholder, projectId = "" } = props;
 
   return (
     <Card title={title} className={styles.card}>
@@ -25,7 +26,7 @@ const CardTile = (props: Props) => {
           placeholder={title}
           onChange={change}
         />
-        <Link to="/project">
+        <Link to={`/project/${projectId}`}>
           <Button
             label={btn}
             onClick={action}
