@@ -16,25 +16,28 @@ const projectSlice = createSlice({
     clearProjects: (state) => {
       state.projects = [];
     },
-    addProject: (state, action: PayloadAction<Project>) => {
+    addProject: (
+      state,
+      action: PayloadAction<{ projectName: string; estimatedBy: string }>
+    ) => {
       const newProject = createProject(action.payload.projectName);
       state.projects.push(newProject);
     },
-    delProject: (state, action: PayloadAction<Project>) => {
+    delProject: (state, action: PayloadAction<{ projectId: string }>) => {
       state.projects.find(
-        (project) => project.projectName === action.payload.projectName
+        (project) => project.projectId === action.payload.projectId
       )
         ? (state.projects = state.projects.filter(
-            (project) => project.projectName !== action.payload.projectName
+            (project) => project.projectId !== action.payload.projectId
           ))
         : console.log(
-            `Dont find project with name "${action.payload.projectName}"`
+            `Dont find project with ID "${action.payload.projectId}"`
           );
     },
     addTask: (
       state,
       action: PayloadAction<{
-        projectName: string;
+        projectId?: string;
         sectionName: string;
         taskName: string;
         taskId?: string;
@@ -46,7 +49,7 @@ const projectSlice = createSlice({
       );
 
       const newState = [...state.projects].map((project) =>
-        project.projectName === action.payload.projectName
+        project.projectId === action.payload.projectId
           ? {
               ...project,
               sections: project.sections
@@ -65,13 +68,13 @@ const projectSlice = createSlice({
     delTask: (
       state,
       action: PayloadAction<{
-        projectName: string;
+        projectId: string;
         sectionName: string;
         id: string;
       }>
     ) => {
       const newState = [...state.projects].map((project) =>
-        project.projectName === action.payload.projectName
+        project.projectId === action.payload.projectId
           ? {
               ...project,
               sections: project.sections
@@ -94,7 +97,7 @@ const projectSlice = createSlice({
     addSubtask: (
       state,
       action: PayloadAction<{
-        projectName: string;
+        projectId: string;
         sectionName: string;
         taskId: string;
         subtaskName: string;
@@ -106,7 +109,7 @@ const projectSlice = createSlice({
       );
 
       const newState = [...state.projects].map((project) =>
-        project.projectName === action.payload.projectName
+        project.projectId === action.payload.projectId
           ? {
               ...project,
               sections: project.sections

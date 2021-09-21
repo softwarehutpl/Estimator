@@ -12,10 +12,11 @@ import {
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
-  const [sectionName, setSectionName] = useState("Frontend development");
+  const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskId, setTaskId] = useState("");
   const [estimatedBy, setEstimatedBy] = useState("");
+  const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
     state.projects.projects.map((project) =>
@@ -82,14 +83,14 @@ export default function RootStore() {
       </p>
       <input
         type="text"
-        value={projectName}
-        onChange={(event) => setProjectName(event.target.value)}
-        placeholder="Project Name To Del"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Del"
       />
       <button
         onClick={() => {
-          dispatch(delProject({ projectName: projectName }));
-          setProjectName("");
+          dispatch(delProject({ projectId: projectId }));
+          setProjectId("");
         }}
       >
         delProject
@@ -101,9 +102,9 @@ export default function RootStore() {
       <br />
       <input
         type="text"
-        value={projectName}
-        onChange={(event) => setProjectName(event.target.value)}
-        placeholder="Project Name To Add Task"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Add Task"
       />
       <input
         type="text"
@@ -121,13 +122,13 @@ export default function RootStore() {
         onClick={() => {
           dispatch(
             addTask({
-              projectName: projectName,
+              projectId: projectId,
               sectionName: sectionName,
               taskName: taskName,
             })
           );
           setSectionName("");
-          setProjectName("");
+          setProjectId("");
           setTaskName("");
         }}
       >
@@ -138,9 +139,9 @@ export default function RootStore() {
       </p>
       <input
         type="text"
-        value={projectName}
-        onChange={(event) => setProjectName(event.target.value)}
-        placeholder="Project Name To Dell Task"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Dell Task"
       />
       <input
         type="text"
@@ -158,13 +159,13 @@ export default function RootStore() {
         onClick={() => {
           dispatch(
             delTask({
-              projectName: projectName,
+              projectId: projectId,
               sectionName: sectionName,
               id: taskId,
             })
           );
           setSectionName("");
-          setProjectName("");
+          setProjectId("");
           setTaskId("");
         }}
       >
@@ -177,9 +178,9 @@ export default function RootStore() {
       <br />
       <input
         type="text"
-        value={projectName}
-        onChange={(event) => setProjectName(event.target.value)}
-        placeholder="Project Name To Add Subtask"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Add Subtask"
       />
       <input
         type="text"
@@ -203,18 +204,18 @@ export default function RootStore() {
         onClick={() => {
           dispatch(
             addSubtask({
-              projectName: projectName,
+              projectId: projectId,
               sectionName: sectionName,
               taskId: taskId,
               subtaskName: taskName,
             })
           );
           setSectionName("");
-          setProjectName("");
+          setProjectId("");
           setTaskName("");
         }}
       >
-        addTask
+        addSubtask
       </button>
     </div>
   );
