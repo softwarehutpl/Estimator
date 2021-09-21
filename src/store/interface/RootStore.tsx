@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   initialProjects,
@@ -43,6 +44,11 @@ export default function RootStore() {
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         ---------- INITIAL PROJECTS ----------
       </p>
+      <nav className="p-d-flex p-jc-around">
+        <Link to="/">Home</Link>
+        <Link to="/project">Project</Link>
+      </nav>
+      <p>---------- INITIAL PROJECTS ----------</p>
       <button onClick={() => dispatch(initialProjects())}>
         initialProjects
       </button>
