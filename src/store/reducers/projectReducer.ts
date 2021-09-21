@@ -10,7 +10,10 @@ const projectSlice = createSlice({
     clearProjects: (state) => {
       state.projects = [];
     },
-    addProject: (state, action: PayloadAction<{ projectName: string }>) => {
+    addProject: (
+      state,
+      action: PayloadAction<{ projectName: string; projectId: string }>
+    ) => {
       // if (
       //   state.projects.find(
       //     (project) => project.projectName === action.payload.projectName
@@ -25,7 +28,9 @@ const projectSlice = createSlice({
         (project) => project.projectName === action.payload.projectName
       )
         ? console.log("Error") // error handling add!!!
-        : state.projects.push(createProject(action.payload.projectName));
+        : state.projects.push(
+            createProject(action.payload.projectName, action.payload.projectId)
+          );
     },
     delProject: (state, action: PayloadAction<{ projectId: string }>) => {
       state.projects.find(
