@@ -10,12 +10,22 @@ const projectSlice = createSlice({
     clearProjects: (state) => {
       state.projects = [];
     },
-    addProject: (
-      state,
-      action: PayloadAction<{ projectName: string; estimatedBy: string }>
-    ) => {
-      const newProject = createProject(action.payload.projectName);
-      state.projects.push(newProject);
+    addProject: (state, action: PayloadAction<{ projectName: string }>) => {
+      // if (
+      //   state.projects.find(
+      //     (project) => project.projectName === action.payload.projectName
+      //   )
+      // ) {
+      //   console.log("Error"); // error handling add!!!
+      // } else {
+      //   state.projects.push(createProject(action.payload.projectName));
+      // }
+
+      state.projects.find(
+        (project) => project.projectName === action.payload.projectName
+      )
+        ? console.log("Error") // error handling add!!!
+        : state.projects.push(createProject(action.payload.projectName));
     },
     delProject: (state, action: PayloadAction<{ projectId: string }>) => {
       state.projects.find(
@@ -34,12 +44,13 @@ const projectSlice = createSlice({
         projectId?: string;
         sectionName: string;
         taskName: string;
-        taskId?: string;
+        type: string;
       }>
     ) => {
       const newTask = createTask(
         action.payload.sectionName,
-        action.payload.taskName
+        action.payload.taskName,
+        action.payload.type
       );
 
       const newState = [...state.projects].map((project) =>

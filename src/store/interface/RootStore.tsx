@@ -16,7 +16,7 @@ export default function RootStore() {
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskId, setTaskId] = useState("");
-  const [estimatedBy, setEstimatedBy] = useState("");
+  const [type, setType] = useState("group");
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
@@ -67,11 +67,9 @@ export default function RootStore() {
           dispatch(
             addProject({
               projectName: projectName,
-              estimatedBy: estimatedBy,
             })
           );
           setProjectName("");
-          setEstimatedBy("");
         }}
       >
         addProject
@@ -116,6 +114,13 @@ export default function RootStore() {
         onChange={(event) => setTaskName(event.target.value)}
         placeholder="Task Name To Add Task"
       />
+      <p>Task / Group</p>
+      <input
+        type="text"
+        value={type}
+        onChange={(event) => setType(event.target.value)}
+        placeholder="Type Task / Group"
+      />
       <button
         onClick={() => {
           dispatch(
@@ -123,6 +128,7 @@ export default function RootStore() {
               projectId: projectId,
               sectionName: sectionName,
               taskName: taskName,
+              type: type,
             })
           );
           setSectionName("");
