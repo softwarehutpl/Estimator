@@ -1,6 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import data from "../../data.json";
-import { Project } from "../../types/Interface";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -9,19 +7,34 @@ const projectSlice = createSlice({
   name: "project",
   initialState,
   reducers: {
-    initialProjects: (state) => {
-      const projects: any[] = [...data.projects];
-      state.projects = projects;
-    },
     clearProjects: (state) => {
       state.projects = [];
     },
+<<<<<<< HEAD
     addProject: (
       state,
       action: PayloadAction<{ projectName: string }>
     ) => {
       const newProject = createProject(action.payload.projectName);
       state.projects.push(newProject);
+=======
+    addProject: (state, action: PayloadAction<{ projectName: string }>) => {
+      // if (
+      //   state.projects.find(
+      //     (project) => project.projectName === action.payload.projectName
+      //   )
+      // ) {
+      //   console.log("Error"); // error handling add!!!
+      // } else {
+      //   state.projects.push(createProject(action.payload.projectName));
+      // }
+
+      state.projects.find(
+        (project) => project.projectName === action.payload.projectName
+      )
+        ? console.log("Error") // error handling add!!!
+        : state.projects.push(createProject(action.payload.projectName));
+>>>>>>> d205384bb97948480eb4eb100a68a2e0e9a2be01
     },
     delProject: (state, action: PayloadAction<{ projectId: string }>) => {
       state.projects.find(
@@ -40,12 +53,13 @@ const projectSlice = createSlice({
         projectId?: string;
         sectionName: string;
         taskName: string;
-        taskId?: string;
+        type: string;
       }>
     ) => {
       const newTask = createTask(
         action.payload.sectionName,
-        action.payload.taskName
+        action.payload.taskName,
+        action.payload.type
       );
 
       const newState = [...state.projects].map((project) =>
@@ -139,7 +153,6 @@ const projectSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  initialProjects,
   clearProjects,
   addProject,
   delProject,

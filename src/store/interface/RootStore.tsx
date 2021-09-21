@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Project } from "../../types/Interface";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
-  initialProjects,
   clearProjects,
   addProject,
   delProject,
@@ -16,11 +16,11 @@ export default function RootStore() {
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
   const [taskId, setTaskId] = useState("");
-  const [estimatedBy, setEstimatedBy] = useState("");
+  const [type, setType] = useState("group");
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project) =>
+    state.projects.projects.map((project: Project) =>
       Object.create({
         projectName: project.projectName,
         projectId: project.projectId,
@@ -41,24 +41,16 @@ export default function RootStore() {
         backgroundColor: "#E6E6E6",
       }}
     >
-      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-        ---------- INITIAL PROJECTS ----------
-      </p>
       <nav className="p-d-flex p-jc-around">
         <Link to="/">Home</Link>
         <Link to="/project">Project</Link>
       </nav>
-      <p>---------- INITIAL PROJECTS ----------</p>
-      <button onClick={() => dispatch(initialProjects())}>
-        initialProjects
-      </button>
+      <p>---------- CLEAR PROJECTS ----------</p>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
-      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-        ---------- PROJECTS NAMES ----------
-      </p>
-      {projectsData.map((project) => (
+      <p>---------- PROJECTS NAMES ----------</p>
+      {projectsData.map((project: Project) => (
         <li
-          key={project.projectName}
+          key={project.projectId}
         >{`projectName ${project.projectName} id ${project.projectId}`}</li>
       ))}
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
@@ -75,11 +67,9 @@ export default function RootStore() {
           dispatch(
             addProject({
               projectName: projectName,
-              estimatedBy: estimatedBy,
             })
           );
           setProjectName("");
-          setEstimatedBy("");
         }}
       >
         addProject
@@ -124,6 +114,13 @@ export default function RootStore() {
         onChange={(event) => setTaskName(event.target.value)}
         placeholder="Task Name To Add Task"
       />
+      <p>Task / Group</p>
+      <input
+        type="text"
+        value={type}
+        onChange={(event) => setType(event.target.value)}
+        placeholder="Type Task / Group"
+      />
       <button
         onClick={() => {
           dispatch(
@@ -131,6 +128,7 @@ export default function RootStore() {
               projectId: projectId,
               sectionName: sectionName,
               taskName: taskName,
+              type: type,
             })
           );
           setSectionName("");

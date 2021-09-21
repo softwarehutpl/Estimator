@@ -5,9 +5,9 @@ const initialTask: Task = {
   type: Type.Task,
   name: "",
   role: Role.Empty,
-  minMd: 0,
-  maxMd: 0,
-  predictedMd: 0,
+  minMd: 0 || null,
+  maxMd: 0 || null,
+  predictedMd: 0 || null,
   predictedMdFormula: "",
   risk: "",
   comment: {
