@@ -1,5 +1,6 @@
 import { FC } from "react";
-import EstimateTable from "../../components/EstimateTable/EstimateTable";
+
+import EstimateTable from "../../components/Table/EstimateTable/EstimateTable";
 import ProjectSummary from "../../components/ProjectSummary/ProjectSummary";
 import { useParams } from "react-router";
 
