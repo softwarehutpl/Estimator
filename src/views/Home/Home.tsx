@@ -3,16 +3,18 @@ import ProjectTile from "../../components/Tiles/ProjectTile/ProjectTile";
 import CardTile from "../../components/Tiles/CardTile/CardTile";
 import { useAppSelector } from "../../store/hooks";
 import styles from "./home.module.scss";
+import { Key } from "react";
 
 interface Props {}
 
 const Home = (props: Props) => {
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project) =>
-      Object.create({
-        projectName: project.projectName,
-        projectId: project.projectId,
-      })
+    state.projects.projects.map(
+      (project: { projectName: string; projectId: string }) =>
+        Object.create({
+          projectName: project.projectName,
+          projectId: project.projectId,
+        })
     )
   );
   console.log(projectsData);
@@ -28,9 +30,14 @@ const Home = (props: Props) => {
       </div>
       <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
-          {projectsData.map((project) => (
-            <ProjectTile key={project.projectId} title={project.projectName} />
-          ))}
+          {projectsData.map(
+            (project: { projectId: string; projectName: string }) => (
+              <ProjectTile
+                key={project.projectId}
+                title={project.projectName}
+              />
+            )
+          )}
         </ul>
       </Fieldset>
     </>

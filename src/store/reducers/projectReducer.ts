@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import data from "../../data.json";
-import { Project } from "../../types/Interface";
+import { Project, Projects } from "../../types/Interface";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";

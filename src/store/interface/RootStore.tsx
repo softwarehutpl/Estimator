@@ -20,11 +20,12 @@ export default function RootStore() {
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project) =>
-      Object.create({
-        projectName: project.projectName,
-        projectId: project.projectId,
-      })
+    state.projects.projects.map(
+      (project: { projectName: string; projectId: string }) =>
+        Object.create({
+          projectName: project.projectName,
+          projectId: project.projectId,
+        })
     )
   );
   const dispatch = useAppDispatch();
@@ -41,9 +42,6 @@ export default function RootStore() {
         backgroundColor: "#E6E6E6",
       }}
     >
-      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-        ---------- INITIAL PROJECTS ----------
-      </p>
       <nav className="p-d-flex p-jc-around">
         <Link to="/">Home</Link>
         <Link to="/project">Project</Link>
@@ -53,14 +51,14 @@ export default function RootStore() {
         initialProjects
       </button>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
-      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
-        ---------- PROJECTS NAMES ----------
-      </p>
-      {projectsData.map((project) => (
-        <li
-          key={project.projectName}
-        >{`projectName ${project.projectName} id ${project.projectId}`}</li>
-      ))}
+      <p>---------- PROJECTS NAMES ----------</p>
+      {projectsData.map(
+        (project: { projectName: string; projectId: string }) => (
+          <li
+            key={project.projectName}
+          >{`projectName ${project.projectName} id ${project.projectId}`}</li>
+        )
+      )}
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- ADD NEW PROJECT -----------
       </p>
