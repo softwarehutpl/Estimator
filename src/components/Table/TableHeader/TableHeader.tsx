@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import TableRow from '../TableRow/TableRow';
+import TableRow from '../TableRow/TableRow/TableRow';
 
 import styles from './TableHeader.module.scss';
 
