@@ -5,3 +5,5 @@ const initialState: Projects = {
 };
 
 export default initialState;
+
+//TODO: json mock

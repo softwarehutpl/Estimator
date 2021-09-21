@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   initialProjects,
   clearProjects,
   addProject,
   delProject,
-  getProjectNames,
   addTask,
   delTask,
 } from "../reducers/projectReducer";
@@ -16,6 +16,14 @@ export default function RootStore() {
   const [taskName, setTaskName] = useState("");
   const [estimatedBy, setEstimatedBy] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
+  const projectsData = useAppSelector((state) =>
+    state.projects.projects.map((project) =>
+      Object.create({
+        projectName: project.projectName,
+        projectId: project.projectId,
+      })
+    )
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -30,15 +38,21 @@ export default function RootStore() {
         backgroundColor: "#E6E6E6",
       }}
     >
+      <nav className="p-d-flex p-jc-around">
+        <Link to="/">Home</Link>
+        <Link to="/project">Project</Link>
+      </nav>
       <p>---------- INITIAL PROJECTS ----------</p>
       <button onClick={() => dispatch(initialProjects())}>
         initialProjects
       </button>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
-      <p>---------- GET PROJECTS NAMES ----------</p>
-      <button onClick={() => dispatch(getProjectNames())}>
-        getProjectNames
-      </button>
+      <p>---------- PROJECTS NAMES ----------</p>
+      {projectsData.map((project) => (
+        <li
+          key={project.projectName}
+        >{`projectName ${project.projectName} id ${project.projectId}`}</li>
+      ))}
       <p>--------- ADD NEW PROJECT -----------</p>
       <input
         type="text"
