@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   initialProjects,
@@ -37,6 +38,10 @@ export default function RootStore() {
         backgroundColor: "#E6E6E6",
       }}
     >
+      <nav className="p-d-flex p-jc-around">
+        <Link to="/">Home</Link>
+        <Link to="/project">Project</Link>
+      </nav>
       <p>---------- INITIAL PROJECTS ----------</p>
       <button onClick={() => dispatch(initialProjects())}>
         initialProjects
