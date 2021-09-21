@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState, MouseEvent } from 'react';
 
 import { rowOrder } from '../TableRow/TableRow';
 import { Task } from '../../../../types/Interface';
@@ -36,11 +36,25 @@ const TableDraggableRow: FC<IProps> = ({
 	setOpenTooltipId,
 }) => {
 	const [newRisk, setNewRisk] = useState<string>('');
+	const [isOpen, setIsOpen] = useState<boolean>(false);
 
-	const handleToggleTooltip = () => {
-		console.log(orderNumber === openTooltipId);
+	const disabledComment = data.comment.text ? styles.rowControllerTaskButtonDisabled : '';
+
+	const handleTaskAdd = () => console.log('Adding task');
+
+	const handleCommentAdd = () => console.log('Adding comment');
+
+	const handleToggleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
+		if (e.type === 'mouseleave' && !isOpen) {
+			return;
+		}
+
+		setIsOpen(!isOpen);
+	};
+
+	const handleToggleTooltip = (e: MouseEvent<HTMLDivElement>) => {
+		e.stopPropagation();
 		if (orderNumber === openTooltipId) {
-			console.log('here');
 			setOpenTooltipId(null);
 			return;
 		}
@@ -48,18 +62,38 @@ const TableDraggableRow: FC<IProps> = ({
 		setOpenTooltipId(orderNumber);
 	};
 
+	const handleTooltipClosed = () => setOpenTooltipId(null);
+
 	return (
 		<>
-			<div className={`${styles.tableRow} ${stylingClass}`}>
+			<div
+				className={`${styles.tableRow} ${stylingClass}`}
+				onClick={handleTooltipClosed}
+				onMouseLeave={(e) => handleToggleContextMenu(e)}
+			>
+				<div className={styles.rowController} onClick={(e) => handleToggleContextMenu(e)}>
+					<button className={styles.rowControllerButton}>+</button>
+					{isOpen && (
+						<div className={styles.rowControllerButtonsWrapper}>
+							<div className={styles.rowControllerTaskButton} onClick={handleTaskAdd}>
+								<i className='pi pi-calendar-plus'></i>
+							</div>
+							<div
+								className={`${styles.rowControllerTaskButton} ${disabledComment}`}
+								onClick={handleCommentAdd}
+							>
+								<i className='pi pi-comment'></i>
+							</div>
+						</div>
+					)}
+				</div>
 				{rowOrder.map(({ role }) => {
-					console.log(role);
-
 					if (role === 'risk') {
 						return (
 							<TableCell key={role} role={role}>
 								{data.type === 'group' ? null : (
 									<>
-										<div className={styles.riskWrapper} onClick={() => handleToggleTooltip()}>
+										<div className={styles.riskWrapper} onClick={(e) => handleToggleTooltip(e)}>
 											<Badge
 												className={styles.badge}
 												value={newRisk || data[role as keyof Task]}

@@ -25,7 +25,7 @@ export const rowOrder = [
 		role: 'maxMd',
 	},
 	{
-		name: 'Predicated (MD)',
+		name: 'Predicted (MD)',
 		role: 'predictedMd',
 	},
 	{
