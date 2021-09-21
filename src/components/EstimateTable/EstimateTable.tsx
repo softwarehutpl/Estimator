@@ -1,11 +1,11 @@
 import { FC, useState } from "react";
 
-import { projects } from "../../../data.json";
+import { projects } from "../../data.json";
 
-import TableHeader from "../TableHeader/TableHeader";
-import TableSection from "../TableSection/TableSection";
+import TableHeader from "../Table/TableHeader/TableHeader";
+import TableSection from "../Table/TableSection/TableSection";
 
-import styles from "./EstimateTable.module.scss";
+import styles from "./Table/EstimateTable/EstimateTable.module.scss";
 
 interface Props {
   projectId: string;
@@ -18,12 +18,7 @@ const EstimateTable: FC<Props> = ({ projectId }) => {
     <div className={styles.mainTable}>
       <TableHeader />
       {sections.map((section) => (
-        <TableSection
-          key={section.sectionId}
-          section={section}
-          sections={sections}
-          setSections={setSections}
-        />
+        <TableSection key={section.sectionId} section={section} />
       ))}
     </div>
   );
