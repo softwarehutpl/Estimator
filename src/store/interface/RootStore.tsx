@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Project } from "../../types/Interface";
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
-  initialProjects,
   clearProjects,
   addProject,
   delProject,
@@ -20,12 +20,11 @@ export default function RootStore() {
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
-    state.projects.projects.map(
-      (project: { projectName: string; projectId: string }) =>
-        Object.create({
-          projectName: project.projectName,
-          projectId: project.projectId,
-        })
+    state.projects.projects.map((project: Project) =>
+      Object.create({
+        projectName: project.projectName,
+        projectId: project.projectId,
+      })
     )
   );
   const dispatch = useAppDispatch();
@@ -46,19 +45,14 @@ export default function RootStore() {
         <Link to="/">Home</Link>
         <Link to="/project">Project</Link>
       </nav>
-      <p>---------- INITIAL PROJECTS ----------</p>
-      <button onClick={() => dispatch(initialProjects())}>
-        initialProjects
-      </button>
+      <p>---------- CLEAR PROJECTS ----------</p>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
       <p>---------- PROJECTS NAMES ----------</p>
-      {projectsData.map(
-        (project: { projectName: string; projectId: string }) => (
-          <li
-            key={project.projectName}
-          >{`projectName ${project.projectName} id ${project.projectId}`}</li>
-        )
-      )}
+      {projectsData.map((project: Project) => (
+        <li
+          key={project.projectId}
+        >{`projectName ${project.projectName} id ${project.projectId}`}</li>
+      ))}
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- ADD NEW PROJECT -----------
       </p>
