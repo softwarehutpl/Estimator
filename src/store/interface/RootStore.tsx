@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../hooks";
+import { Link } from "react-router-dom";
 import {
   initialProjects,
   clearProjects,
@@ -19,14 +20,14 @@ export default function RootStore() {
   const [estimatedBy, setEstimatedBy] = useState("");
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
-  const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project) =>
-      Object.create({
-        projectName: project.projectName,
-        projectId: project.projectId,
-      })
-    )
-  );
+  // const projectsData = useAppSelector((state) =>
+  //   state.projects.projects.map((project) =>
+  //     Object.create({
+  //       projectName: project.projectName,
+  //       projectId: project.projectId,
+  //     })
+  //   )
+  // );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -41,10 +42,14 @@ export default function RootStore() {
         backgroundColor: "#E6E6E6",
       }}
     >
+<<<<<<< HEAD
+      <nav>
+=======
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         ---------- INITIAL PROJECTS ----------
       </p>
       <nav className="p-d-flex p-jc-around">
+>>>>>>> 5185ae15c68fa5d9bbefbb33ba2b87d1baff9477
         <Link to="/">Home</Link>
         <Link to="/project">Project</Link>
       </nav>
@@ -53,6 +58,15 @@ export default function RootStore() {
         initialProjects
       </button>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
+<<<<<<< HEAD
+      <p>---------- PROJECTS NAMES ----------</p>
+      {/* {projectsData.map((project) => (
+        <li
+          key={project.projectName}
+        >{`projectName ${project.projectName} id ${project.projectId}`}</li>
+      ))} */}
+      <p>--------- ADD NEW PROJECT -----------</p>
+=======
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         ---------- PROJECTS NAMES ----------
       </p>
@@ -64,6 +78,7 @@ export default function RootStore() {
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- ADD NEW PROJECT -----------
       </p>
+>>>>>>> 5185ae15c68fa5d9bbefbb33ba2b87d1baff9477
       <input
         type="text"
         value={projectName}
