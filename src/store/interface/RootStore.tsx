@@ -9,6 +9,7 @@ import {
   addTask,
   delTask,
   addSubtask,
+  updateTasks,
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
 
@@ -18,6 +19,8 @@ export default function RootStore() {
   const [taskName, setTaskName] = useState("");
   const [taskId, setTaskId] = useState("");
   const [type, setType] = useState("group");
+  const [taskProps, setTaskProps] = useState("");
+  const [updatedValue, setUpdatedValue] = useState("");
   const [projectId, setProjectId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
@@ -48,7 +51,9 @@ export default function RootStore() {
       </nav>
       <p>---------- CLEAR PROJECTS ----------</p>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
-      <p>---------- PROJECTS NAMES ----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        ---------- PROJECTS NAMES ----------
+      </p>
       {projectsData.map((project: Project) => (
         <li
           key={project.projectId}
@@ -222,6 +227,61 @@ export default function RootStore() {
         }}
       >
         addSubtask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE TASK -----------
+      </p>
+      Frontend development <br />
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Update Task"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Update Task"
+      />
+      <input
+        type="text"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Update Task"
+      />
+      <input
+        type="text"
+        value={taskProps}
+        onChange={(event) => setTaskProps(event.target.value)}
+        placeholder="Task Props To Update Task"
+      />
+      <input
+        type="text"
+        value={updatedValue}
+        onChange={(event) => setUpdatedValue(event.target.value)}
+        placeholder="Updated value"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            updateTasks({
+              projectId: projectId,
+              sectionName: sectionName,
+              taskId: taskId,
+              taskProps: taskProps,
+              updatedValue: updatedValue,
+            })
+          );
+          setProjectId("");
+          setSectionName("");
+          setTaskId("");
+          setTaskProps("");
+          setUpdatedValue("");
+        }}
+      >
+        updateTask
       </button>
     </div>
   );
