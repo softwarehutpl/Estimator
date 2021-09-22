@@ -12,6 +12,7 @@ import styles from './TableDraggableRow.module.scss';
 import { useAppDispatch } from '../../../../store/hooks';
 import { addTask, delTask, reorder } from '../../../../store/reducers/projectReducer';
 import { useParams } from 'react-router';
+import CellInput from '../../../Input/CellInput/CellInput';
 
 interface IProps {
 	data: Task;
@@ -161,6 +162,10 @@ const TableDraggableRow: FC<IProps> = ({
 					return (
 						<TableCell key={role} role={role}>
 							{role === 'sectionId' ? orderNumber : data[role as keyof Task]}
+							{role === 'name' && <input type='text'></input>}
+							{role === 'minMd' && <CellInput value={data['minMd']} />}
+							{role === 'maxMd' && <input type='number' min='0' max='1000'></input>}
+							{role === 'predictedMd' && <input type='number' min='0' max='1000'></input>}
 						</TableCell>
 					);
 				})}
