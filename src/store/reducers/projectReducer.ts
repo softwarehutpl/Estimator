@@ -1,4 +1,4 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
 import initialState from '../initials/initialState';
 import createProject from '../actions/createProject';
 import createTask from '../actions/createTask';
@@ -130,6 +130,72 @@ const projectSlice = createSlice({
 			);
 			state.projects = newState;
 		},
+		delSubtask: () => {},
+		updateTasks: (
+			state,
+			action: PayloadAction<{
+				projectId: string;
+				sectionName: string;
+				taskId: string;
+				taskProps: string;
+				updatedValue: any;
+			}>
+		) => {
+			const newState = [...state.projects].map((project) =>
+				project.projectId === action.payload.projectId
+					? {
+							...project,
+							sections: project.sections
+								? [...project.sections].map((section) =>
+										section.name === action.payload.sectionName
+											? {
+													...section,
+													tasks: section.tasks?.map((task) =>
+														task.id === action.payload.taskId
+															? {
+																	...task,
+																	name:
+																		action.payload.taskProps === 'name'
+																			? action.payload.updatedValue
+																			: task.name,
+																	minMd:
+																		action.payload.taskProps === 'minMd'
+																			? Number(action.payload.updatedValue)
+																			: task.minMd,
+																	maxMd:
+																		action.payload.taskProps === 'maxMd'
+																			? Number(action.payload.updatedValue)
+																			: task.maxMd,
+																	risk:
+																		action.payload.taskProps === 'risk'
+																			? action.payload.updatedValue
+																			: task.risk,
+																	comment: {
+																		text:
+																			action.payload.taskProps === 'commentText'
+																				? action.payload.updatedValue
+																				: task.comment.text,
+																		isImportant:
+																			action.payload.taskProps === 'commentImportant'
+																				? action.payload.updatedValue === 'true'
+																					? true
+																					: action.payload.updatedValue === 'false'
+																					? false
+																					: task.comment.isImportant
+																				: task.comment.isImportant,
+																	},
+															  }
+															: task
+													),
+											  }
+											: section
+								  )
+								: [],
+					  }
+					: project
+			);
+			state.projects = newState;
+		},
 		reorder: (
 			state,
 			action: PayloadAction<{
@@ -170,18 +236,27 @@ const projectSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { clearProjects, addProject, delProject, addTask, delTask, addSubtask, reorder } =
-	projectSlice.actions;
+export const {
+	clearProjects,
+	addProject,
+	delProject,
+	addTask,
+	delTask,
+	addSubtask,
+	updateTasks,
+	reorder,
+} = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
 
 export default projectReducer;
 //add task -> done
-//add sub
-//del task
-//del sub
+//add sub -> done
+//del task -> done
+//del sub -> in progress
 //del proj -> done
 //add proj -> done
 //get projects -> done
+//edit task
 //get project
 //edit task
