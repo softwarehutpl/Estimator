@@ -227,6 +227,7 @@ export default function RootStore() {
           setSectionName("");
           setProjectId("");
           setTaskName("");
+          setTaskId("");
         }}
       >
         addSubtask
