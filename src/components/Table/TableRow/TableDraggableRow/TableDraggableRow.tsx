@@ -9,11 +9,17 @@ import TaskComment from '../../TaskComment/TaskComment';
 
 import { Badge } from 'primereact/badge';
 import styles from './TableDraggableRow.module.scss';
+import { useAppDispatch } from '../../../../store/hooks';
+import { addTask, delTask, reorder } from '../../../../store/reducers/projectReducer';
+import { useParams } from 'react-router';
+import CellInput from '../../../Input/CellInput/CellInput';
 
 interface IProps {
 	data: Task;
+	index: number;
 	openTooltipId: number | null;
 	orderNumber: number;
+	sectionName: string;
 	stylingClass?: string;
 	setOpenTooltipId: Dispatch<SetStateAction<number | null>>;
 }
@@ -30,17 +36,31 @@ const riskMultiplicator: RiskMultiplicator = {
 
 const TableDraggableRow: FC<IProps> = ({
 	data,
+	index,
 	openTooltipId,
 	orderNumber,
+	sectionName,
 	stylingClass,
 	setOpenTooltipId,
 }) => {
 	const [newRisk, setNewRisk] = useState<string>('');
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 
+	const dispatch = useAppDispatch();
+
+	const { projectId } = useParams<{ projectId: string }>();
+
 	const disabledComment = data.comment.text ? styles.rowControllerTaskButtonDisabled : '';
 
-	const handleTaskAdd = () => console.log('Adding task');
+	const handleTaskAdd = () => {
+		//TODO posibility to create task with diffrent type
+		dispatch(addTask({ projectId, sectionName, type: 'task' }));
+		dispatch(reorder({ projectId, sectionName, endIndex: index }));
+	};
+
+	const handleTaskDelete = () => {
+		dispatch(delTask({ projectId, sectionName, id: data.id }));
+	};
 
 	const handleCommentAdd = () => console.log('Adding comment');
 
@@ -75,6 +95,9 @@ const TableDraggableRow: FC<IProps> = ({
 					<button className={styles.rowControllerButton}>+</button>
 					{isOpen && (
 						<div className={styles.rowControllerButtonsWrapper}>
+							<div className={styles.rowControllerTaskButton} onClick={handleTaskDelete}>
+								<i className='pi pi-trash'></i>
+							</div>
 							<div className={styles.rowControllerTaskButton} onClick={handleTaskAdd}>
 								<i className='pi pi-calendar-plus'></i>
 							</div>
@@ -139,6 +162,10 @@ const TableDraggableRow: FC<IProps> = ({
 					return (
 						<TableCell key={role} role={role}>
 							{role === 'sectionId' ? orderNumber : data[role as keyof Task]}
+							{role === 'name' && <input type='text'></input>}
+							{role === 'minMd' && <CellInput value={data['minMd']} />}
+							{role === 'maxMd' && <input type='number' min='0' max='1000'></input>}
+							{role === 'predictedMd' && <input type='number' min='0' max='1000'></input>}
 						</TableCell>
 					);
 				})}

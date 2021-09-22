@@ -9,10 +9,11 @@ import TableSubtasks from '../TableSubtasks/TableSubtasks';
 import styles from './TableTask.module.scss';
 
 interface IProps {
+	sectionName: string;
 	tasks: Task[];
 }
 
-const TableTasks: FC<IProps> = ({ tasks }) => {
+const TableTasks: FC<IProps> = ({ sectionName, tasks }) => {
 	const [openTooltipId, setOpenTooltipId] = useState<number | null>(null);
 
 	return (
@@ -27,9 +28,11 @@ const TableTasks: FC<IProps> = ({ tasks }) => {
 						>
 							<TableDraggableRow
 								data={task}
+								index={index}
 								orderNumber={index + 1}
 								stylingClass={styles.task}
 								openTooltipId={openTooltipId}
+								sectionName={sectionName}
 								setOpenTooltipId={setOpenTooltipId}
 							/>
 							<TableSubtasks subtasks={task.subtasks} taskId={task.id} />
@@ -45,9 +48,11 @@ const TableTasks: FC<IProps> = ({ tasks }) => {
 					>
 						<TableDraggableRow
 							data={task}
+							index={index}
 							orderNumber={index + 1}
 							stylingClass={styles.task}
 							openTooltipId={openTooltipId}
+							sectionName={sectionName}
 							setOpenTooltipId={setOpenTooltipId}
 						/>
 					</DraggableWrapper>

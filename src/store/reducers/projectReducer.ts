@@ -38,13 +38,13 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId?: string;
         sectionName: string;
-        taskName: string;
+        taskName?: string;
         type: string;
       }>
     ) => {
       const newTask = createTask(
         action.payload.sectionName,
-        action.payload.taskName,
+        (action.payload.taskName = ""),
         action.payload.type
       );
 
@@ -321,6 +321,45 @@ const projectSlice = createSlice({
       );
       state.projects = newState;
     },
+    reorder: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        sectionName: string;
+        startIndex?: number;
+        endIndex: number;
+      }>
+    ) => {
+      const sectionTasks =
+        state.projects
+          .find((project) => project.projectId === action.payload.projectId)
+          ?.sections?.find(
+            (section) => section.name === action.payload.sectionName
+          )?.tasks || [];
+
+      const [removedTask] =
+        sectionTasks?.splice(sectionTasks.length - 1, 1) || [];
+      sectionTasks?.splice(action.payload.endIndex + 1, 0, removedTask);
+
+      const newState = [...state.projects].map((project) =>
+        project.projectId === action.payload.projectId
+          ? {
+              ...project,
+              sections: project.sections
+                ? [...project.sections].map((section) =>
+                    section.name === action.payload.sectionName
+                      ? {
+                          ...section,
+                          tasks: sectionTasks,
+                        }
+                      : section
+                  )
+                : [],
+            }
+          : project
+      );
+      state.projects = newState;
+    },
   },
 });
 
@@ -335,6 +374,7 @@ export const {
   delSubtask,
   updateTasks,
   updateSubtask,
+  reorder,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
