@@ -106,16 +106,23 @@ describe('testing store actions related to tasks, group and subtasks', () => {
   });
   
   test('delete task', () => {
-    const previousState = testUtils.stateWithOneProjectAndOneTask;
+    const previousState = testUtils.stateWithEmptyProject;
   
-    const taskId = "f819c1a6-5237-44b5-a4fe-623f911c2a8c";
+    // const taskId = "f819c1a6-5237-44b5-a4fe-623f911c2a8c";
     const sectionName = "Backend development";
     const projectId = "1b3cada1-6c61-4974-9886-d3651f76007d";
-    // const newState = projectReducer(previousState, delTask({projectId: projectId, sectionName: sectionName, id: taskId}));
-  
-    // const expectedState = {"projects": []};
-    // expect(newState).toEqual(expectedState);
-  
+    const taskName = "New task";
+    const type = "task";
+
+    const afterAddingTaskState = projectReducer(previousState, addTask({projectId: projectId, sectionName: sectionName, taskName: taskName, type: type}));
+
+    const receivedSections = afterAddingTaskState.projects[0].sections!;
+    const taskId = receivedSections[1].tasks[0].id;
+
+    const newState = projectReducer(previousState, delTask({projectId: projectId, sectionName: sectionName, id: taskId}));  
+    const expectedState = previousState;
+
+    expect(newState).toEqual(expectedState);  
   });
 
   test('add new group', () => {
@@ -137,24 +144,6 @@ describe('testing store actions related to tasks, group and subtasks', () => {
     expect(receivedSections[1].tasks[0].role).toEqual(Role.BD);
   });
 
-  // test('add new subtask (type: Task) to another task - it should be not allowed', () => {
-
-  //   const previousState = testUtils.stateWithOneProjectAndOneTask;
-  
-  //   const projectId = "1b3cada1-6c61-4974-9886-d3651f76007d";
-  //   const sectionName = "Backend development";
-  //   const taskName = "New subtask";
-  //   const type = "Task";
-  //   const newState = projectReducer(previousState, addTask({projectId: projectId, sectionName: sectionName, taskName: taskName, type: type}));
-  
-  //   const receivedSections = newState.projects[0].sections!;
-  //   expect(receivedSections[1].tasks[0].name).toEqual(taskName);
-  //   expect(receivedSections[1].tasks[0].minMd).toEqual(null);
-  //   expect(receivedSections[1].tasks[0].maxMd).toEqual(null);
-  //   expect(receivedSections[1].tasks[0].predictedMd).toEqual(null);
-  //   expect(receivedSections[1].tasks[0].risk).toEqual("");
-  //   expect(receivedSections[1].tasks[0].role).toEqual(Role.BD);
-  // });
   test('add new subtask to group', () => {
     const previousState = testUtils.stateWithEmptyProject;
   
