@@ -11,6 +11,7 @@ import {
   addSubtask,
   updateTasks,
   delSubtask,
+  updateSubtask,
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
 
@@ -326,6 +327,69 @@ export default function RootStore() {
           setProjectId("");
           setSectionName("");
           setTaskId("");
+          setTaskProps("");
+          setUpdatedValue("");
+        }}
+      >
+        updateTask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE SUBTASK -----------
+      </p>
+      Frontend development <br />
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Update Subtask"
+      />
+      <input
+        type="text"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={subtaskId}
+        onChange={(event) => setSubtaskId(event.target.value)}
+        placeholder="Subtask ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={taskProps}
+        onChange={(event) => setTaskProps(event.target.value)}
+        placeholder="Subtask Props To Update Subtask"
+      />
+      <input
+        type="text"
+        value={updatedValue}
+        onChange={(event) => setUpdatedValue(event.target.value)}
+        placeholder="Updated value"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            updateSubtask({
+              projectId: projectId,
+              sectionName: sectionName,
+              taskId: taskId,
+              subtaskId: subtaskId,
+              taskProps: taskProps,
+              updatedValue: updatedValue,
+            })
+          );
+          setProjectId("");
+          setSectionName("");
+          setTaskId("");
+          setSubtaskId("");
           setTaskProps("");
           setUpdatedValue("");
         }}
