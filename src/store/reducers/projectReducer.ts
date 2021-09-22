@@ -237,3 +237,5 @@ export default projectReducer;
 //add proj -> done
 //get projects -> done
 //edit task
+//get project
+//edit task
