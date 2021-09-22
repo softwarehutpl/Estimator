@@ -10,6 +10,7 @@ import {
   delTask,
   addSubtask,
 } from "../reducers/projectReducer";
+import { v4 as uuidv4 } from "uuid";
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
@@ -67,6 +68,7 @@ export default function RootStore() {
           dispatch(
             addProject({
               projectName: projectName,
+              projectId: uuidv4(),
             })
           );
           setProjectName("");
