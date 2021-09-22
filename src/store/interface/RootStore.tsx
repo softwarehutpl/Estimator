@@ -10,6 +10,7 @@ import {
   delTask,
   addSubtask,
   updateTasks,
+  delSubtask,
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
 
@@ -22,6 +23,7 @@ export default function RootStore() {
   const [taskProps, setTaskProps] = useState("");
   const [updatedValue, setUpdatedValue] = useState("");
   const [projectId, setProjectId] = useState("");
+  const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const projectsData = useAppSelector((state) =>
     state.projects.projects.map((project: Project) =>
@@ -227,6 +229,53 @@ export default function RootStore() {
         }}
       >
         addSubtask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- DEL SUBTASK -----------
+      </p>
+      Frontend development <br />
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Add Subtask"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Add Subtask"
+      />
+      <input
+        type="text"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Add Subtask"
+      />
+      <input
+        type="text"
+        value={subtaskId}
+        onChange={(event) => setSubtaskId(event.target.value)}
+        placeholder="Subtask ID To Dell Subtask"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            delSubtask({
+              projectId: projectId,
+              sectionName: sectionName,
+              taskId: taskId,
+              subtaskId: subtaskId,
+            })
+          );
+          setSectionName("");
+          setProjectId("");
+          setTaskName("");
+          setProjectId("");
+        }}
+      >
+        delSubtask
       </button>
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- UPDATE TASK -----------

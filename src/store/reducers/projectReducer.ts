@@ -14,16 +14,6 @@ const projectSlice = createSlice({
       state,
       action: PayloadAction<{ projectName: string; projectId: string }>
     ) => {
-      // if (
-      //   state.projects.find(
-      //     (project) => project.projectName === action.payload.projectName
-      //   )
-      // ) {
-      //   console.log("Error"); // error handling add!!!
-      // } else {
-      //   state.projects.push(createProject(action.payload.projectName));
-      // }
-
       state.projects.find(
         (project) => project.projectName === action.payload.projectName
       )
@@ -144,7 +134,45 @@ const projectSlice = createSlice({
       );
       state.projects = newState;
     },
-    delSubtask: () => {},
+    delSubtask: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        sectionName: string;
+        taskId: string;
+        subtaskId: string;
+      }>
+    ) => {
+      const newState = [...state.projects].map((project) =>
+        project.projectId === action.payload.projectId
+          ? {
+              ...project,
+              sections: project.sections
+                ? [...project.sections].map((section) =>
+                    section.name === action.payload.sectionName
+                      ? {
+                          ...section,
+                          tasks: section.tasks?.map((task) =>
+                            task.id === action.payload.taskId
+                              ? {
+                                  ...task,
+                                  subtasks: (task.subtasks =
+                                    task.subtasks?.filter(
+                                      (subtask) =>
+                                        subtask.id !== action.payload.subtaskId
+                                    )),
+                                }
+                              : task
+                          ),
+                        }
+                      : section
+                  )
+                : [],
+            }
+          : project
+      );
+      state.projects = newState;
+    },
     updateTasks: (
       state,
       action: PayloadAction<{
@@ -152,7 +180,7 @@ const projectSlice = createSlice({
         sectionName: string;
         taskId: string;
         taskProps: string;
-        updatedValue: any;
+        updatedValue: string;
       }>
     ) => {
       const newState = [...state.projects].map((project) =>
@@ -223,6 +251,7 @@ export const {
   addTask,
   delTask,
   addSubtask,
+  delSubtask,
   updateTasks,
 } = projectSlice.actions;
 
