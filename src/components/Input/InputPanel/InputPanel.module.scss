@@ -1,0 +1,29 @@
+.inputPanelWrapper {
+	padding: 20px 10px;
+}
+
+.panelInput {
+	padding: 5px;
+	background-color: transparent;
+	font-family: inherit;
+	border: none;
+	border-bottom: 2px solid var(--indigo-100);
+	outline: none;
+}
+
+.panelButton {
+	margin: 0 20px;
+	padding: 5px 20px;
+	background-color: var(--indigo-200);
+	color: white;
+	font-weight: 700;
+	border: none;
+	border-radius: 6px;
+	outline: none;
+	cursor: pointer;
+	transition: 0.3s ease;
+
+	&:hover {
+		background-color: var(--indigo-300);
+	}
+}
