@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -236,6 +236,4 @@ export default projectReducer;
 //del proj -> done
 //add proj -> done
 //get projects -> done
-//edit task
-//get project
-//edit task
+//edit task -> done
