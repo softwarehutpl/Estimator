@@ -1,38 +1,38 @@
-import { useState } from "react";
+import { ChangeEventHandler, MouseEventHandler } from "react";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
+import { Link } from "react-router-dom";
 import styles from "./cardTitle.module.scss";
 
 interface Props {
   btn: string;
   title: string;
-  default: string;
+  placeholder: string;
+  action: MouseEventHandler<HTMLButtonElement>;
+  change: ChangeEventHandler<HTMLInputElement>;
+  projectId: string | "";
 }
 
 const CardTile = (props: Props) => {
-  const { btn, title } = props;
-  const [projectName, setProjectName] = useState("");
-
-  const createProjectHandler = () => {
-    console.log(projectName);
-    setProjectName("");
-  };
+  const { btn, title, action, change, placeholder, projectId = "" } = props;
 
   return (
     <Card title={title} className={styles.card}>
       <div className="p-d-flex p-flex-column">
         <InputText
           id="projectName"
-          value={projectName}
+          value={placeholder}
           placeholder={title}
-          onChange={(e) => setProjectName(e.target.value)}
+          onChange={change}
         />
-        <Button
-          label={btn}
-          onClick={createProjectHandler}
-          className={`${styles.btn} p-my-3`}
-        />
+        <Link to={`/project/${projectId}`}>
+          <Button
+            label={btn}
+            onClick={action}
+            className={`${styles.btn} p-my-3`}
+          />
+        </Link>
       </div>
     </Card>
   );
