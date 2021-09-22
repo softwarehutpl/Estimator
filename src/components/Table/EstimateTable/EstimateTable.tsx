@@ -1,32 +1,40 @@
-import { FC, useState } from "react";
+import { FC, useState } from 'react';
+import { useAppSelector } from '../../../store/hooks';
+import { Project, Section } from '../../../types/Interface';
 
-import { projects } from "../../../data.json";
+import TableHeader from '../TableHeader/TableHeader';
+import TableSection from '../TableSection/TableSection';
 
-import TableHeader from "../TableHeader/TableHeader";
-import TableSection from "../TableSection/TableSection";
-
-import styles from "./EstimateTable.module.scss";
+import styles from './EstimateTable.module.scss';
 
 interface Props {
-  projectId: string;
+	projectId: string;
 }
 
 const EstimateTable: FC<Props> = ({ projectId }) => {
-  const [sections, setSections] = useState(projects[0].sections);
+	const [sections, setSections] = useState(null);
 
-  return (
-    <div className={styles.mainTable}>
-      <TableHeader />
-      {sections.map((section) => (
-        <TableSection
-          key={section.sectionId}
-          section={section}
-          sections={sections}
-          setSections={setSections}
-        />
-      ))}
-    </div>
-  );
+	const project: Project = useAppSelector((state) =>
+		state.projects.projects.find((project: Project) => project.projectId === projectId)
+	);
+
+	//TODO if project with given Id does not exist display something else than table
+	if (!project) return null;
+
+	return (
+		<div className={styles.mainTable}>
+			<TableHeader />
+			{project.sections?.map((section: Section) => (
+				<TableSection
+					key={section.sectionId}
+					projectId={projectId}
+					section={section}
+					sections={project.sections}
+					setSections={setSections}
+				/>
+			))}
+		</div>
+	);
 };
 
 export default EstimateTable;

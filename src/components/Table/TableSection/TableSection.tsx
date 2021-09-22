@@ -1,4 +1,4 @@
-import { Dispatch, FC, SetStateAction } from 'react';
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
 import { Panel } from 'primereact/panel';
@@ -8,15 +8,33 @@ import TableExpandableRow from '../TableRow/TableExapndableRow/TableExpandableRo
 import TableTasks from '../TableTasks/TableTasks';
 
 import styles from './TableSection.module.scss';
+import { useAppDispatch } from '../../../store/hooks';
+import { addTask } from '../../../store/reducers/projectReducer';
+import InputPanel from '../../Input/InputPanel/InputPanel';
 
 interface IProps {
 	//TODO why type Section is problematic?
+	projectId: string;
 	section: any;
 	sections: any;
 	setSections: Dispatch<SetStateAction<any>>;
 }
 
-const TableSection: FC<IProps> = ({ section, sections, setSections }) => {
+const TableSection: FC<IProps> = ({ section, projectId, sections, setSections }) => {
+	const [inputValue, setInputValue] = useState<string>('');
+	const dispatch = useAppDispatch();
+
+	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { value } = e.target;
+
+		setInputValue(value);
+	};
+
+	const handleTaskAdd = () => {
+		//TODO posibility to create task with diffrent type
+		dispatch(addTask({ projectId, sectionName: section.name, taskName: inputValue, type: 'task' }));
+	};
+
 	const getNewSections = (tasks: any) => {
 		const newSection = { ...section, tasks };
 
@@ -77,11 +95,14 @@ const TableSection: FC<IProps> = ({ section, sections, setSections }) => {
 			>
 				{section.tasks.length ? (
 					<DroppableWrapper droppableId={`droppable-${section.sectionId}`}>
-						<TableTasks tasks={section.tasks} />
+						<TableTasks tasks={section.tasks} sectionName={section.name} />
 					</DroppableWrapper>
 				) : (
-					//TODO if no task, display button with ability to create first one?
-					<p>No tasks yet...</p>
+					<InputPanel
+						handleInputChange={handleInputChange}
+						handleTaskAdd={handleTaskAdd}
+						inputValue={inputValue}
+					/>
 				)}
 			</Panel>
 		</DragDropContext>
