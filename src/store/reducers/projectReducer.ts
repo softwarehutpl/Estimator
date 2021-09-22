@@ -383,8 +383,9 @@ export default projectReducer;
 //add task -> done
 //add sub -> done
 //del task -> done
-//del sub -> in progress
+//del sub -> done
 //del proj -> done
 //add proj -> done
 //get projects -> done
 //edit task -> done
+//edit subtask -> done
