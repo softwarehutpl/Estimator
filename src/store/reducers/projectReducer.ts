@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, current } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import initialState from '../initials/initialState';
 import createProject from '../actions/createProject';
 import createTask from '../actions/createTask';
@@ -43,7 +43,7 @@ const projectSlice = createSlice({
 		) => {
 			const newTask = createTask(
 				action.payload.sectionName,
-				action.payload.taskName,
+				(action.payload.taskName = ''),
 				action.payload.type
 			);
 
