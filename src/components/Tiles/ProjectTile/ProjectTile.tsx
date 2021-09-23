@@ -13,7 +13,10 @@ const ProjectTile: FC<Props> = ({ title, projectId }) => {
     <>
       <li className={`${styles.listItem} p-d-flex p-ai-center p-jc-between`}>
         <h3>{title}</h3>
-        <Link to={`/project/${projectId}`} className="p-ai-center">
+        <Link
+          to={`/project/${projectId}`}
+          className={`${styles.link} p-ai-center`}
+        >
           <Button label="Open" className="p-button-warning p-button-raised" />
         </Link>
       </li>
