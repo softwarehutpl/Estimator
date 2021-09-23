@@ -30,14 +30,6 @@ export default function RootStore() {
   const [projectId, setProjectId] = useState("");
   const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
-  // const projectsData = useAppSelector((state) =>
-  //   state.projects.projects.map((project: Project) =>
-  //     Object.create({
-  //       projectName: project.projectName,
-  //       projectId: project.projectId,
-  //     })
-  //   )
-  // );
   const dispatch = useAppDispatch();
   const project = useAppSelector(
     getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
