@@ -69,7 +69,11 @@ const Home = (props: Props) => {
       <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
           {projectsData.map((project: Project) => (
-            <ProjectTile key={project.projectId} title={project.projectName} />
+            <ProjectTile
+              key={project.projectId}
+              projectId={project.projectId}
+              title={project.projectName}
+            />
           ))}
         </ul>
       </Fieldset>
