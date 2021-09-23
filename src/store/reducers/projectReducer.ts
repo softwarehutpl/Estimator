@@ -14,10 +14,12 @@ const projectSlice = createSlice({
       state,
       action: PayloadAction<{ projectName: string; projectId: string }>
     ) => {
-      state.projects.find(
-        (project) => project.projectName === action.payload.projectName
-      )
-        ? console.log("Error") // error handling add!!!
+      action.payload.projectName.length === 0
+        ? console.log("Project name is empty!") // error handling add!!!
+        : state.projects.find(
+            (project) => project.projectName === action.payload.projectName
+          )
+        ? console.log("The project with the given title exists") // error handling add!!!
         : state.projects.push(
             createProject(action.payload.projectName, action.payload.projectId)
           );
@@ -47,7 +49,6 @@ const projectSlice = createSlice({
         (action.payload.taskName = ""),
         action.payload.type
       );
-
       const newState = [...state.projects].map((project) =>
         project.projectId === action.payload.projectId
           ? {
@@ -62,7 +63,6 @@ const projectSlice = createSlice({
             }
           : project
       );
-
       state.projects = newState;
     },
     delTask: (
