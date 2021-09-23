@@ -50,7 +50,7 @@ const exampleProject: Project = {
 							predictedMdFormula: "",
 							risk: "H",
 							comment: {
-								text: "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text",                            
+								text: "Business feature is better described as doing something i.e. logging into a system, printing a report or editing a text ",                            
 								isImportant: true
 							},
 							subtasks: []
@@ -231,7 +231,7 @@ const exampleProject: Project = {
 		},
 		{
 			name: "Est. Delivery Date:",
-			estDeliveryDate: ""
+			estDeliveryDate: "21.03.2022"
 		}
 	],
 	assumptions: [

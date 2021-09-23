@@ -1,8 +1,182 @@
 // @ts-nocheck
 import ReactExport from "react-data-export";
-import { useAppSelector } from "../../store/hooks";
-import initialProject from "../../store/initials/initialProject";
+import { SymbolDisplayPartKind } from "typescript";
 import exampleProject from "./exampleProject";
+
+const subtitleStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: 10,
+    bold: true
+  }
+}
+
+// cell styles
+
+const projectKeyStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8"
+  },
+  alignment: {
+    horizontal: "right"
+  }
+}
+
+const projectValueStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const projectValueCenterStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
+const projectValueCenterSmallStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8",
+    bold: true
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
+const tableHeaderStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8"
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const borderTopStyle: ReactExport.ExcelStyle = {
+  border: {
+    top: {
+      style: "dotted",
+      color: { rgb: "000000"}
+    }    
+  }
+}
+
+const tableHeaderCenterStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8"
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
+const sectionTitleStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const sectionValuesStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
+const sectionProcentStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    horizontal: "center"
+  },
+  numFmt: "0.00%;\\(0.00%\\);\\-;@"
+}
+
+const taskValuesStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8"
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
+const taskNameStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8"
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const commentStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8",
+    italic: true,
+    color: { rgb: "666666" }
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const importantCommentStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8",
+    italic: true,
+    color: { rgb: "c9211e" }
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const sectionTitleSmallStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "8",
+    bold: true
+  },
+  alignment: {
+    horizontal: "left"
+  }
+}
+
+const totalTitleStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10"
+  },
+  alignment: {
+    horizontal: "right"
+  }
+}
+
+const totalValuesStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10"
+  },
+  alignment: {
+    horizontal: "center"
+  }
+}
+
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -158,68 +332,75 @@ export default function Export() {
       { value: "" },
     ],
     [ //3 zmergowane cells wszystkie w tym rzedzie
-      { value: "Project Workload Estimation", style: { font: { sz: "14", bold: true } } },
+      { value: "Project Workload Estimation", style: { font: { sz: "18", bold: true } } },
     ],
     [ //4
       { value: ""},
     ],
     [ //5
       { value: "" },
-      { value: "Project name:" },
-      { value: "Test project" },
+      { value: "Project name:", style: projectKeyStyle },
+      { value: "Test project", style: projectValueStyle },
       { value: "" },
-      { value: "Est. Start:" },
-      { value: "1.01.2021" },
-      { value: "Est. End:" },
-      { value: "1.03.2021" },
+      { value: "Est. Start:", style: projectKeyStyle },
+      { value: "1.01.2021", style: projectValueCenterStyle },
+      { value: "Est. End:", style: projectKeyStyle },
+      { value: "1.03.2021", style: projectValueCenterStyle },
     ],
     [ //6
       { value: "" },
       { value: "" },
       { value: "" },
       { value: "" },
-      { value: "Team size (FTEs):" },
-      { value: "4" },
-      { value: "Time Budget:" },
-      { value: "160 MD" },
+      { value: "Team size (FTEs):", style: projectKeyStyle },
+      { value: "4", style: projectValueCenterStyle },
+      { value: "Time Budget:", style: projectKeyStyle },
+      { value: "160 MD", style: projectValueCenterStyle },
     ],
     [ //7
       { value: ""},
     ],
     [ //8
       { value: "" },
-      { value: "Estimated by:" },
-      { value: "Hortensjo Pisuarez" },
+      { value: "Estimated by:", style: projectKeyStyle },
+      { value: "Hortensjo Pisuarez", style: projectValueStyle },
       { value: "" },
-      { value: "Date:" },
-      { value: "30.11.2020" },
-      { value: "Effort:" },
-      { value: "12h" },
+      { value: "Date:", style: projectKeyStyle },
+      { value: "30.11.2020", style: projectValueCenterStyle },
+      { value: "Effort:", style: projectKeyStyle },
+      { value: "12h", style: projectValueCenterStyle },
     ],
     [ //9
       { value: "" },
-      { value: "Verified by:" },
-      { value: "Wieńczysław Należyty" },
+      { value: "Verified by:", style: projectKeyStyle },
+      { value: "Wieńczysław Należyty", style: projectValueStyle },
       { value: "" },
-      { value: "Date:" },
-      { value: "" },
+      { value: "Date:", style: projectKeyStyle },
+      { value: "01.02.2023", style: projectValueCenterStyle },
     ],
     [ //10
       { value: ""},
     ],
     [ //11
-      { value: ""},
-      { value: "Group / Task	"},
-      { value: ""},
-      { value: ""},
-      { value: "Role"},
-      { value: "Min (MD)"},
-      { value: "Max (MD)"},
-      { value: "Predicted (MD)"},
-      { value: "Risk"},
+      { value: "", style: tableHeaderStyle},
+      { value: "Group / Task	", style: tableHeaderStyle},
+      { value: "", style: tableHeaderStyle},
+      { value: "", style: tableHeaderStyle},
+      { value: "Role", style: tableHeaderCenterStyle},
+      { value: "Min (MD)", style: tableHeaderCenterStyle},
+      { value: "Max (MD)", style: tableHeaderCenterStyle},
+      { value: "Predicted (MD)", style: tableHeaderCenterStyle},
+      { value: "Risk", style: tableHeaderCenterStyle},
     ],
     [ //12 
-      { value: ""},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
+      { value: "", style: borderTopStyle},
 
       // formula test
       // { value: "12"},
@@ -255,17 +436,18 @@ export default function Export() {
     let minMd = section.minMd;
     let maxMd = section.maxMd;
     let predictedMd = section.predictedMd;
-    let risk = section.risk;
+    let risk = section.risk/100;
+    // let risk = section.risk.toString().replace('.',',');
     
-    newArray.push({value:sectionSymbol}); // A
-    newArray.push({value:sectionName}); // B
+    newArray.push({value:sectionSymbol, style:sectionValuesStyle}); // A
+    newArray.push({value:sectionName, style:sectionTitleStyle}); // B
     newArray.push({}); // C
     newArray.push({}); // D
     newArray.push({}); // E
-    newArray.push({value:minMd}); // F
-    newArray.push({value:maxMd}); // G
-    newArray.push({value:predictedMd}); // H
-    newArray.push({value:risk}); // I
+    newArray.push({value:minMd, style:sectionValuesStyle}); // F
+    newArray.push({value:maxMd, style:sectionValuesStyle}); // G
+    newArray.push({value:predictedMd, style:sectionValuesStyle}); // H
+    newArray.push({value:risk, style:sectionProcentStyle}); // I
 
     fullDataArray.push(newArray);
     let taskNumber = 0;
@@ -284,15 +466,15 @@ export default function Export() {
       let commentText = task.comment.text;
       let commentIsImportant = task.comment.isImportant;
       
-      newArray.push({value:taskNumber}); // A
-      newArray.push({value:taskName}); // B
+      newArray.push({value: taskNumber, style: taskValuesStyle}); // A
+      newArray.push({value: taskName, style: taskNameStyle}); // B
       newArray.push({}); // C
       newArray.push({}); // D
-      newArray.push({value:taskSymbol}); // E
-      newArray.push({value:minMd}); // F
-      newArray.push({value:maxMd}); // G
-      newArray.push({value:predictedMd}); // H
-      newArray.push({value:risk}); // I
+      newArray.push({value: taskSymbol, style: taskValuesStyle}); // E
+      newArray.push({value: minMd, style: taskValuesStyle}); // F
+      newArray.push({value: maxMd, style: taskValuesStyle}); // G
+      newArray.push({value: predictedMd, style: taskValuesStyle}); // H
+      newArray.push({value: risk, style: taskValuesStyle}); // I
   
       fullDataArray.push(newArray);
       
@@ -300,8 +482,10 @@ export default function Export() {
       if (commentText) {
         newArray = [];
         newArray.push({});
-        newArray.push({value:commentText}); //style isImportant
+        
+        commentIsImportant ? newArray.push({value:commentText, style: importantCommentStyle}) : newArray.push({value:commentText, style: commentStyle}); 
         fullDataArray.push(newArray);
+        newArray = [];
       }
 
       let subtaskNumber = 0;
@@ -321,16 +505,16 @@ export default function Export() {
   
         let commentText = subtask.comment.text;
         let commentIsImportant = subtask.comment.isImportant;
-        
-        newArray.push({value:nr}); // A
-        newArray.push({value:taskName}); // B
+
+        newArray.push({value: nr, style: taskValuesStyle}); // A
+        newArray.push({value: taskName, style: taskNameStyle}); // B
         newArray.push({}); // C
         newArray.push({}); // D
-        newArray.push({value:taskSymbol}); // E
-        newArray.push({value:minMd}); // F
-        newArray.push({value:maxMd}); // G
-        newArray.push({value:predictedMd}); // H
-        newArray.push({value:risk}); // I
+        newArray.push({value: taskSymbol, style: taskValuesStyle}); // E
+        newArray.push({value: minMd, style: taskValuesStyle}); // F
+        newArray.push({value: maxMd, style: taskValuesStyle}); // G
+        newArray.push({value: predictedMd, style: taskValuesStyle}); // H
+        newArray.push({value: risk, style: taskValuesStyle}); // I
     
         fullDataArray.push(newArray);
         
@@ -338,8 +522,10 @@ export default function Export() {
         if (commentText) {
           newArray = [];
           newArray.push({});
-          newArray.push({value:commentText}); //style isImportant
+          
+          commentIsImportant ? newArray.push({value:commentText, style: importantCommentStyle}) : newArray.push({value:commentText, style: commentStyle}); 
           fullDataArray.push(newArray);
+          newArray = [];
         }
         
       });
@@ -360,14 +546,14 @@ export default function Export() {
 
   let newArray = [];
   newArray.push({});
-  newArray.push({value: rdName});
+  newArray.push({value: rdName, style: sectionTitleStyle});
   newArray.push({});
   newArray.push({});
   newArray.push({});
-  newArray.push({value: rdMin});
-  newArray.push({value: rdMax});
-  newArray.push({value: rdPredicted});
-  newArray.push({value: rdRisk});
+  newArray.push({value: rdMin, style: sectionValuesStyle});
+  newArray.push({value: rdMax, style: sectionValuesStyle});
+  newArray.push({value: rdPredicted, style: sectionValuesStyle});
+  newArray.push({value: rdRisk, style: sectionProcentStyle});
 
   fullDataArray.push(newArray);
 
@@ -383,19 +569,29 @@ export default function Export() {
     let newArray = [];
     
     newArray.push({}); // A
-    newArray.push({value:rdName}); // B
+    newArray.push({value:rdName, style: sectionTitleSmallStyle}); // B
     newArray.push({}); // C
-    newArray.push({value:rdProcent}); // D
-    newArray.push({value:rdRole}); // E
-    newArray.push({value:rdMin}); // F
-    newArray.push({value:rdMax}); // G
-    newArray.push({value:rdPredicted}); // H
+    newArray.push({value:rdProcent, style: taskValuesStyle}); // D
+    newArray.push({value:rdRole, style: taskValuesStyle}); // E
+    newArray.push({value:rdMin, style: taskValuesStyle}); // F
+    newArray.push({value:rdMax, style: taskValuesStyle}); // G
+    newArray.push({value:rdPredicted, style: taskValuesStyle}); // H
 
     fullDataArray.push(newArray);    
   });
 
   // row beetween 'raw dev...' and summary
-  fullDataArray.push([{}]);
+  fullDataArray.push([ 
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+    { value: "", style: borderTopStyle},
+  ]); // style with border top for A:H colums
+  
   
   //summary
 
@@ -410,11 +606,11 @@ export default function Export() {
   newArray.push({}); // B
   newArray.push({}); // C
   newArray.push({}); // D
-  newArray.push({value:totalName}); // E
-  newArray.push({value:totalMin}); // F
-  newArray.push({value:totalMax}); // G
-  newArray.push({value:totalPredicted}); // H
-  newArray.push({value:totalRisk}); // I
+  newArray.push({value:totalName, style: totalTitleStyle}); // E
+  newArray.push({value:totalMin, style: totalValuesStyle}); // F
+  newArray.push({value:totalMax, style: totalValuesStyle}); // G
+  newArray.push({value:totalPredicted, style: sectionValuesStyle}); // H
+  newArray.push({value:totalRisk, style: sectionProcentStyle}); // I
   fullDataArray.push(newArray);
 
   // per member
@@ -427,10 +623,10 @@ export default function Export() {
   newArray.push({}); // B
   newArray.push({}); // C
   newArray.push({}); // D
-  newArray.push({value:perMemberName}); // E
-  newArray.push({value:perMemberMin}); // F
-  newArray.push({value:perMemberMax}); // G
-  newArray.push({value:perMemberPredicted}); // H
+  newArray.push({value:perMemberName, style: projectKeyStyle}); // E
+  newArray.push({value:perMemberMin, style: taskValuesStyle}); // F
+  newArray.push({value:perMemberMax, style: taskValuesStyle}); // G
+  newArray.push({value:perMemberPredicted, style: taskValuesStyle}); // H
   fullDataArray.push(newArray);
 
   // delivery date
@@ -441,15 +637,15 @@ export default function Export() {
   newArray.push({}); // B
   newArray.push({}); // C
   newArray.push({}); // D
-  newArray.push({value:estDeliveryDateName}); // E
-  newArray.push({value:estDeliveryDateDate}); // F
+  newArray.push({value:estDeliveryDateName, style: projectKeyStyle}); // E
+  newArray.push({value:estDeliveryDateDate, style: projectValueCenterSmallStyle}); // F
   fullDataArray.push(newArray);
 
    // row beetween summary and assumptions
    fullDataArray.push([{}]);
    fullDataArray.push([
      {},
-     {value:"Important assumptions:"}
+     {value:"Important assumptions:", style: sectionTitleSmallStyle}
     ]);
 
    // assumptions
@@ -458,8 +654,8 @@ export default function Export() {
     let text = item.text;
 
     let newArray = [];    
-    newArray.push({value:id}); // A
-    newArray.push({value:text}); // B
+    newArray.push({value:id, style: projectKeyStyle}); // A
+    newArray.push({value:text, style: taskNameStyle}); // B
     fullDataArray.push(newArray);    
   });
 
@@ -480,16 +676,12 @@ export default function Export() {
     }
   ];
 
-  const wowstring = fullDataArray.toString();
 
   return (
     <div className="App">
       <ExcelFile element={<button>Download Data With Styles</button>}>
         <ExcelSheet dataSet={multiDataSet} name="Organization" />
       </ExcelFile>
-      <p>
-{wowstring}
-      </p>
     </div>
   );
 };
