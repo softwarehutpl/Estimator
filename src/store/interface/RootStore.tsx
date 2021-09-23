@@ -14,7 +14,10 @@ import {
   updateSubtask,
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
-import { getProjectSelector } from "../selectors/getProjectsSelector";
+import {
+  getProjectsData,
+  getProjectSelector,
+} from "../selectors/getProjectsSelector";
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
@@ -27,19 +30,13 @@ export default function RootStore() {
   const [projectId, setProjectId] = useState("");
   const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
-  const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project: Project) =>
-      Object.create({
-        projectName: project.projectName,
-        projectId: project.projectId,
-      })
-    )
-  );
   const dispatch = useAppDispatch();
   const project = useAppSelector(
     getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
   ); //=> PUSH PROJECT ID!
   console.log(project);
+  const projectsData = useAppSelector(getProjectsData());
+  console.log(projectsData);
 
   useEffect(() => {
     console.log(projects);
