@@ -2,6 +2,7 @@
 import ReactExport from "react-data-export";
 import { useAppSelector } from "../../store/hooks";
 import initialProject from "../../store/initials/initialProject";
+import exampleProject from "./exampleProject";
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -151,6 +152,166 @@ interface Props {}
 
 
 export default function Export() {
+
+  let fullDataArray = [
+    [ //2
+      { value: "" },
+    ],
+    [ //3 zmergowane cells wszystkie w tym rzedzie
+      { value: "Project Workload Estimation", style: { font: { sz: "14", bold: true } } },
+    ],
+    [ //4
+      { value: ""},
+    ],
+    [ //5
+      { value: "" },
+      { value: "Project name:" },
+      { value: "Test project" },
+      { value: "" },
+      { value: "Est. Start:" },
+      { value: "1.01.2021" },
+      { value: "Est. End:" },
+      { value: "1.03.2021" },
+    ],
+    [ //6
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "Team size (FTEs):" },
+      { value: "4" },
+      { value: "Time Budget:" },
+      { value: "160 MD" },
+    ],
+    [ //7
+      { value: ""},
+    ],
+    [ //8
+      { value: "" },
+      { value: "Estimated by:" },
+      { value: "Hortensjo Pisuarez" },
+      { value: "" },
+      { value: "Date:" },
+      { value: "30.11.2020" },
+      { value: "Effort:" },
+      { value: "12h" },
+    ],
+    [ //9
+      { value: "" },
+      { value: "Verified by:" },
+      { value: "Wieńczysław Należyty" },
+      { value: "" },
+      { value: "Date:" },
+      { value: "" },
+    ],
+    [ //10
+      { value: ""},
+    ],
+    [ //11
+      { value: ""},
+      { value: "Group / Task	"},
+      { value: ""},
+      { value: ""},
+      { value: "Role"},
+      { value: "Min (MD)"},
+      { value: "Max (MD)"},
+      { value: "Predicted (MD)"},
+      { value: "Risk"},
+    ],
+    [ //12 
+      { value: ""},
+    ]
+  ];
+
+  // const sectionsData = exampleProject.sections;
+  // const sectionDataObject = {};
+  // let sectionArr = [];
+  // let exapleObj = {value: ""}
+
+//   for (var i = 0; i < exampleProject.sections.length; i++) {
+//     exapleObj.value =  exampleProject.sections[i].name;
+//     sectionArr.push(exampleObj);
+//     sectionDataObject.
+//     console.log(sectionArr[i]);
+// }
+  // var arr = exampleProject.sections;
+  // var newArray = [];
+
+  function getSectionSymbol(sectionName: string) {
+    switch (sectionName) {
+      case "Frontend development":
+        return "F";
+      case "Backend development":
+        return "B";  
+      case "Mobile development":
+        return "M";  
+      case "Design / UX / UI":
+        return "U";  
+      case "Configuration / Setup / Deployment":
+        return "C";  
+      default:
+        return "";
+    }
+  }
+
+  function changeDotIntoComma(changingNumber) {
+    const stringNumber = changingNumber.toString();
+    const stringNumberWithComma = stringNumber.replace(".", ",");
+    // stringNumberWithComma.concat('\\'); // add new line
+    return stringNumberWithComma;
+  }
+
+  exampleProject.sections.forEach(function(section) {
+    let sectionName = section.name;
+    let emptyCell = {value: ""};
+    let newArray = [];
+    let sectionSymbol = getSectionSymbol(sectionName);
+
+    // moze zostac zmienione na formuly
+    let minMd = changeDotIntoComma(section.minMd);
+    let maxMd = changeDotIntoComma(section.maxMd);
+    let predictedMd = changeDotIntoComma(section.predictedMd);
+    let risk = changeDotIntoComma(section.risk);
+    
+    newArray.push({value:sectionSymbol}); // A
+    newArray.push({value:sectionName}); // B
+    newArray.push(emptyCell); // C
+    newArray.push(emptyCell); // D
+    newArray.push(emptyCell); // E
+    newArray.push({value:minMd}); // F
+    newArray.push({value:maxMd}); // G
+    newArray.push({value:predictedMd}); // H
+    newArray.push({value:risk}); // I
+
+    fullDataArray.push(newArray);
+
+    section.tasks.forEach(function(task) {
+      let taskName = task.name;
+      newArray = [];
+      let taskSymbol = task.role;
+  
+      // // moze zostac zmienione na formuly
+      // let minMd = changeDotIntoComma(item.minMd);
+      // let maxMd = changeDotIntoComma(item.maxMd);
+      // let predictedMd = changeDotIntoComma(item.predictedMd);
+      // let risk = changeDotIntoComma(item.risk);
+      
+      newArray.push({value:"nr"}); // A
+      newArray.push({value:taskName}); // B
+      newArray.push(emptyCell); // C
+      newArray.push(emptyCell); // D
+      newArray.push({value:taskSymbol}); // E
+      newArray.push({value:minMd}); // F
+      newArray.push({value:maxMd}); // G
+      newArray.push({value:predictedMd}); // H
+      newArray.push({value:risk}); // I
+  
+      fullDataArray.push(newArray);      
+    });
+    
+  });
+
+
   const multiDataSet = [
     {
       columns: [
@@ -164,89 +325,95 @@ export default function Export() {
           { title: "H", width: { wpx: 81 } },
           { title: "I", width: { wpx: 51 } },
         ],
-      data: [
+      data: fullDataArray
+      // [
         // [
         //   { value: "Logo software hut", style: { font: { sz: "24", bold: true } } },          
         // ],
-        [ //2
-          { value: "" },
-        ],
-        [ //3 zmergowane cells wszystkie w tym rzedzie
-          { value: "Project Workload Estimation", style: { font: { sz: "14", bold: true } } },
-        ],
-        [ //4
-          { value: ""},
-        ],
-        [ //5
-          { value: "" },
-          { value: "Project name:" },
-          { value: "Test project" },
-          { value: "" },
-          { value: "Est. Start:" },
-          { value: "1.01.2021" },
-          { value: "Est. End:" },
-          { value: "1.03.2021" },
-        ],
-        [ //6
-          { value: "" },
-          { value: "" },
-          { value: "" },
-          { value: "" },
-          { value: "Team size (FTEs):" },
-          { value: "4" },
-          { value: "Time Budget:" },
-          { value: "160 MD" },
-        ],
-        [ //7
-          { value: ""},
-        ],
-        [ //8
-          { value: "" },
-          { value: "Estimated by:" },
-          { value: "Hortensjo Pisuarez" },
-          { value: "" },
-          { value: "Date:" },
-          { value: "30.11.2020" },
-          { value: "Effort:" },
-          { value: "12h" },
-        ],
-        [ //9
-          { value: "" },
-          { value: "Verified by:" },
-          { value: "Wieńczysław Należyty" },
-          { value: "" },
-          { value: "Date:" },
-          { value: "" },
-        ],
-        [ //10
-          { value: ""},
-        ],
-        [ //11
-          { value: ""},
-          { value: "Group / Task	"},
-          { value: ""},
-          { value: ""},
-          { value: "Role"},
-          { value: "Min (MD)"},
-          { value: "Max (MD)"},
-          { value: "Predicted (MD)"},
-          { value: "Risk"},
-        ],
-        [ //12 test1
-          { value: "12"},
-          { value: "3"},
-          { value: "=A12+A13"},
-          { value: ""},
-        ]
-      ]
+        // [ //2
+        //   { value: "" },
+        // ],
+        // [ //3 zmergowane cells wszystkie w tym rzedzie
+        //   { value: "Project Workload Estimation", style: { font: { sz: "14", bold: true } } },
+        // ],
+        // [ //4
+        //   { value: ""},
+        // ],
+        // [ //5
+        //   { value: "" },
+        //   { value: "Project name:" },
+        //   { value: "Test project" },
+        //   { value: "" },
+        //   { value: "Est. Start:" },
+        //   { value: "1.01.2021" },
+        //   { value: "Est. End:" },
+        //   { value: "1.03.2021" },
+        // ],
+        // [ //6
+        //   { value: "" },
+        //   { value: "" },
+        //   { value: "" },
+        //   { value: "" },
+        //   { value: "Team size (FTEs):" },
+        //   { value: "4" },
+        //   { value: "Time Budget:" },
+        //   { value: "160 MD" },
+        // ],
+        // [ //7
+        //   { value: ""},
+        // ],
+        // [ //8
+        //   { value: "" },
+        //   { value: "Estimated by:" },
+        //   { value: "Hortensjo Pisuarez" },
+        //   { value: "" },
+        //   { value: "Date:" },
+        //   { value: "30.11.2020" },
+        //   { value: "Effort:" },
+        //   { value: "12h" },
+        // ],
+        // [ //9
+        //   { value: "" },
+        //   { value: "Verified by:" },
+        //   { value: "Wieńczysław Należyty" },
+        //   { value: "" },
+        //   { value: "Date:" },
+        //   { value: "" },
+        // ],
+        // [ //10
+        //   { value: ""},
+        // ],
+        // [ //11
+        //   { value: ""},
+        //   { value: "Group / Task	"},
+        //   { value: ""},
+        //   { value: ""},
+        //   { value: "Role"},
+        //   { value: "Min (MD)"},
+        //   { value: "Max (MD)"},
+        //   { value: "Predicted (MD)"},
+        //   { value: "Risk"},
+        // ],
+        // [ //12 test1
+        //   { value: "12"},
+        //   { value: "3"},
+        //   { value: "=A12+A13"},
+        //   { value: ""},
+        // ]
+      // ]
     }
   ];
+
+  const wowstring = fullDataArray.toString();
 
   return (
     <div className="App">
       <ExcelFile element={<button>Download Data With Styles</button>}>
         <ExcelSheet dataSet={multiDataSet} name="Organization" />
       </ExcelFile>
+      <p>
+{wowstring}
+      </p>
     </div>
   );
 };
