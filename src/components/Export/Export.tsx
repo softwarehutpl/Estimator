@@ -268,6 +268,7 @@ export default function Export() {
     newArray.push({value:risk}); // I
 
     fullDataArray.push(newArray);
+    let taskNumber = 0;
 
     // tasks
     section.tasks.forEach(function(task) {
@@ -278,11 +279,12 @@ export default function Export() {
       let maxMd = task.maxMd;
       let predictedMd = task.predictedMd;
       let risk = task.risk;
+      taskNumber++;
 
       let commentText = task.comment.text;
       let commentIsImportant = task.comment.isImportant;
       
-      newArray.push({value:"nr"}); // A
+      newArray.push({value:taskNumber}); // A
       newArray.push({value:taskName}); // B
       newArray.push({}); // C
       newArray.push({}); // D
@@ -302,6 +304,8 @@ export default function Export() {
         fullDataArray.push(newArray);
       }
 
+      let subtaskNumber = 0;
+
       // subtasks
       task.subtasks.forEach(function(subtask) {
         let taskName = subtask.name;
@@ -311,11 +315,14 @@ export default function Export() {
         let maxMd = subtask.maxMd;
         let predictedMd = subtask.predictedMd;
         let risk = subtask.risk;
+        subtaskNumber++;
+
+        let nr = taskNumber.toString()+'.'+subtaskNumber.toString();
   
         let commentText = subtask.comment.text;
         let commentIsImportant = subtask.comment.isImportant;
         
-        newArray.push({value:"nr"}); // A
+        newArray.push({value:nr}); // A
         newArray.push({value:taskName}); // B
         newArray.push({}); // C
         newArray.push({}); // D
@@ -440,9 +447,21 @@ export default function Export() {
 
    // row beetween summary and assumptions
    fullDataArray.push([{}]);
+   fullDataArray.push([
+     {},
+     {value:"Important assumptions:"}
+    ]);
 
    // assumptions
+   exampleProject.assumptions.forEach(function(item) {
+    let id = item.id;
+    let text = item.text;
 
+    let newArray = [];    
+    newArray.push({value:id}); // A
+    newArray.push({value:text}); // B
+    fullDataArray.push(newArray);    
+  });
 
   const multiDataSet = [
     {
