@@ -15,7 +15,11 @@ import {
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
 import {
+<<<<<<< HEAD
+  getProjectsDataSelector,
+=======
   getProjectsData,
+>>>>>>> main
   getProjectSelector,
 } from "../selectors/getProjectsSelector";
 
@@ -35,7 +39,7 @@ export default function RootStore() {
     getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
   ); //=> PUSH PROJECT ID!
   console.log(project);
-  const projectsData = useAppSelector(getProjectsData());
+  const projectsData = useAppSelector(getProjectsDataSelector());
   console.log(projectsData);
 
   useEffect(() => {

@@ -12,7 +12,7 @@ export const getProjectSelector = (projectId: string) =>
     return project ? project : null;
   });
 
-export const getProjectsData = () =>
+export const getProjectsDataSelector = () =>
   createDraftSafeSelector(selectSelf, (state) => {
     const projectData = state.projects.map((project: Project) =>
       Object.create({
