@@ -244,32 +244,24 @@ export default function Export() {
         return "";
     }
   }
-
-  function changeDotIntoComma(changingNumber) {
-    const stringNumber = changingNumber.toString();
-    const stringNumberWithComma = stringNumber.replace(".", ",");
-    // stringNumberWithComma.concat('\\'); // add new line
-    return stringNumberWithComma;
-  }
-
+  
   // sections
   exampleProject.sections.forEach(function(section) {
-    let sectionName = section.name;
-    let emptyCell = {value: ""};
-    let newArray = [];
+    let sectionName = section.name;        
     let sectionSymbol = getSectionSymbol(sectionName);
+    let newArray = [];
 
     // moze zostac zmienione na formuly
-    let minMd = changeDotIntoComma(section.minMd);
-    let maxMd = changeDotIntoComma(section.maxMd);
-    let predictedMd = changeDotIntoComma(section.predictedMd);
-    let risk = changeDotIntoComma(section.risk);
+    let minMd = section.minMd;
+    let maxMd = section.maxMd;
+    let predictedMd = section.predictedMd;
+    let risk = section.risk;
     
     newArray.push({value:sectionSymbol}); // A
     newArray.push({value:sectionName}); // B
-    newArray.push(emptyCell); // C
-    newArray.push(emptyCell); // D
-    newArray.push(emptyCell); // E
+    newArray.push({}); // C
+    newArray.push({}); // D
+    newArray.push({}); // E
     newArray.push({value:minMd}); // F
     newArray.push({value:maxMd}); // G
     newArray.push({value:predictedMd}); // H
@@ -280,11 +272,11 @@ export default function Export() {
     // tasks
     section.tasks.forEach(function(task) {
       let taskName = task.name;
-      newArray = [];
+      let newArray = [];
       let taskSymbol = task.role;  
-      let minMd = changeDotIntoComma(task.minMd);
-      let maxMd = changeDotIntoComma(task.maxMd);
-      let predictedMd = changeDotIntoComma(task.predictedMd);
+      let minMd = task.minMd;
+      let maxMd = task.maxMd;
+      let predictedMd = task.predictedMd;
       let risk = task.risk;
 
       let commentText = task.comment.text;
@@ -292,8 +284,8 @@ export default function Export() {
       
       newArray.push({value:"nr"}); // A
       newArray.push({value:taskName}); // B
-      newArray.push(emptyCell); // C
-      newArray.push(emptyCell); // D
+      newArray.push({}); // C
+      newArray.push({}); // D
       newArray.push({value:taskSymbol}); // E
       newArray.push({value:minMd}); // F
       newArray.push({value:maxMd}); // G
@@ -305,7 +297,7 @@ export default function Export() {
       // add row with comment      
       if (commentText) {
         newArray = [];
-        newArray.push(emptyCell);
+        newArray.push({});
         newArray.push({value:commentText}); //style isImportant
         fullDataArray.push(newArray);
       }
@@ -313,11 +305,11 @@ export default function Export() {
       // subtasks
       task.subtasks.forEach(function(subtask) {
         let taskName = subtask.name;
-        newArray = [];
+        let newArray = [];
         let taskSymbol = subtask.role;  
-        let minMd = changeDotIntoComma(subtask.minMd);
-        let maxMd = changeDotIntoComma(subtask.maxMd);
-        let predictedMd = changeDotIntoComma(subtask.predictedMd);
+        let minMd = subtask.minMd;
+        let maxMd = subtask.maxMd;
+        let predictedMd = subtask.predictedMd;
         let risk = subtask.risk;
   
         let commentText = subtask.comment.text;
@@ -325,8 +317,8 @@ export default function Export() {
         
         newArray.push({value:"nr"}); // A
         newArray.push({value:taskName}); // B
-        newArray.push(emptyCell); // C
-        newArray.push(emptyCell); // D
+        newArray.push({}); // C
+        newArray.push({}); // D
         newArray.push({value:taskSymbol}); // E
         newArray.push({value:minMd}); // F
         newArray.push({value:maxMd}); // G
@@ -338,7 +330,7 @@ export default function Export() {
         // add row with comment      
         if (commentText) {
           newArray = [];
-          newArray.push(emptyCell);
+          newArray.push({});
           newArray.push({value:commentText}); //style isImportant
           fullDataArray.push(newArray);
         }
@@ -348,6 +340,108 @@ export default function Export() {
     });
     
   });
+
+  //row beetween 'tasks' and 'raw development...'
+  fullDataArray.push([{value: ""}]);
+
+  // raw development
+  let rdName = exampleProject.rawDevelopmentEffortSum?.name;
+  let rdMin = exampleProject.rawDevelopmentEffortSum?.main.minMd;
+  let rdMax = exampleProject.rawDevelopmentEffortSum?.main.maxMd;
+  let rdPredicted = exampleProject.rawDevelopmentEffortSum?.main.predictedMd;
+  let rdRisk = exampleProject.rawDevelopmentEffortSum?.main.risk;
+
+  let newArray = [];
+  newArray.push({});
+  newArray.push({value: rdName});
+  newArray.push({});
+  newArray.push({});
+  newArray.push({});
+  newArray.push({value: rdMin});
+  newArray.push({value: rdMax});
+  newArray.push({value: rdPredicted});
+  newArray.push({value: rdRisk});
+
+  fullDataArray.push(newArray);
+
+  // raw development parts
+  exampleProject.rawDevelopmentEffortSum?.parts.forEach(function(part) {
+    let rdName = part.name;
+    let rdProcent = part.procent;
+    let rdRole = part.role;
+    let rdMin = part.minMd;
+    let rdMax = part.maxMd;
+    let rdPredicted = part.predictedMd;
+
+    let newArray = [];
+    
+    newArray.push({}); // A
+    newArray.push({value:rdName}); // B
+    newArray.push({}); // C
+    newArray.push({value:rdProcent}); // D
+    newArray.push({value:rdRole}); // E
+    newArray.push({value:rdMin}); // F
+    newArray.push({value:rdMax}); // G
+    newArray.push({value:rdPredicted}); // H
+
+    fullDataArray.push(newArray);    
+  });
+
+  // row beetween 'raw dev...' and summary
+  fullDataArray.push([{}]);
+  
+  //summary
+
+  //total
+  newArray = [];
+  let totalName = exampleProject.summary[0].name;
+  let totalMin = exampleProject.summary[0].minMd;
+  let totalMax = exampleProject.summary[0].maxMd;
+  let totalPredicted = exampleProject.summary[0].predictedMd;
+  let totalRisk = exampleProject.summary[0].risk;
+  newArray.push({}); // A
+  newArray.push({}); // B
+  newArray.push({}); // C
+  newArray.push({}); // D
+  newArray.push({value:totalName}); // E
+  newArray.push({value:totalMin}); // F
+  newArray.push({value:totalMax}); // G
+  newArray.push({value:totalPredicted}); // H
+  newArray.push({value:totalRisk}); // I
+  fullDataArray.push(newArray);
+
+  // per member
+  newArray = [];
+  let perMemberName = exampleProject.summary[1].name;
+  let perMemberMin = exampleProject.summary[1].minMd;
+  let perMemberMax = exampleProject.summary[1].maxMd;
+  let perMemberPredicted = exampleProject.summary[1].predictedMd;
+  newArray.push({}); // A
+  newArray.push({}); // B
+  newArray.push({}); // C
+  newArray.push({}); // D
+  newArray.push({value:perMemberName}); // E
+  newArray.push({value:perMemberMin}); // F
+  newArray.push({value:perMemberMax}); // G
+  newArray.push({value:perMemberPredicted}); // H
+  fullDataArray.push(newArray);
+
+  // delivery date
+  newArray = [];
+  let estDeliveryDateName = exampleProject.summary[2].name;
+  let estDeliveryDateDate = exampleProject.summary[2].estDeliveryDate;
+  newArray.push({}); // A
+  newArray.push({}); // B
+  newArray.push({}); // C
+  newArray.push({}); // D
+  newArray.push({value:estDeliveryDateName}); // E
+  newArray.push({value:estDeliveryDateDate}); // F
+  fullDataArray.push(newArray);
+
+   // row beetween summary and assumptions
+   fullDataArray.push([{}]);
+
+   // assumptions
 
 
   const multiDataSet = [

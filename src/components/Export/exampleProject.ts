@@ -1,17 +1,16 @@
 import { Project, Role, Type } from '../../types/Interface';
 
 const exampleProject: Project = {
-	projectName: '',
-	projectId: '',
-	estimatedBy: '',
-	estimationDate: '',
-	verifiedBy: '',
-	verificationDate: '',
-	estStart: '',
-	estEns: '',
-	teamSize: 0,
-	timeBudget: 0,
-	effort: 0,
+	projectName: "Test project",
+	estimatedBy: "Hortensjo Pisuarez",
+	estimationDate: "30.11.2020", 
+	verifiedBy: "Wieńczysław Należyty",
+	verificationDate: "",
+	estStart: "01.01.2021", 
+	estEns: "01.03.2021", 
+	teamSize: 4,
+	timeBudget: 160,
+	effort: 12,
 	sections: [
 		{
 			sectionId: Role.FD,
@@ -31,7 +30,7 @@ const exampleProject: Project = {
 					name: "Business feature",
 					role: Role.FD,
 					minMd: 11,
-					maxMd: 30,
+					maxMd: 30.6,
 					predictedMd: 25,
 					predictedMdFormula: "",
 					risk: "H",
@@ -46,7 +45,7 @@ const exampleProject: Project = {
 							name: "s1",
 							role: Role.FD,
 							minMd: 12,
-							maxMd: 30,
+							maxMd: 30.5,
 							predictedMd: 25,
 							predictedMdFormula: "",
 							risk: "H",
@@ -61,7 +60,7 @@ const exampleProject: Project = {
 							type: Type.Task,
 							name: "s2",
 							role: Role.FD,
-							minMd: 13,
+							minMd: 13.4,
 							maxMd: 30,
 							predictedMd: 25,
 							predictedMdFormula: "",
@@ -162,12 +161,93 @@ const exampleProject: Project = {
 		},
 	],
 	rawDevelopmentEffortSum: {
-		name: '',
-		main: {},
-		parts: [],
+		name: "Raw development effort sum",
+		main: {
+			minMd: 39.5,
+			minMdFormula: "",
+			maxMd: 92.5,
+			maxMdFormula: "",
+			predictedMd: 76,
+			predictedMdFormula: "",
+			risk: 21.71,
+			riskFormula: ""
+		},
+		parts: [ 
+			{
+				name: "Tests and fixes overhead",
+				procent: 20,
+				role: "QA",
+				minMd: 7.5,
+				minMdFormula: "",
+				maxMd: 18.5,
+				maxMdFormula: "",
+				predictedMd: 15,
+				predictedMdFormula: ""
+			},
+			{
+				name: "Communication and management",
+				procent: 10,
+				role: "PM",
+				minMd: 3.5,
+				minMdFormula: "",
+				maxMd: 9,
+				maxMdFormula: "",
+				predictedMd: 7.5,
+				predictedMdFormula: ""
+			},
+			{
+				name: "Other risks (i.e. fixed price)",
+				procent: 0,
+				role: "",
+				minMd: 0,
+				minMdFormula: "",
+				maxMd: 0,
+				maxMdFormula: "",
+				predictedMd: 0,
+				predictedMdFormula: ""
+			}
+		]
 	},
-	summary: [],
-	assumptions: [],
-};
+	summary: [
+		{
+			name: "Total (MD):",
+			minMd: 51,
+			minMdFormula: "",
+			maxMd: 120,
+			maxMdFormula: "",
+			predictedMd: 99,
+			predictedMdFormula: "",
+			risk: 21.11,
+			riskFormula: ""
+		},
+		{
+			name: "Per Team Member:",
+			minMd: 12.75,
+			minMdFormula: "",
+			maxMd: 30,
+			maxMdFormula: "",
+			predictedMd: 24.75,
+			predictedMdFormula: ""
+		},
+		{
+			name: "Est. Delivery Date:",
+			estDeliveryDate: ""
+		}
+	],
+	assumptions: [
+		{
+			id: 1,
+			text: "The features and tasks estimated here might not be complete, they reflect current state of knowledge."
+		},
+		{
+			id: 2,
+			text: "Any change in user requirements will invalidate this estimation. In such case the workload must be re-estimated."
+		},
+		{
+			id: 3,
+			text: "???"
+		}
+	],
+}
 
 export default exampleProject;
