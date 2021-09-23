@@ -395,7 +395,7 @@ export default function RootStore() {
           setUpdatedValue("");
         }}
       >
-        updateTask
+        updateSubtask
       </button>
     </div>
   );
