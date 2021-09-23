@@ -92,15 +92,19 @@ export interface Comment {
 }
 
 export enum Role {
-  Empty = "",
-  FD = "FD",
-  BD = "BD",
-  MD = "MD",
-  UD = "UD",
-  DO = "DO",
+  Empty = '',
+  FD = 'FD',
+  BD = 'BD',
+  MD = 'MD',
+  UD = 'UD',
+  DO = 'DO',
 }
 
 export enum Type {
-  Group = "group",
-  Task = "task",
+  Group = 'group',
+  Task = 'task',
+}
+
+export interface RiskMultiplicator {
+  [key: string]: number;
 }
