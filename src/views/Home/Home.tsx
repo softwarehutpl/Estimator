@@ -49,6 +49,7 @@ const Home = (props: Props) => {
       <div className={`${styles.home} p-d-flex`}>
         <CardTile
           btn="Create New"
+          cardTitle="New Project"
           title={projectName}
           placeholder="Project name"
           action={createProjectHandler}
@@ -57,6 +58,7 @@ const Home = (props: Props) => {
         />
         <CardTile
           btn="Join"
+          cardTitle="Join Projects"
           title={joinId}
           placeholder="Join"
           action={() => joinProjectHandler}
