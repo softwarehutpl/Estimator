@@ -207,6 +207,7 @@ const myProject: Project = {
 				predictedMdFormula: ""
 			}
 		]
+		
 	},
 	summary: [
 		{
