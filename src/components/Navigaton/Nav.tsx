@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
 //Components
 import { Toolbar } from "primereact/toolbar";
 import { Button } from "primereact/button";
@@ -9,15 +9,31 @@ import ExportDialog from "../Dialogs/ExportDialog";
 import InviteDialog from "../Dialogs/InviteDialog";
 import JoinDialog from "../Dialogs/JoinDialog";
 import TerminateDialog from "../Dialogs/TerminateDialog";
-import { Route } from "react-router-dom";
-
+//Types
+import { Params, Project } from "../../types/Interface";
+//Router
+import { Route, useParams } from "react-router-dom";
+//Store
+import { useAppSelector } from "../../store/hooks";
+import {
+  getProjectsDataSelector,
+  getProjectSelector,
+} from "../../store/selectors/selectors";
+//Styles
 import styles from "./nav.module.scss";
 
 interface Props {}
 
 const Nav: FC<Props> = () => {
+  //Selectors
+  const { projectId } = useParams<Params>();
+  const project = useAppSelector(getProjectSelector(projectId));
+  const projectsData = useAppSelector(getProjectsDataSelector());
+  console.log(projectsData);
   //Dialogs state
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(
+    projectId && project.projectName
+  );
   const [importDialog, setImportDialog] = useState(false);
   const [exportDialog, setExportDialog] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
@@ -26,11 +42,13 @@ const Nav: FC<Props> = () => {
   //Buttons state
   const [isConnected, setIsConnected] = useState(false);
 
-  const projectTitles = [
-    { label: "Project A", value: "A" },
-    { label: "Project B", value: "B" },
-    { label: "Project C", value: "C" },
-  ];
+  const projectTitles = projectsData.map((project: Project) => {
+    return { label: project.projectName, value: project.projectId };
+  });
+
+  useEffect(() => {
+    setSelectedProject(projectId && project.projectName);
+  }, [projectId]);
 
   const selectHandler = (e: DropdownChangeParams) =>
     setSelectedProject(e.target.value);
@@ -133,7 +151,7 @@ const Nav: FC<Props> = () => {
       <Route path="/project">
         <Dropdown
           className={`${styles.select} p-mx-2`}
-          placeholder="Select project"
+          placeholder={selectedProject}
           value={selectedProject}
           options={projectTitles}
           onChange={selectHandler}
