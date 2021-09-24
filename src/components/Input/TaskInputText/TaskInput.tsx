@@ -55,6 +55,7 @@ const TaskInput: FC<IProps> = ({ sectionName, taskId, value }) => {
     <div className={styles.inputWrapper}>
       <input
         type='text'
+        placeholder='Add your task name'
         value={inputValue || ''}
         onChange={(e) => handleInputChange(e)}
         onClick={handleOpenControlls}

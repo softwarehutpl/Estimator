@@ -1,12 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState, MouseEvent } from 'react';
 import { useParams } from 'react-router';
 
-import { useAppDispatch } from '../../../../store/hooks';
-import { addTask, delTask, reorder } from '../../../../store/reducers/projectReducer';
 import { rowOrder } from '../TableRow/TableRow';
 
-import { Task } from '../../../../types/Interface';
+import { Task, Type } from '../../../../types/Interface';
 
+import ContextMenu from '../../../ContextMenu/ContextMenu';
 import TableCell from '../../TableCell/TableCell';
 import TaskComment from '../../TaskComment/TaskComment';
 import TaskInput from '../../../Input/TaskInputText/TaskInput';
@@ -37,26 +36,9 @@ const TableDraggableRow: FC<IProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
-  const dispatch = useAppDispatch();
-
   const { projectId } = useParams<{ projectId: string }>();
 
-  const disabledComment = data.comment.text ? styles.rowControllerTaskButtonDisabled : '';
-
-  const handleTaskAdd = () => {
-    dispatch(addTask({ projectId, sectionName, type: 'task' }));
-    dispatch(reorder({ projectId, sectionName, endIndex: index }));
-  };
-
-  //TODO posibility to create task with diffrent type
-  const handleTaskGroupAdd = () => {};
-
-  const handleTaskDelete = () => {
-    dispatch(delTask({ projectId, sectionName, id: data.id }));
-  };
-
   const handleToggleComment = () => {
-    //TODO do not run this function when comment exists
     setIsEditable(!isEditable);
   };
 
@@ -77,40 +59,40 @@ const TableDraggableRow: FC<IProps> = ({
         onClick={handleTooltipClosed}
         onMouseLeave={(e) => handleToggleContextMenu(e)}
       >
-        <div className={styles.rowController} onClick={(e) => handleToggleContextMenu(e)}>
-          <button className={styles.rowControllerButton}>+</button>
-          {isOpen && (
-            <div className={styles.rowControllerButtonsWrapper}>
-              <div className={styles.rowControllerTaskButton} onClick={handleTaskDelete}>
-                <i className='pi pi-trash'></i>
-              </div>
-              <div className={styles.rowControllerTaskButton} onClick={handleTaskAdd}>
-                <i className='pi pi-calendar-plus'></i>
-              </div>
-              <div
-                className={`${styles.rowControllerTaskButton} ${disabledComment}`}
-                onClick={handleToggleComment}
-              >
-                <i className='pi pi-comment'></i>
-              </div>
-            </div>
-          )}
-        </div>
+        <ContextMenu
+          endIndex={index}
+          handleToggleComment={handleToggleComment}
+          handleToggleContextMenu={handleToggleContextMenu}
+          isOpen={isOpen}
+          projectId={projectId}
+          sectionName={sectionName}
+          taskComment={data.comment.text}
+          taskId={data.id}
+          type={data.type}
+        />
         {rowOrder.map(({ role }) => {
+          if (data.type === Type.Group) {
+            return (
+              <TableCell key={role} role={role}>
+                {role === 'sectionId' && orderNumber}
+                {role === 'name' && (
+                  <TaskInput sectionName={sectionName} taskId={data.id} value={data[role]} />
+                )}
+              </TableCell>
+            );
+          }
+
           if (role === 'risk') {
             return (
               <TableCell key={role} role={role}>
-                {/* TODO add diffrent display for group task */}
-                {data.type === 'group' ? null : (
-                  <RiskBadge
-                    openTooltipId={openTooltipId}
-                    orderNumber={orderNumber}
-                    risk={data[role]}
-                    sectionName={sectionName}
-                    setOpenTooltipId={setOpenTooltipId}
-                    taskId={data.id}
-                  />
-                )}
+                <RiskBadge
+                  openTooltipId={openTooltipId}
+                  orderNumber={orderNumber}
+                  risk={data[role]}
+                  sectionName={sectionName}
+                  setOpenTooltipId={setOpenTooltipId}
+                  taskId={data.id}
+                />
               </TableCell>
             );
           } else if (role === 'name') {
@@ -137,13 +119,15 @@ const TableDraggableRow: FC<IProps> = ({
             </TableCell>
           );
         })}
-        <TaskComment
-          comment={data.comment}
-          isEditable={isEditable}
-          sectionName={sectionName}
-          taskId={data.id}
-          toggleComment={handleToggleComment}
-        />
+        {data.type === 'task' && (
+          <TaskComment
+            comment={data.comment}
+            isEditable={isEditable}
+            sectionName={sectionName}
+            taskId={data.id}
+            toggleComment={handleToggleComment}
+          />
+        )}
       </div>
     </>
   );

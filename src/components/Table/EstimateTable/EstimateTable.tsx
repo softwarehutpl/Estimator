@@ -12,9 +12,6 @@ interface Props {
 }
 
 const EstimateTable: FC<Props> = ({ projectId, project }) => {
-  //TODO delete state
-  const [sections, setSections] = useState(null);
-
   //TODO if project with given Id does not exist display something else than table
   if (!project) return null;
 
@@ -22,13 +19,7 @@ const EstimateTable: FC<Props> = ({ projectId, project }) => {
     <div className={styles.mainTable}>
       <TableHeader />
       {project.sections?.map((section: Section) => (
-        <TableSection
-          key={section.sectionId}
-          projectId={projectId}
-          section={section}
-          sections={project.sections}
-          setSections={setSections}
-        />
+        <TableSection key={section.sectionId} projectId={projectId} section={section} />
       ))}
     </div>
   );

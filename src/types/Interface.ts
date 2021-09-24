@@ -83,7 +83,7 @@ export interface Section {
 
 export interface Task {
   id: string;
-  type?: Type;
+  type: Type;
   name: string;
   role: Role;
   minMd: number | null;

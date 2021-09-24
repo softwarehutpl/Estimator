@@ -35,7 +35,7 @@ const projectSlice = createSlice({
     ) => {
       const newTask = createTask(
         action.payload.sectionName,
-        (action.payload.taskName = ''),
+        action.payload.taskName,
         action.payload.type
       );
       const newState = [...state.projects].map((project) =>
