@@ -1,20 +1,33 @@
 import { FC } from "react";
-
+//Components
 import EstimateTable from "../../components/Table/EstimateTable/EstimateTable";
 import ProjectSummary from "../../components/ProjectSummary/ProjectSummary";
+import DevelopmentEffortSummary from "../../components/DevelopmentEffortSummary/DevelopmentEffortSummary";
+//Store
+import { useAppSelector } from "../../store/hooks";
+//Router
 import { useParams } from "react-router";
-
+//Types
+import { Project } from "../../types/Interface";
+//Styles
 import styles from "./project.module.scss";
 
 interface Props {}
 
 const DataView: FC<Props> = () => {
   const { projectId } = useParams<{ projectId: string }>();
-
+  const project: Project = useAppSelector((state) =>
+    state.projects.projects.find(
+      (project: Project) => project.projectId === projectId
+    )
+  );
+  const devData = project.rawDevelopmentEffortSum;
+  console.log(project);
   return (
     <main className={styles.contentWrapper}>
-      <EstimateTable projectId={projectId} />
-      <ProjectSummary />
+      <EstimateTable projectId={projectId} project={project} />
+      <DevelopmentEffortSummary projectId={projectId} data={devData} />
+      <ProjectSummary projectId={projectId} />
     </main>
   );
 };
