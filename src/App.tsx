@@ -10,21 +10,24 @@ import RootStore from "./store/interface/RootStore";
 function App() {
   return (
     <div>
-      <Nav />
       <Switch>
         <Route exact path="/">
+          <Nav />
           <Home />
         </Route>
         <Route path="/project/:projectId">
+          <Nav />
           <Project />
         </Route>
         <Route path="/root">
           <RootStore />
         </Route>
         <Route path="/export">
+          <Nav />
           <Export />
         </Route>
         <Route path="*">
+          <Nav />
           <NotFound404 />
         </Route>
       </Switch>

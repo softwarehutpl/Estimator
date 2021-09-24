@@ -113,3 +113,7 @@ export enum Type {
   Group = "group",
   Task = "task",
 }
+
+export interface Params {
+  projectId: string;
+}
