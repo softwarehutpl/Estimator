@@ -12,7 +12,7 @@ import TerminateDialog from "../Dialogs/TerminateDialog";
 //Types
 import { Params, Project } from "../../types/Interface";
 //Router
-import { Route, useParams } from "react-router-dom";
+import { Route, useParams, Link } from "react-router-dom";
 //Store
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -43,7 +43,14 @@ const Nav: FC<Props> = () => {
   const [isConnected, setIsConnected] = useState(false);
 
   const projectTitles = projectsData.map((project: Project) => {
-    return { label: project.projectName, value: project.projectId };
+    return {
+      label: (
+        <Link className={styles.link} to={`/project/${project.projectId}`}>
+          {project.projectName}
+        </Link>
+      ),
+      value: project.projectId,
+    };
   });
 
   useEffect(() => {
