@@ -107,7 +107,10 @@ const projectSlice = createSlice({
                             task.id === action.payload.taskId
                               ? {
                                   ...task,
-                                  subtasks: task.subtasks?.concat(newSubTask),
+                                  subtasks:
+                                    task.type === "group"
+                                      ? task.subtasks?.concat(newSubTask)
+                                      : task.subtasks,
                                 }
                               : task
                           ),

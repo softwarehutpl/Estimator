@@ -125,15 +125,7 @@ const initialProject: Project = {
         predictedMd: 0,
         predictedMdFormula: "",
       },
-    ],
-    total: {
-      name: "Total (MD):",
-      minMd: 0,
-      minMdFormula: "",
-      maxMd: 0,
-      maxMdFormula: "",
-      predictedMd: 0,
-    },
+    ]
   },
   summary: [],
   assumptions: [],
