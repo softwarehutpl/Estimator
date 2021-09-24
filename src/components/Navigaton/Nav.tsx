@@ -57,8 +57,11 @@ const Nav: FC<Props> = () => {
     setSelectedProject(projectId && project.projectName);
   }, [projectId]);
 
-  const selectHandler = (e: DropdownChangeParams) =>
+  const selectHandler = (e: DropdownChangeParams) => {
+    console.log("dzialam");
+    //TODO: handel Route here
     setSelectedProject(e.target.value);
+  };
 
   const dialogFooter = (
     <div>
