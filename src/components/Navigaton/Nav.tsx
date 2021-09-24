@@ -66,13 +66,14 @@ const Nav: FC<Props> = () => {
         label="No"
         icon="pi pi-times"
         onClick={() => setImportDialog(false)}
-        className="p-button-text"
+        className="p-button-secondary p-button-text"
       />
       <Button
         label="Yes"
         icon="pi pi-check"
         onClick={() => setImportDialog(false)}
         autoFocus
+        className="p-button-secondary p-button-text"
       />
     </div>
   );
@@ -85,22 +86,22 @@ const Nav: FC<Props> = () => {
         <>
           <Button
             label="Import"
-            className="p-mx-2 p-my-auto"
+            className="p-button-secondary p-mx-2 p-my-auto"
             onClick={() => setImportDialog(true)}
           />
           <Button
             label="Export"
-            className="p-mx-2 p-my-auto"
+            className="p-button-secondary p-mx-2 p-my-auto"
             onClick={() => setExportDialog(true)}
           />
           <Button
             label="Invite"
-            className="p-mx-2 p-my-auto"
+            className="p-button-secondary p-mx-2 p-my-auto"
             onClick={() => setInviteDialog(true)}
           />
           <Button
             label="Join"
-            className="p-mx-2 p-my-auto"
+            className="p-button-secondary p-mx-2 p-my-auto"
             onClick={() => setJoinDialog(true)}
           />
         </>
@@ -149,7 +150,7 @@ const Nav: FC<Props> = () => {
     <>
       {isConnected ? (
         <Button
-          className="p-mx-2"
+          className="p-button-secondary p-mx-2"
           label="Terminate"
           onClick={() => setTerminateDialog(true)}
         />
