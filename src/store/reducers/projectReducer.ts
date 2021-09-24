@@ -46,7 +46,7 @@ const projectSlice = createSlice({
     ) => {
       const newTask = createTask(
         action.payload.sectionName,
-        (action.payload.taskName = ""),
+        action.payload.taskName,
         action.payload.type
       );
       const newState = [...state.projects].map((project) =>
@@ -121,7 +121,10 @@ const projectSlice = createSlice({
                             task.id === action.payload.taskId
                               ? {
                                   ...task,
-                                  subtasks: task.subtasks?.concat(newSubTask),
+                                  subtasks:
+                                    task.type === "group"
+                                      ? task.subtasks?.concat(newSubTask)
+                                      : task.subtasks,
                                 }
                               : task
                           ),
