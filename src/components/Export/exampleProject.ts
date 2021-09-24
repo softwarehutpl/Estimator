@@ -1,6 +1,6 @@
 import { Project, Role, Type } from '../../types/Interface';
 
-const exampleProject: Project = {
+const myProject: Project = {
 	projectName: "Test project",
 	estimatedBy: "Hortensjo Pisuarez",
 	estimationDate: "30.11.2020", 
@@ -250,4 +250,4 @@ const exampleProject: Project = {
 	],
 }
 
-export default exampleProject;
+export default myProject;
