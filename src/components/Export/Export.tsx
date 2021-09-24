@@ -3,14 +3,9 @@ import ReactExport from "react-data-export";
 import { SymbolDisplayPartKind } from "typescript";
 import exampleProject from "./exampleProject";
 
-const subtitleStyle: ReactExport.ExcelStyle = {
-  font: {
-    sz: 10,
-    bold: true
-  }
-}
-
 // cell styles
+
+const greyBackgroundColor: ReactExport.ExcelStyle = {fill: { patternType: "solid", fgColor: { rgb: "dddddd" }}};
 
 const projectKeyStyle: ReactExport.ExcelStyle = {
   font: {
@@ -63,7 +58,7 @@ const tableHeaderStyle: ReactExport.ExcelStyle = {
 const borderTopStyle: ReactExport.ExcelStyle = {
   border: {
     top: {
-      style: "dotted",
+      style: "thin",
       color: { rgb: "000000"}
     }    
   }
@@ -332,6 +327,9 @@ export default function Export() {
       { value: "" },
     ],
     [ //3 zmergowane cells wszystkie w tym rzedzie
+      {},
+      {},
+      {},
       { value: "Project Workload Estimation", style: { font: { sz: "18", bold: true } } },
     ],
     [ //4
@@ -389,7 +387,8 @@ export default function Export() {
       { value: "Role", style: tableHeaderCenterStyle},
       { value: "Min (MD)", style: tableHeaderCenterStyle},
       { value: "Max (MD)", style: tableHeaderCenterStyle},
-      { value: "Predicted (MD)", style: tableHeaderCenterStyle},
+      // { value: "Predicted (MD)", style: tableHeaderCenterStyle},
+      { value: "Predicted (MD)", style: Object.assign({}, tableHeaderCenterStyle, greyBackgroundColor)},      
       { value: "Risk", style: tableHeaderCenterStyle},
     ],
     [ //12 
@@ -400,6 +399,7 @@ export default function Export() {
       { value: "", style: borderTopStyle},
       { value: "", style: borderTopStyle},
       { value: "", style: borderTopStyle},
+      { value: "", style: Object.assign({}, borderTopStyle, greyBackgroundColor)}, //H
       { value: "", style: borderTopStyle},
 
       // formula test
@@ -446,7 +446,7 @@ export default function Export() {
     newArray.push({}); // E
     newArray.push({value:minMd, style:sectionValuesStyle}); // F
     newArray.push({value:maxMd, style:sectionValuesStyle}); // G
-    newArray.push({value:predictedMd, style:sectionValuesStyle}); // H
+    newArray.push({value:predictedMd, style: Object.assign({}, sectionValuesStyle, greyBackgroundColor)}); // H
     newArray.push({value:risk, style:sectionProcentStyle}); // I
 
     fullDataArray.push(newArray);
@@ -473,7 +473,7 @@ export default function Export() {
       newArray.push({value: taskSymbol, style: taskValuesStyle}); // E
       newArray.push({value: minMd, style: taskValuesStyle}); // F
       newArray.push({value: maxMd, style: taskValuesStyle}); // G
-      newArray.push({value: predictedMd, style: taskValuesStyle}); // H
+      newArray.push({value: predictedMd, style: Object.assign({}, taskValuesStyle, greyBackgroundColor)}); // H
       newArray.push({value: risk, style: taskValuesStyle}); // I
   
       fullDataArray.push(newArray);
@@ -481,9 +481,17 @@ export default function Export() {
       // add row with comment      
       if (commentText) {
         newArray = [];
-        newArray.push({});
+        newArray.push({}); // A
         
-        commentIsImportant ? newArray.push({value:commentText, style: importantCommentStyle}) : newArray.push({value:commentText, style: commentStyle}); 
+        commentIsImportant ? newArray.push({value:commentText, style: importantCommentStyle}) : newArray.push({value:commentText, style: commentStyle}); // B
+        
+        newArray.push({}); //C
+        newArray.push({}); //D
+        newArray.push({}); //E
+        newArray.push({}); //F
+        newArray.push({}); //G
+        newArray.push({value:"", style: greyBackgroundColor}); //H
+        
         fullDataArray.push(newArray);
         newArray = [];
       }
@@ -513,7 +521,7 @@ export default function Export() {
         newArray.push({value: taskSymbol, style: taskValuesStyle}); // E
         newArray.push({value: minMd, style: taskValuesStyle}); // F
         newArray.push({value: maxMd, style: taskValuesStyle}); // G
-        newArray.push({value: predictedMd, style: taskValuesStyle}); // H
+        newArray.push({value: predictedMd, style: Object.assign({}, taskValuesStyle, greyBackgroundColor)}); // H
         newArray.push({value: risk, style: taskValuesStyle}); // I
     
         fullDataArray.push(newArray);
@@ -524,6 +532,14 @@ export default function Export() {
           newArray.push({});
           
           commentIsImportant ? newArray.push({value:commentText, style: importantCommentStyle}) : newArray.push({value:commentText, style: commentStyle}); 
+          
+          newArray.push({}); //C
+          newArray.push({}); //D
+          newArray.push({}); //E
+          newArray.push({}); //F
+          newArray.push({}); //G
+          newArray.push({value:"", style: greyBackgroundColor}); //H
+          
           fullDataArray.push(newArray);
           newArray = [];
         }
@@ -535,14 +551,23 @@ export default function Export() {
   });
 
   //row beetween 'tasks' and 'raw development...'
-  fullDataArray.push([{value: ""}]);
+  fullDataArray.push([ 
+    { value: "",},
+    { value: "",},
+    { value: "",},
+    { value: "",},
+    { value: "",},
+    { value: "",},
+    { value: "",},
+    { value: "", style: greyBackgroundColor},
+  ]); // style with border top for A:H colums
 
   // raw development
   let rdName = exampleProject.rawDevelopmentEffortSum?.name;
   let rdMin = exampleProject.rawDevelopmentEffortSum?.main.minMd;
   let rdMax = exampleProject.rawDevelopmentEffortSum?.main.maxMd;
   let rdPredicted = exampleProject.rawDevelopmentEffortSum?.main.predictedMd;
-  let rdRisk = exampleProject.rawDevelopmentEffortSum?.main.risk;
+  let rdRisk = exampleProject.rawDevelopmentEffortSum?.main.risk/100;
 
   let newArray = [];
   newArray.push({});
@@ -552,7 +577,7 @@ export default function Export() {
   newArray.push({});
   newArray.push({value: rdMin, style: sectionValuesStyle});
   newArray.push({value: rdMax, style: sectionValuesStyle});
-  newArray.push({value: rdPredicted, style: sectionValuesStyle});
+  newArray.push({value: rdPredicted, style: Object.assign({}, sectionValuesStyle, greyBackgroundColor)});
   newArray.push({value: rdRisk, style: sectionProcentStyle});
 
   fullDataArray.push(newArray);
@@ -575,7 +600,7 @@ export default function Export() {
     newArray.push({value:rdRole, style: taskValuesStyle}); // E
     newArray.push({value:rdMin, style: taskValuesStyle}); // F
     newArray.push({value:rdMax, style: taskValuesStyle}); // G
-    newArray.push({value:rdPredicted, style: taskValuesStyle}); // H
+    newArray.push({value:rdPredicted, style: Object.assign({}, taskValuesStyle, greyBackgroundColor)}); // H
 
     fullDataArray.push(newArray);    
   });
@@ -589,7 +614,7 @@ export default function Export() {
     { value: "", style: borderTopStyle},
     { value: "", style: borderTopStyle},
     { value: "", style: borderTopStyle},
-    { value: "", style: borderTopStyle},
+    { value: "", style: Object.assign({}, borderTopStyle, greyBackgroundColor)},
   ]); // style with border top for A:H colums
   
   
@@ -601,7 +626,7 @@ export default function Export() {
   let totalMin = exampleProject.summary[0].minMd;
   let totalMax = exampleProject.summary[0].maxMd;
   let totalPredicted = exampleProject.summary[0].predictedMd;
-  let totalRisk = exampleProject.summary[0].risk;
+  let totalRisk = exampleProject.summary[0].risk/100;
   newArray.push({}); // A
   newArray.push({}); // B
   newArray.push({}); // C
@@ -609,7 +634,7 @@ export default function Export() {
   newArray.push({value:totalName, style: totalTitleStyle}); // E
   newArray.push({value:totalMin, style: totalValuesStyle}); // F
   newArray.push({value:totalMax, style: totalValuesStyle}); // G
-  newArray.push({value:totalPredicted, style: sectionValuesStyle}); // H
+  newArray.push({value:totalPredicted, style: Object.assign({}, sectionValuesStyle, greyBackgroundColor)}); // H
   newArray.push({value:totalRisk, style: sectionProcentStyle}); // I
   fullDataArray.push(newArray);
 
@@ -626,7 +651,7 @@ export default function Export() {
   newArray.push({value:perMemberName, style: projectKeyStyle}); // E
   newArray.push({value:perMemberMin, style: taskValuesStyle}); // F
   newArray.push({value:perMemberMax, style: taskValuesStyle}); // G
-  newArray.push({value:perMemberPredicted, style: taskValuesStyle}); // H
+  newArray.push({value:perMemberPredicted, style: Object.assign({}, taskValuesStyle, greyBackgroundColor)}); // H
   fullDataArray.push(newArray);
 
   // delivery date
@@ -662,15 +687,27 @@ export default function Export() {
   const multiDataSet = [
     {
       columns: [
-          { title: "Logo software hut", width: { wpx: 30 } }, // A
-          { title: "", width: { wpx: 81 } }, //B
-          { title: "", width: { wpx: 142 } }, //C
-          { title: "", width: { wpx: 35 } }, //D
-          { title: "", width: { wpx: 85 } }, //E
-          { title: "", width: { wpx: 81 } }, //F
-          { title: "", width: { wpx: 81 } }, //G
-          { title: "", width: { wpx: 81 } }, //H
-          { title: "", width: { wpx: 51 } }, //I
+        //px width
+          { title: "Logo software hut", width: { wpx: 30*0.87 } }, // A
+          { title: "", width: { wpx: 81*0.87 } }, //B
+          { title: "", width: { wpx: 142*0.87 } }, //C
+          { title: "", width: { wpx: 35*0.87 } }, //D
+          { title: "", width: { wpx: 85*0.87 } }, //E
+          { title: "", width: { wpx: 81*0.87 } }, //F
+          { title: "", width: { wpx: 81*0.87 } }, //G
+          { title: "", width: { wpx: 81*0.87 } }, //H
+          { title: "", width: { wpx: 51*0.87 } }, //I
+        // //ch width
+        //   { title: "Logo software hut", width: { wch: 3.57 } }, // A
+        //   { title: "", width: { wch: 10.86 } }, //B
+        //   { title: "", width: { wch: 19.57 } }, //C
+        //   { title: "", width: { wch: 4.29 } }, //D
+        //   { title: "", width: { wch: 11.43 } }, //E
+        //   { title: "", width: { wch: 10.86 } }, //F
+        //   { title: "", width: { wch: 10.86 } }, //G
+        //   { title: "", width: { wch: 10.86 } }, //H
+        //   { title: "", width: { wch: 6.57 } }, //I
+
         ],
       data: fullDataArray      
     }
