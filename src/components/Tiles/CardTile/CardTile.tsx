@@ -22,11 +22,11 @@ const CardTile = (props: Props) => {
       <div className="p-d-flex p-flex-column">
         <InputText
           id="projectName"
-          value={placeholder}
-          placeholder={title}
+          value={title}
+          placeholder={placeholder}
           onChange={change}
         />
-        <Link to={`/project/${projectId}`}>
+        <Link className={styles.link} to={`/project/${projectId}`}>
           <Button
             label={btn}
             onClick={action}

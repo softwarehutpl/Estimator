@@ -31,6 +31,7 @@ export interface RawDevelopmentEffortSum {
   name: string;
   main: Main;
   parts: Part[];
+  total: Total;
 }
 
 export interface Main {
@@ -42,7 +43,7 @@ export interface Main {
   predictedMdFormula?: string;
   risk?: number;
   riskFormula?: string;
-  name?: string;
+  // name?: string;
   estDeliveryDate?: string;
 }
 
@@ -56,6 +57,14 @@ export interface Part {
   maxMdFormula: string;
   predictedMd: number;
   predictedMdFormula: string;
+}
+export interface Total {
+  name: string;
+  minMd: number;
+  minMdFormula: string;
+  maxMd: number;
+  maxMdFormula: string;
+  predictedMd: number;
 }
 
 export interface Section {

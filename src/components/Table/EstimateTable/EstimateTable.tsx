@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { useAppSelector } from '../../../store/hooks';
 import { Project, Section } from '../../../types/Interface';
 
 import TableHeader from '../TableHeader/TableHeader';
@@ -9,15 +8,12 @@ import styles from './EstimateTable.module.scss';
 
 interface Props {
   projectId: string;
+  project: Project;
 }
 
-const EstimateTable: FC<Props> = ({ projectId }) => {
+const EstimateTable: FC<Props> = ({ projectId, project }) => {
   //TODO delete state
   const [sections, setSections] = useState(null);
-
-  const project: Project = useAppSelector((state) =>
-    state.projects.projects.find((project: Project) => project.projectId === projectId)
-  );
 
   //TODO if project with given Id does not exist display something else than table
   if (!project) return null;
