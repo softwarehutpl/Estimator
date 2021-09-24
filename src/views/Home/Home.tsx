@@ -16,8 +16,8 @@ interface Props {}
 
 const Home = (props: Props) => {
   const dispatch = useAppDispatch();
-  const [projectName, setProjectName] = useState("Project name");
-  const [joinId, setJoinId] = useState("Connection Id");
+  const [projectName, setProjectName] = useState("");
+  const [joinId, setJoinId] = useState("");
   const projectsData = useAppSelector((state) =>
     state.projects.projects.map((project: Project) =>
       Object.create({
@@ -33,14 +33,12 @@ const Home = (props: Props) => {
 
   const createProjectHandler = () => {
     console.log("Create Project works");
-    const id = dispatch(
+    dispatch(
       addProject({
         projectName: projectName,
         projectId: generatedId,
       })
     );
-    console.log(`Project ID: `);
-    console.log(id);
   };
 
   const joinProjectHandler = () => {
@@ -51,16 +49,16 @@ const Home = (props: Props) => {
       <div className={`${styles.home} p-d-flex`}>
         <CardTile
           btn="Create New"
-          title="Create new Project"
-          placeholder={projectName}
+          title={projectName}
+          placeholder="Project name"
           action={createProjectHandler}
           change={(e) => setProjectName(e.target.value)}
           projectId={generatedId}
         />
         <CardTile
           btn="Join"
-          title="Join"
-          placeholder={joinId}
+          title={joinId}
+          placeholder="Join"
           action={() => joinProjectHandler}
           change={(e) => setJoinId(e.target.value)}
           projectId={remoteId}
@@ -69,7 +67,11 @@ const Home = (props: Props) => {
       <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
           {projectsData.map((project: Project) => (
-            <ProjectTile key={project.projectId} title={project.projectName} />
+            <ProjectTile
+              key={project.projectId}
+              projectId={project.projectId}
+              title={project.projectName}
+            />
           ))}
         </ul>
       </Fieldset>
