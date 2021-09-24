@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
-import { Project, Section } from "../../../types/Interface";
+import { FC, useState } from 'react';
+import { Project, Section } from '../../../types/Interface';
 
-import TableHeader from "../TableHeader/TableHeader";
-import TableSection from "../TableSection/TableSection";
+import TableHeader from '../TableHeader/TableHeader';
+import TableSection from '../TableSection/TableSection';
 
-import styles from "./EstimateTable.module.scss";
+import styles from './EstimateTable.module.scss';
 
 interface Props {
   projectId: string;
@@ -12,8 +12,6 @@ interface Props {
 }
 
 const EstimateTable: FC<Props> = ({ projectId, project }) => {
-  const [sections, setSections] = useState(null);
-
   //TODO if project with given Id does not exist display something else than table
   if (!project) return null;
 
@@ -21,13 +19,7 @@ const EstimateTable: FC<Props> = ({ projectId, project }) => {
     <div className={styles.mainTable}>
       <TableHeader />
       {project.sections?.map((section: Section) => (
-        <TableSection
-          key={section.sectionId}
-          projectId={projectId}
-          section={section}
-          sections={project.sections}
-          setSections={setSections}
-        />
+        <TableSection key={section.sectionId} projectId={projectId} section={section} />
       ))}
     </div>
   );

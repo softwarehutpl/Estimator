@@ -1,35 +1,34 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+
+import { Comment } from '../../../types/Interface';
 
 import EditableInput from '../EditableInput/EditableInput';
 
 import styles from './TaskComment.module.scss';
 
 interface IProps {
-	text: string;
-	isImportant: boolean;
+  comment: Comment;
+  isEditable: boolean;
+  sectionName: string;
+  taskId: string;
+  toggleComment: () => void;
 }
 
-const TaskComment: FC<IProps> = ({ isImportant, text }) => {
-	const [isEditable, setIsEditable] = useState<boolean>(false);
-
-	const importantStyles = isImportant ? styles.taskCommentImportant : '';
-
-	return (
-		<>
-			{text && (
-				<div className={`${styles.taskComment} ${importantStyles}`}>
-					<span className={styles.taskCommentTitle}>Comment: </span>
-					{!isEditable ? (
-						<p onClick={() => setIsEditable(true)} className={styles.taskCommentText}>
-							{text}
-						</p>
-					) : (
-						<EditableInput value={text} setIsEditable={setIsEditable} />
-					)}
-				</div>
-			)}
-		</>
-	);
+const TaskComment: FC<IProps> = ({ comment, isEditable, sectionName, taskId, toggleComment }) => {
+  return (
+    <>
+      {(comment.text || isEditable) && (
+        <div className={`${styles.taskComment}`}>
+          <EditableInput
+            comment={comment}
+            sectionName={sectionName}
+            taskId={taskId}
+            toggleComment={toggleComment}
+          />
+        </div>
+      )}
+    </>
+  );
 };
 
 export default TaskComment;

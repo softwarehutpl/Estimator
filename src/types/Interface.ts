@@ -82,7 +82,7 @@ export interface Section {
 
 export interface Task {
   id: string;
-  type?: Type;
+  type: Type;
   name: string;
   role: Role;
   minMd: number | null;
@@ -100,17 +100,21 @@ export interface Comment {
 }
 
 export enum Role {
-  Empty = "",
-  FD = "FD",
-  BD = "BD",
-  MD = "MD",
-  UD = "UD",
-  DO = "DO",
+  Empty = '',
+  FD = 'FD',
+  BD = 'BD',
+  MD = 'MD',
+  UD = 'UD',
+  DO = 'DO',
 }
 
 export enum Type {
-  Group = "group",
-  Task = "task",
+  Group = 'group',
+  Task = 'task',
+}
+
+export interface RiskMultiplicator {
+  [key: string]: number;
 }
 
 export interface Params {
