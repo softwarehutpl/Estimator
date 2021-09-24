@@ -2,8 +2,7 @@
 import ReactExport from "react-data-export";
 import { SymbolDisplayPartKind } from "typescript";
 import exampleProject from "./exampleProject";
-
-// cell styles
+import logoFile from "./logo";
 
 const greyBackgroundColor: ReactExport.ExcelStyle = {fill: { patternType: "solid", fgColor: { rgb: "dddddd" }}};
 
@@ -16,15 +15,8 @@ const projectKeyStyle: ReactExport.ExcelStyle = {
   }
 }
 
-const projectValueStyle: ReactExport.ExcelStyle = {
-  font: {
-    sz: "10",
-    bold: true
-  },
-  alignment: {
-    horizontal: "left"
-  }
-}
+const vertAlignCenter: ReactExport.ExcelStyle = {alignment: { vertical: "center"}};
+
 
 const projectValueCenterStyle: ReactExport.ExcelStyle = {
   font: {
@@ -33,6 +25,16 @@ const projectValueCenterStyle: ReactExport.ExcelStyle = {
   },
   alignment: {
     horizontal: "center"
+  }
+}
+
+const projectValueStyle: ReactExport.ExcelStyle = {
+  font: {
+    sz: "10",
+    bold: true
+  },
+  alignment: {
+    vertical: "left"
   }
 }
 
@@ -176,6 +178,19 @@ const totalValuesStyle: ReactExport.ExcelStyle = {
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
+// const logo =
+
+// const img = "./LogoSH.svg";
+
+// // 1. Keep a DOM reference to the SVG element
+// let SVGDomElement = "./LogoSH.svg"
+
+// // 2. Serialize element into plain SVG
+// var serializedSVG = new XMLSerializer().serializeToString(SVGDomElement);
+
+// // 3. convert svg to base64
+// var base64Data = window.btoa(serializedSVG);
+
 interface Props {}
 
 // const multiDataSet = [
@@ -317,23 +332,25 @@ interface Props {}
 //   );
 // };
 
-
-
+const base64Data = logoFile.text;
 
 export default function Export() {
 
   let fullDataArray = [
-    [ //2
-      { value: "" },
+    [ //1
+      // { value: "|", style: {font: {sz:"25", color: { rgb: "FFFFFF" }}} }, // height like font 25
+      { value: "SoftwareHut", style: {font: {sz:"25", name:"Montserrat", bold: true, color: { rgb: "4e4e4e" } }} }, // height like font 25
     ],
-    [ //3 zmergowane cells wszystkie w tym rzedzie
+    [ //2      
+      {}   
+    ],
+    [ //3 
       {},
       {},
-      {},
-      { value: "Project Workload Estimation", style: { font: { sz: "18", bold: true } } },
+      { value: "               Project Workload Estimation", style: { font: { sz: "18", bold: true } } },
     ],
     [ //4
-      { value: ""},
+      {}
     ],
     [ //5
       { value: "" },
@@ -341,9 +358,9 @@ export default function Export() {
       { value: "Test project", style: projectValueStyle },
       { value: "" },
       { value: "Est. Start:", style: projectKeyStyle },
-      { value: "1.01.2021", style: projectValueCenterStyle },
+      { value: exampleProject.estStart, style: projectValueCenterStyle },
       { value: "Est. End:", style: projectKeyStyle },
-      { value: "1.03.2021", style: projectValueCenterStyle },
+      { value: exampleProject.estEns, style: projectValueCenterStyle },
     ],
     [ //6
       { value: "" },
@@ -351,9 +368,9 @@ export default function Export() {
       { value: "" },
       { value: "" },
       { value: "Team size (FTEs):", style: projectKeyStyle },
-      { value: "4", style: projectValueCenterStyle },
+      { value: exampleProject.teamSize, style: projectValueCenterStyle },
       { value: "Time Budget:", style: projectKeyStyle },
-      { value: "160 MD", style: projectValueCenterStyle },
+      { value: exampleProject.timeBudget?.toString()+" MD", style: projectValueCenterStyle },
     ],
     [ //7
       { value: ""},
@@ -361,20 +378,20 @@ export default function Export() {
     [ //8
       { value: "" },
       { value: "Estimated by:", style: projectKeyStyle },
-      { value: "Hortensjo Pisuarez", style: projectValueStyle },
+      { value: exampleProject.estimatedBy, style: projectValueStyle },
       { value: "" },
       { value: "Date:", style: projectKeyStyle },
-      { value: "30.11.2020", style: projectValueCenterStyle },
+      { value: exampleProject.estimationDate, style: projectValueCenterStyle },
       { value: "Effort:", style: projectKeyStyle },
-      { value: "12h", style: projectValueCenterStyle },
+      { value: exampleProject.effort?.toString()+"h", style: projectValueCenterStyle },
     ],
     [ //9
-      { value: "" },
-      { value: "Verified by:", style: projectKeyStyle },
-      { value: "Wieńczysław Należyty", style: projectValueStyle },
+      { value: "|", style: {font: {sz:"18", color: { rgb: "FFFFFF" }}} }, // height like font 18
+      { value: "Verified by:", style: projectKeyStyle},
+      { value: exampleProject.verifiedBy, style: projectValueStyle },
       { value: "" },
       { value: "Date:", style: projectKeyStyle },
-      { value: "01.02.2023", style: projectValueCenterStyle },
+      { value: exampleProject.verificationDate, style: projectValueCenterStyle },
     ],
     [ //10
       { value: ""},
@@ -500,7 +517,7 @@ export default function Export() {
 
       // subtasks
       task.subtasks.forEach(function(subtask) {
-        let taskName = subtask.name;
+        let taskName = '    '+subtask.name;
         let newArray = [];
         let taskSymbol = subtask.role;  
         let minMd = subtask.minMd;
@@ -688,7 +705,7 @@ export default function Export() {
     {
       columns: [
         //px width
-          { title: "Logo software hut", width: { wpx: 30*0.87 } }, // A
+          { title: "", width: { wpx: 30*0.87 } }, // A
           { title: "", width: { wpx: 81*0.87 } }, //B
           { title: "", width: { wpx: 142*0.87 } }, //C
           { title: "", width: { wpx: 35*0.87 } }, //D
