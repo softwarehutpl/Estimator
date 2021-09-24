@@ -16,7 +16,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import {
   getProjectsDataSelector,
-  getProjectSelector,
+  // getProjectSelector,
 } from "../selectors/selectors";
 
 export default function RootStore() {
@@ -31,14 +31,14 @@ export default function RootStore() {
   const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const dispatch = useAppDispatch();
-  const project = useAppSelector(
-    getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
-  ); //=> PUSH PROJECT ID!
-  console.log(project);
+  // const project = useAppSelector(
+  //   getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
+  // ); //=> PUSH PROJECT ID!
   const projectsData = useAppSelector(getProjectsDataSelector());
-  console.log(projectsData);
 
   useEffect(() => {
+    // console.log(project);
+    // console.log(projectsData);
     console.log(projects);
   }, [projects]);
 

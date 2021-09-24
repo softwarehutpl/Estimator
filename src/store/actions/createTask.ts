@@ -21,7 +21,7 @@ const returnRole = (sectionName: string) => {
 
 export default function createTask(
   sectionName: string,
-  taskName: string,
+  taskName: string = "",
   type?: string
 ) {
   const newTask = Object.assign({}, initialTask, {
