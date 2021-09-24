@@ -15,13 +15,9 @@ import {
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
 import {
-<<<<<<< HEAD
   getProjectsDataSelector,
-=======
-  getProjectsData,
->>>>>>> main
   getProjectSelector,
-} from "../selectors/getProjectsSelector";
+} from "../selectors/selectors";
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
