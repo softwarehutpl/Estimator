@@ -1,4 +1,4 @@
-import { ChangeEventHandler, MouseEventHandler } from "react";
+import { ChangeEventHandler, FC, MouseEventHandler } from "react";
 import { Card } from "primereact/card";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
@@ -12,21 +12,28 @@ interface Props {
   action: MouseEventHandler<HTMLButtonElement>;
   change: ChangeEventHandler<HTMLInputElement>;
   projectId: string | "";
+  cardTitle: string;
 }
 
-const CardTile = (props: Props) => {
-  const { btn, title, action, change, placeholder, projectId = "" } = props;
-
+const CardTile: FC<Props> = ({
+  btn,
+  title,
+  action,
+  change,
+  placeholder,
+  projectId = "",
+  cardTitle,
+}) => {
   return (
-    <Card title={title} className={styles.card}>
+    <Card title={cardTitle} className={styles.card}>
       <div className="p-d-flex p-flex-column">
         <InputText
           id="projectName"
-          value={placeholder}
-          placeholder={title}
+          value={title}
+          placeholder={placeholder}
           onChange={change}
         />
-        <Link to={`/project/${projectId}`}>
+        <Link className={styles.link} to={`/project/${projectId}`}>
           <Button
             label={btn}
             onClick={action}

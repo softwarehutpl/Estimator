@@ -10,8 +10,14 @@ import {
   delTask,
   addSubtask,
   updateTasks,
+  delSubtask,
+  updateSubtask,
 } from "../reducers/projectReducer";
 import { v4 as uuidv4 } from "uuid";
+import {
+  getProjectsDataSelector,
+  // getProjectSelector,
+} from "../selectors/selectors";
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState("");
@@ -22,18 +28,17 @@ export default function RootStore() {
   const [taskProps, setTaskProps] = useState("");
   const [updatedValue, setUpdatedValue] = useState("");
   const [projectId, setProjectId] = useState("");
+  const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
-  const projectsData = useAppSelector((state) =>
-    state.projects.projects.map((project: Project) =>
-      Object.create({
-        projectName: project.projectName,
-        projectId: project.projectId,
-      })
-    )
-  );
   const dispatch = useAppDispatch();
+  // const project = useAppSelector(
+  //   getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
+  // ); //=> PUSH PROJECT ID!
+  const projectsData = useAppSelector(getProjectsDataSelector());
 
   useEffect(() => {
+    // console.log(project);
+    // console.log(projectsData);
     console.log(projects);
   }, [projects]);
 
@@ -224,9 +229,57 @@ export default function RootStore() {
           setSectionName("");
           setProjectId("");
           setTaskName("");
+          setTaskId("");
         }}
       >
         addSubtask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- DEL SUBTASK -----------
+      </p>
+      Frontend development <br />
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Add Subtask"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Add Subtask"
+      />
+      <input
+        type="text"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Add Subtask"
+      />
+      <input
+        type="text"
+        value={subtaskId}
+        onChange={(event) => setSubtaskId(event.target.value)}
+        placeholder="Subtask ID To Dell Subtask"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            delSubtask({
+              projectId: projectId,
+              sectionName: sectionName,
+              taskId: taskId,
+              subtaskId: subtaskId,
+            })
+          );
+          setSectionName("");
+          setProjectId("");
+          setTaskName("");
+          setProjectId("");
+        }}
+      >
+        delSubtask
       </button>
       <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- UPDATE TASK -----------
@@ -282,6 +335,69 @@ export default function RootStore() {
         }}
       >
         updateTask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE SUBTASK -----------
+      </p>
+      Frontend development <br />
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={sectionName}
+        onChange={(event) => setSectionName(event.target.value)}
+        placeholder="Section Name To Update Subtask"
+      />
+      <input
+        type="text"
+        value={taskId}
+        onChange={(event) => setTaskId(event.target.value)}
+        placeholder="Task ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={subtaskId}
+        onChange={(event) => setSubtaskId(event.target.value)}
+        placeholder="Subtask ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={taskProps}
+        onChange={(event) => setTaskProps(event.target.value)}
+        placeholder="Subtask Props To Update Subtask"
+      />
+      <input
+        type="text"
+        value={updatedValue}
+        onChange={(event) => setUpdatedValue(event.target.value)}
+        placeholder="Updated value"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            updateSubtask({
+              projectId: projectId,
+              sectionName: sectionName,
+              taskId: taskId,
+              subtaskId: subtaskId,
+              taskProps: taskProps,
+              updatedValue: updatedValue,
+            })
+          );
+          setProjectId("");
+          setSectionName("");
+          setTaskId("");
+          setSubtaskId("");
+          setTaskProps("");
+          setUpdatedValue("");
+        }}
+      >
+        updateSubtask
       </button>
     </div>
   );

@@ -6,3 +6,8 @@
 .listItem {
   padding: $main-pad;
 }
+.link {
+  &:hover {
+    text-decoration: none;
+  }
+}
