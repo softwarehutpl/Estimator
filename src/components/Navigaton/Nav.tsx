@@ -1,26 +1,23 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from 'react';
 //Components
-import { Toolbar } from "primereact/toolbar";
-import { Button } from "primereact/button";
-import { Dropdown, DropdownChangeParams } from "primereact/dropdown";
-import { Dialog } from "primereact/dialog";
-import ImportDialog from "../Dialogs/ImportDialog";
-import ExportDialog from "../Dialogs/ExportDialog";
-import InviteDialog from "../Dialogs/InviteDialog";
-import JoinDialog from "../Dialogs/JoinDialog";
-import TerminateDialog from "../Dialogs/TerminateDialog";
+import { Toolbar } from 'primereact/toolbar';
+import { Button } from 'primereact/button';
+import { Dropdown, DropdownChangeParams } from 'primereact/dropdown';
+import { Dialog } from 'primereact/dialog';
+import ImportDialog from '../Dialogs/ImportDialog';
+import ExportDialog from '../Dialogs/ExportDialog';
+import InviteDialog from '../Dialogs/InviteDialog';
+import JoinDialog from '../Dialogs/JoinDialog';
+import TerminateDialog from '../Dialogs/TerminateDialog';
 //Types
-import { Params, Project } from "../../types/Interface";
+import { Params, Project } from '../../types/Interface';
 //Router
-import { Route, useParams, Link } from "react-router-dom";
+import { Route, useParams, Link } from 'react-router-dom';
 //Store
-import { useAppSelector } from "../../store/hooks";
-import {
-  getProjectsDataSelector,
-  getProjectSelector,
-} from "../../store/selectors/selectors";
+import { useAppSelector } from '../../store/hooks';
+import { getProjectsDataSelector, getProjectSelector } from '../../store/selectors/selectors';
 //Styles
-import styles from "./nav.module.scss";
+import styles from './nav.module.scss';
 
 interface Props {}
 
@@ -31,9 +28,7 @@ const Nav: FC<Props> = () => {
   const projectsData = useAppSelector(getProjectsDataSelector());
   console.log(projectsData);
   //Dialogs state
-  const [selectedProject, setSelectedProject] = useState(
-    projectId && project.projectName
-  );
+  const [selectedProject, setSelectedProject] = useState(projectId && project.projectName);
   const [importDialog, setImportDialog] = useState(false);
   const [exportDialog, setExportDialog] = useState(false);
   const [inviteDialog, setInviteDialog] = useState(false);
@@ -53,62 +48,62 @@ const Nav: FC<Props> = () => {
     };
   });
 
+  // TODO: add dependency to dependency array
   useEffect(() => {
     setSelectedProject(projectId && project.projectName);
   }, [projectId]);
 
-  const selectHandler = (e: DropdownChangeParams) =>
-    setSelectedProject(e.target.value);
+  const selectHandler = (e: DropdownChangeParams) => setSelectedProject(e.target.value);
 
   const dialogFooter = (
     <div>
       <Button
-        label="No"
-        icon="pi pi-times"
+        label='No'
+        icon='pi pi-times'
         onClick={() => setImportDialog(false)}
-        className="p-button-secondary p-button-text"
+        className='p-button-secondary p-button-text'
       />
       <Button
-        label="Yes"
-        icon="pi pi-check"
+        label='Yes'
+        icon='pi pi-check'
         onClick={() => setImportDialog(false)}
         autoFocus
-        className="p-button-secondary p-button-text"
+        className='p-button-secondary p-button-text'
       />
     </div>
   );
 
   const leftContents = (
-    <div className="p-d-flex">
+    <div className='p-d-flex'>
       <div className={`${styles.estimator} p-text-center`}>Estimator</div>
 
-      <Route path="/project">
+      <Route path='/project'>
         <>
           <Button
-            label="Import"
-            className="p-button-secondary p-mx-2 p-my-auto"
+            label='Import'
+            className='p-button-secondary p-mx-2 p-my-auto'
             onClick={() => setImportDialog(true)}
           />
           <Button
-            label="Export"
-            className="p-button-secondary p-mx-2 p-my-auto"
+            label='Export'
+            className='p-button-secondary p-mx-2 p-my-auto'
             onClick={() => setExportDialog(true)}
           />
           <Button
-            label="Invite"
-            className="p-button-secondary p-mx-2 p-my-auto"
+            label='Invite'
+            className='p-button-secondary p-mx-2 p-my-auto'
             onClick={() => setInviteDialog(true)}
           />
           <Button
-            label="Join"
-            className="p-button-secondary p-mx-2 p-my-auto"
+            label='Join'
+            className='p-button-secondary p-mx-2 p-my-auto'
             onClick={() => setJoinDialog(true)}
           />
         </>
       </Route>
 
       <Dialog
-        header="Import from file"
+        header='Import from file'
         visible={importDialog}
         onHide={() => setImportDialog(false)}
         modal
@@ -117,7 +112,7 @@ const Nav: FC<Props> = () => {
         <ImportDialog />
       </Dialog>
       <Dialog
-        header="Export to file"
+        header='Export to file'
         visible={exportDialog}
         onHide={() => setExportDialog(false)}
         modal
@@ -126,7 +121,7 @@ const Nav: FC<Props> = () => {
         <ExportDialog />
       </Dialog>
       <Dialog
-        header="Invite from file"
+        header='Invite from file'
         visible={inviteDialog}
         onHide={() => setInviteDialog(false)}
         modal
@@ -135,7 +130,7 @@ const Nav: FC<Props> = () => {
         <InviteDialog />
       </Dialog>
       <Dialog
-        header="Join from file"
+        header='Join from file'
         visible={joinDialog}
         onHide={() => setJoinDialog(false)}
         modal
@@ -150,13 +145,13 @@ const Nav: FC<Props> = () => {
     <>
       {isConnected ? (
         <Button
-          className="p-button-secondary p-mx-2"
-          label="Terminate"
+          className='p-button-secondary p-mx-2'
+          label='Terminate'
           onClick={() => setTerminateDialog(true)}
         />
       ) : null}
 
-      <Route path="/project">
+      <Route path='/project'>
         <Dropdown
           className={`${styles.select} p-mx-2`}
           placeholder={selectedProject}
@@ -166,8 +161,8 @@ const Nav: FC<Props> = () => {
         />
       </Route>
       <Dialog
-        header="Are you sure you want to terminate connection
-        ?"
+        header='Are you sure you want to terminate connection
+        ?'
         visible={terminateDialog}
         onHide={() => setTerminateDialog(false)}
         modal
@@ -178,8 +173,6 @@ const Nav: FC<Props> = () => {
     </>
   );
 
-  return (
-    <Toolbar className={styles.nav} left={leftContents} right={rightContents} />
-  );
+  return <Toolbar className={styles.nav} left={leftContents} right={rightContents} />;
 };
 export default Nav;
