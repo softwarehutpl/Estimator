@@ -2,20 +2,21 @@ import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { useAppDispatch } from '../../../store/hooks';
-import { updateTasks } from '../../../store/reducers/projectReducer';
+import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 
 import { Params, PressableKeys } from '../../../types/Interface';
 
 import styles from './TaskInputNumber.module.scss';
 
 interface IProps {
+  parentTaskId?: string;
   role: string;
   sectionName: string;
   taskId: string;
   value: number | null;
 }
 
-const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
+const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, value }) => {
   const [inputValue, setInputValue] = useState<number>(value || 0);
 
   const dispatch = useAppDispatch();
@@ -29,13 +30,28 @@ const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
   const handleUpdateValue = () => {
     if (inputValue === value) return;
 
+    if (!parentTaskId) {
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: role,
+          updatedValue: inputValue,
+        })
+      );
+
+      return;
+    }
+
     dispatch(
-      updateTasks({
+      updateSubtask({
         projectId,
         sectionName,
-        taskId,
+        taskId: parentTaskId,
+        subtaskId: taskId,
         taskProps: role,
-        updatedValue: String(inputValue),
+        updatedValue: inputValue,
       })
     );
   };
@@ -70,7 +86,7 @@ const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
         min='0'
         max='100'
         step='0.25'
-        placeholder='0'
+        // placeholder='0'
         onKeyDown={(e) => handleKeyDown(e)}
         onBlur={handleUpdateValue}
         onChange={(e) => handleInputChange(e)}

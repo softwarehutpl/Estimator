@@ -1,14 +1,13 @@
 import { Dispatch, FC, SetStateAction, useState, MouseEvent } from 'react';
 import { useParams } from 'react-router';
 
-import { rowOrder } from '../TableRow/TableRow';
-
-import { Task, Type } from '../../../../types/Interface';
+import { Fields, Params, Task, Type } from '../../../../types/Interface';
+import { rowOrder } from '../../../../constants/constants';
 
 import ContextMenu from '../../../ContextMenu/ContextMenu';
 import TableCell from '../../TableCell/TableCell';
 import TaskComment from '../../TaskComment/TaskComment';
-import TaskInput from '../../../Input/TaskInputText/TaskInput';
+import TaskInputText from '../../../Input/TaskInputText/TaskInputText';
 import TaskInputNumber from '../../../Input/TaskInputNumber/TaskInputNumber';
 import RiskBadge from '../../RiskBadge/RiskBadge';
 
@@ -16,27 +15,30 @@ import styles from './TableDraggableRow.module.scss';
 
 interface IProps {
   data: Task;
-  index: number;
-  openTooltipId: number | null;
+
+  openedMenuId: string | null;
   orderNumber: number;
+  parentOrderNumber?: number;
+  parentTaskId?: string;
   sectionName: string;
+  setopenedMenuId: Dispatch<SetStateAction<string | null>>;
   stylingClass?: string;
-  setOpenTooltipId: Dispatch<SetStateAction<number | null>>;
 }
 
 const TableDraggableRow: FC<IProps> = ({
   data,
-  index,
-  openTooltipId,
+  openedMenuId,
   orderNumber,
+  parentOrderNumber,
+  parentTaskId,
   sectionName,
+  setopenedMenuId,
   stylingClass,
-  setOpenTooltipId,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isEditable, setIsEditable] = useState<boolean>(false);
 
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId } = useParams<Params>();
 
   const handleToggleComment = () => {
     setIsEditable(!isEditable);
@@ -50,7 +52,8 @@ const TableDraggableRow: FC<IProps> = ({
     setIsOpen(!isOpen);
   };
 
-  const handleTooltipClosed = () => setOpenTooltipId(null);
+  //TODO change this function name?
+  const handleTooltipClosed = () => setopenedMenuId(null);
 
   return (
     <>
@@ -60,15 +63,13 @@ const TableDraggableRow: FC<IProps> = ({
         onMouseLeave={(e) => handleToggleContextMenu(e)}
       >
         <ContextMenu
-          endIndex={index}
+          data={data}
           handleToggleComment={handleToggleComment}
           handleToggleContextMenu={handleToggleContextMenu}
           isOpen={isOpen}
+          parentTaskId={parentTaskId}
           projectId={projectId}
           sectionName={sectionName}
-          taskComment={data.comment.text}
-          taskId={data.id}
-          type={data.type}
         />
         {rowOrder.map(({ role }) => {
           if (data.type === Type.Group) {
@@ -76,53 +77,69 @@ const TableDraggableRow: FC<IProps> = ({
               <TableCell key={role} role={role}>
                 {role === 'sectionId' && orderNumber}
                 {role === 'name' && (
-                  <TaskInput sectionName={sectionName} taskId={data.id} value={data[role]} />
+                  <TaskInputText sectionName={sectionName} taskId={data.id} value={data[role]} />
                 )}
               </TableCell>
             );
+          } else {
+            if (role === Fields.NAME) {
+              return (
+                <TableCell key={role} role={role}>
+                  {role === 'name' && (
+                    <TaskInputText
+                      sectionName={sectionName}
+                      taskId={data.id}
+                      parentTaskId={parentTaskId}
+                      value={data[role]}
+                    />
+                  )}
+                </TableCell>
+              );
+            } else if (role === Fields.MIN_MD || role === Fields.MAX_MD) {
+              return (
+                <TableCell key={role} role={role}>
+                  <TaskInputNumber
+                    parentTaskId={parentTaskId}
+                    role={role}
+                    sectionName={sectionName}
+                    taskId={data.id}
+                    value={data[role]}
+                  />
+                </TableCell>
+              );
+            } else if (role === Fields.RISK) {
+              return (
+                <TableCell key={role} role={role}>
+                  <RiskBadge
+                    openedMenuId={openedMenuId}
+                    parentTaskId={parentTaskId}
+                    risk={data[role]}
+                    sectionName={sectionName}
+                    setopenedMenuId={setopenedMenuId}
+                    taskId={data.id}
+                  />
+                </TableCell>
+              );
+            } else if (role === Fields.SECTION_ID) {
+              return (
+                <TableCell key={role} role={role}>
+                  {parentTaskId ? `${parentOrderNumber}.${orderNumber}` : orderNumber}
+                </TableCell>
+              );
+            } else {
+              return (
+                <TableCell key={role} role={role}>
+                  {role === 'sectionId' ? orderNumber : data[role as keyof Task]}
+                </TableCell>
+              );
+            }
           }
-
-          if (role === 'risk') {
-            return (
-              <TableCell key={role} role={role}>
-                <RiskBadge
-                  openTooltipId={openTooltipId}
-                  orderNumber={orderNumber}
-                  risk={data[role]}
-                  sectionName={sectionName}
-                  setOpenTooltipId={setOpenTooltipId}
-                  taskId={data.id}
-                />
-              </TableCell>
-            );
-          } else if (role === 'name') {
-            return (
-              <TableCell key={role} role={role}>
-                <TaskInput sectionName={sectionName} taskId={data.id} value={data[role]} />
-              </TableCell>
-            );
-          } else if (role === 'minMd' || role === 'maxMd') {
-            return (
-              <TableCell key={role} role={role}>
-                <TaskInputNumber
-                  role={role}
-                  sectionName={sectionName}
-                  taskId={data.id}
-                  value={data[role]}
-                />
-              </TableCell>
-            );
-          }
-          return (
-            <TableCell key={role} role={role}>
-              {role === 'sectionId' ? orderNumber : data[role as keyof Task]}
-            </TableCell>
-          );
         })}
         {data.type === 'task' && (
           <TaskComment
             comment={data.comment}
             isEditable={isEditable}
+            parentTaskId={parentTaskId}
             sectionName={sectionName}
             taskId={data.id}
             toggleComment={handleToggleComment}

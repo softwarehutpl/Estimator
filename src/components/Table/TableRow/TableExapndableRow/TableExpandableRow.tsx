@@ -32,7 +32,6 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
         total += curr.maxMd || 0;
         return (total += sumMaxValue(curr.subtasks));
       }
-
       return (total += curr.maxMd || 0);
     }, 0);
 
@@ -47,7 +46,7 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
     }, 0);
 
   const calculateRisk = (maxValue: number, predictedValue: number): number => {
-    const resultValue = ((maxValue - predictedValue) / predictedValue || 1) * 100;
+    const resultValue = ((maxValue - predictedValue) / (predictedValue || 1)) * 100;
 
     if (isNaN(resultValue)) return 0;
 

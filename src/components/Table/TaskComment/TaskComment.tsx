@@ -2,25 +2,34 @@ import { FC } from 'react';
 
 import { Comment } from '../../../types/Interface';
 
-import EditableInput from '../EditableInput/EditableInput';
+import TaskCommentInput from '../../Input/TaskCommentInput/TaskCommentInput';
 
 import styles from './TaskComment.module.scss';
 
 interface IProps {
   comment: Comment;
   isEditable: boolean;
+  parentTaskId?: string;
   sectionName: string;
   taskId: string;
   toggleComment: () => void;
 }
 
-const TaskComment: FC<IProps> = ({ comment, isEditable, sectionName, taskId, toggleComment }) => {
+const TaskComment: FC<IProps> = ({
+  comment,
+  isEditable,
+  parentTaskId,
+  sectionName,
+  taskId,
+  toggleComment,
+}) => {
   return (
     <>
       {(comment.text || isEditable) && (
         <div className={`${styles.taskComment}`}>
-          <EditableInput
+          <TaskCommentInput
             comment={comment}
+            parentTaskId={parentTaskId}
             sectionName={sectionName}
             taskId={taskId}
             toggleComment={toggleComment}

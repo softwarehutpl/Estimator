@@ -92,36 +92,15 @@ const projectSlice = createSlice({
         subtaskName: string;
       }>
     ) => {
-      const newSubTask = createTask(action.payload.sectionName, action.payload.subtaskName);
+      const { projectId, sectionName, taskId, subtaskName } = action.payload;
 
-      const newState = [...state.projects].map((project) =>
-        project.projectId === action.payload.projectId
-          ? {
-              ...project,
-              sections: project.sections
-                ? [...project.sections].map((section) =>
-                    section.name === action.payload.sectionName
-                      ? {
-                          ...section,
-                          tasks: section.tasks?.map((task) =>
-                            task.id === action.payload.taskId
-                              ? {
-                                  ...task,
-                                  subtasks:
-                                    task.type === "group"
-                                      ? task.subtasks?.concat(newSubTask)
-                                      : task.subtasks,
-                                }
-                              : task
-                          ),
-                        }
-                      : section
-                  )
-                : [],
-            }
-          : project
-      );
-      state.projects = newState;
+      const newSubTask = createTask(sectionName, subtaskName);
+
+      const project = state.projects.find((project) => project.projectId === projectId);
+      const section = project?.sections?.find((section) => section.name === sectionName);
+      const task = section?.tasks?.find((task) => task.id === taskId);
+
+      task?.subtasks?.push(newSubTask);
     },
     delSubtask: (
       state,
@@ -167,63 +146,92 @@ const projectSlice = createSlice({
         sectionName: string;
         taskId: string;
         taskProps: string;
-        updatedValue: string;
+        updatedValue: string | number | boolean;
       }>
     ) => {
-      const newState = [...state.projects].map((project) =>
-        project.projectId === action.payload.projectId
-          ? {
-              ...project,
-              sections: project.sections
-                ? [...project.sections].map((section) =>
-                    section.name === action.payload.sectionName
-                      ? {
-                          ...section,
-                          tasks: section.tasks?.map((task) =>
-                            task.id === action.payload.taskId
-                              ? {
-                                  ...task,
-                                  name:
-                                    action.payload.taskProps === 'name'
-                                      ? action.payload.updatedValue
-                                      : task.name,
-                                  minMd:
-                                    action.payload.taskProps === 'minMd'
-                                      ? Number(action.payload.updatedValue)
-                                      : task.minMd,
-                                  maxMd:
-                                    action.payload.taskProps === 'maxMd'
-                                      ? Number(action.payload.updatedValue)
-                                      : task.maxMd,
-                                  risk:
-                                    action.payload.taskProps === 'risk'
-                                      ? action.payload.updatedValue
-                                      : task.risk,
-                                  comment: {
-                                    text:
-                                      action.payload.taskProps === 'commentText'
-                                        ? action.payload.updatedValue
-                                        : task.comment.text,
-                                    isImportant:
-                                      action.payload.taskProps === 'commentImportant'
-                                        ? action.payload.updatedValue === 'true'
-                                          ? true
-                                          : action.payload.updatedValue === 'false'
-                                          ? false
-                                          : task.comment.isImportant
-                                        : task.comment.isImportant,
-                                  },
-                                }
-                              : task
-                          ),
-                        }
-                      : section
-                  )
-                : [],
-            }
-          : project
-      );
-      state.projects = newState;
+      const { projectId, sectionName, taskId, taskProps, updatedValue } = action.payload;
+
+      const task = state.projects
+        .find((project) => project.projectId === projectId)
+        ?.sections?.find((section) => section.name === sectionName)
+        ?.tasks.find((task) => task.id === taskId)!;
+
+      switch (taskProps) {
+        case 'name':
+          task.name = updatedValue as string;
+          break;
+        case 'minMd':
+          task.minMd = updatedValue as number;
+          break;
+        case 'maxMd':
+          task.maxMd = updatedValue as number;
+          break;
+        case 'risk':
+          task.risk = updatedValue as string;
+          break;
+        case 'commentText':
+          task.comment.text = updatedValue as string;
+          break;
+        case 'commentImportant':
+          task.comment.isImportant = updatedValue as boolean;
+          break;
+        default:
+          break;
+      }
+      // const newState = [...state.projects].map((project) =>
+      //   project.projectId === action.payload.projectId
+      //     ? {
+      //         ...project,
+      //         sections: project.sections
+      //           ? [...project.sections].map((section) =>
+      //               section.name === action.payload.sectionName
+      //                 ? {
+      //                     ...section,
+      //                     tasks: section.tasks?.map((task) =>
+      //                       task.id === action.payload.taskId
+      //                         ? {
+      //                             ...task,
+      //                             name:
+      //                               action.payload.taskProps === 'name'
+      //                                 ? action.payload.updatedValue
+      //                                 : task.name,
+      //                             minMd:
+      //                               action.payload.taskProps === 'minMd'
+      //                                 ? Number(action.payload.updatedValue)
+      //                                 : task.minMd,
+      //                             maxMd:
+      //                               action.payload.taskProps === 'maxMd'
+      //                                 ? Number(action.payload.updatedValue)
+      //                                 : task.maxMd,
+      //                             risk:
+      //                               action.payload.taskProps === 'risk'
+      //                                 ? action.payload.updatedValue
+      //                                 : task.risk,
+      //                             comment: {
+      //                               text:
+      //                                 action.payload.taskProps === 'commentText'
+      //                                   ? action.payload.updatedValue
+      //                                   : task.comment.text,
+      //                               isImportant:
+      //                                 action.payload.taskProps === 'commentImportant'
+      //                                   ? action.payload.updatedValue === 'true'
+      //                                     ? true
+      //                                     : action.payload.updatedValue === 'false'
+      //                                     ? false
+      //                                     : task.comment.isImportant
+      //                                   : task.comment.isImportant,
+      //                             },
+      //                           }
+      //                         : task
+      //                     ),
+      //                   }
+      //                 : section
+      //             )
+      //           : [],
+      //       }
+      //     : project
+      // );
+      // state.projects = newState;
     },
     updateSubtask: (
       state,
@@ -233,106 +241,59 @@ const projectSlice = createSlice({
         taskId: string;
         subtaskId: string;
         taskProps: string;
-        updatedValue: string;
+        updatedValue: string | boolean | number;
       }>
     ) => {
-      const newState = [...state.projects].map((project) =>
-        project.projectId === action.payload.projectId
-          ? {
-              ...project,
-              sections: project.sections
-                ? [...project.sections].map((section) =>
-                    section.name === action.payload.sectionName
-                      ? {
-                          ...section,
-                          tasks: section.tasks?.map((task) =>
-                            task.id === action.payload.taskId
-                              ? {
-                                  ...task,
-                                  subtasks: task.subtasks?.map((subtask) =>
-                                    subtask.id === action.payload.subtaskId
-                                      ? {
-                                          ...subtask,
-                                          name:
-                                            action.payload.taskProps === 'name'
-                                              ? action.payload.updatedValue
-                                              : task.name,
-                                          minMd:
-                                            action.payload.taskProps === 'minMd'
-                                              ? Number(action.payload.updatedValue)
-                                              : task.minMd,
-                                          maxMd:
-                                            action.payload.taskProps === 'maxMd'
-                                              ? Number(action.payload.updatedValue)
-                                              : task.maxMd,
-                                          risk:
-                                            action.payload.taskProps === 'risk'
-                                              ? action.payload.updatedValue
-                                              : task.risk,
-                                          comment: {
-                                            text:
-                                              action.payload.taskProps === 'commentText'
-                                                ? action.payload.updatedValue
-                                                : task.comment.text,
-                                            isImportant:
-                                              action.payload.taskProps === 'commentImportant'
-                                                ? action.payload.updatedValue === 'true'
-                                                  ? true
-                                                  : action.payload.updatedValue === 'false'
-                                                  ? false
-                                                  : task.comment.isImportant
-                                                : task.comment.isImportant,
-                                          },
-                                        }
-                                      : subtask
-                                  ),
-                                }
-                              : task
-                          ),
-                        }
-                      : section
-                  )
-                : [],
-            }
-          : project
-      );
-      state.projects = newState;
+      const { projectId, sectionName, taskId, subtaskId, taskProps, updatedValue } = action.payload;
+
+      const subtasks = state.projects
+        .find((project) => project.projectId === projectId)
+        ?.sections?.find((section) => section.name === sectionName)
+        ?.tasks.find((task) => task.id === taskId)?.subtasks;
+
+      const subtask = subtasks?.find((subtask) => subtask.id === subtaskId)!;
+
+      switch (taskProps) {
+        case 'name':
+          subtask.name = updatedValue as string;
+          break;
+        case 'minMd':
+          subtask.minMd = updatedValue as number;
+          break;
+        case 'maxMd':
+          subtask.maxMd = updatedValue as number;
+          break;
+        case 'risk':
+          subtask.risk = updatedValue as string;
+          break;
+        case 'commentText':
+          subtask.comment.text = updatedValue as string;
+          break;
+        case 'commentImportant':
+          subtask.comment.isImportant = updatedValue as boolean;
+          break;
+        default:
+          break;
+      }
     },
     reorder: (
       state,
       action: PayloadAction<{
         projectId: string;
         sectionName: string;
-        startIndex?: number;
+        startIndex: number;
         endIndex: number;
       }>
     ) => {
+      const { projectId, sectionName, startIndex, endIndex } = action.payload;
+
       const sectionTasks =
         state.projects
-          .find((project) => project.projectId === action.payload.projectId)
-          ?.sections?.find((section) => section.name === action.payload.sectionName)?.tasks || [];
+          .find((project) => project.projectId === projectId)
+          ?.sections?.find((section) => section.name === sectionName)?.tasks || [];
 
-      const [removedTask] = sectionTasks?.splice(sectionTasks.length - 1, 1) || [];
-      sectionTasks?.splice(action.payload.endIndex + 1, 0, removedTask);
-
-      const newState = [...state.projects].map((project) =>
-        project.projectId === action.payload.projectId
-          ? {
-              ...project,
-              sections: project.sections
-                ? [...project.sections].map((section) =>
-                    section.name === action.payload.sectionName
-                      ? {
-                          ...section,
-                          tasks: sectionTasks,
-                        }
-                      : section
-                  )
-                : [],
-            }
-          : project
-      );
-      state.projects = newState;
+      const [removedTask] = sectionTasks?.splice(startIndex, 1);
+      sectionTasks?.splice(endIndex, 0, removedTask);
     },
   },
 });

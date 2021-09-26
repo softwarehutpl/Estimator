@@ -4,18 +4,18 @@ import { useParams } from 'react-router';
 import { useAppDispatch } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 
-import { Params, PressableKeys } from '../../../types/Interface';
+import { Fields, Params, PressableKeys } from '../../../types/Interface';
 
 import styles from './TaskInputText.module.scss';
 
 interface IProps {
   sectionName: string;
-  subtaskId?: string;
+  parentTaskId?: string;
   taskId: string;
   value: string;
 }
 
-const TaskInputText: FC<IProps> = ({ sectionName, subtaskId, taskId, value }) => {
+const TaskInputText: FC<IProps> = ({ sectionName, parentTaskId, taskId, value }) => {
   const [inputValue, setInputValue] = useState<string>(value);
 
   const dispatch = useAppDispatch();
@@ -27,25 +27,26 @@ const TaskInputText: FC<IProps> = ({ sectionName, subtaskId, taskId, value }) =>
   const handleSave = () => {
     if (!inputValue || inputValue === value) return;
 
-    if (subtaskId) {
+    if (!parentTaskId) {
       dispatch(
-        updateSubtask({
+        updateTasks({
           projectId,
           sectionName,
           taskId,
-          subtaskId,
-          taskProps: 'name',
+          taskProps: Fields.NAME,
           updatedValue: inputValue,
         })
       );
-    }
 
+      return;
+    }
     dispatch(
-      updateTasks({
+      updateSubtask({
         projectId,
         sectionName,
-        taskId,
-        taskProps: 'name',
+        taskId: parentTaskId,
+        subtaskId: taskId,
+        taskProps: Fields.NAME,
         updatedValue: inputValue,
       })
     );
