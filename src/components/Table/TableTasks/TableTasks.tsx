@@ -26,7 +26,6 @@ const TableTasks: FC<IProps> = ({ sectionName, tasks }) => {
         >
           <TableDraggableRow
             data={task}
-            index={index}
             orderNumber={index + 1}
             openedMenuId={openedMenuId}
             sectionName={sectionName}
@@ -36,6 +35,7 @@ const TableTasks: FC<IProps> = ({ sectionName, tasks }) => {
           {Boolean(task.subtasks?.length) && (
             <TableSubtasks
               openedMenuId={openedMenuId}
+              parentOrderNumber={index + 1}
               sectionName={sectionName}
               setopenedMenuId={setopenedMenuId}
               subtasks={task.subtasks || []}

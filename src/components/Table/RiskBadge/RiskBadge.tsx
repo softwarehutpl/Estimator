@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 import { getSeverityLevel } from '../../../utils/getSeverityLevel';
 
-import { Multiplicators, Params, Fields } from '../../../types/Interface';
+import { Multiplicators, Params, Fields, Task } from '../../../types/Interface';
 
 import { Badge } from 'primereact/badge';
 import styles from './RiskBadge.module.scss';
@@ -32,6 +32,14 @@ const RiskBadge: FC<IProps> = ({
 
   const { projectId } = useParams<Params>();
 
+  // const predictedValue = (data: Task): number => {
+  //   const { maxMd, minMd, risk } = data;
+
+  //   if (!maxMd || !minMd) return 0;
+
+  //   return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
+  // };
+
   const handleRiskChange = (newRisk: string) => {
     //TODO add recalculate values !!
 
@@ -47,6 +55,16 @@ const RiskBadge: FC<IProps> = ({
           updatedValue: newRisk,
         })
       );
+
+      // dispatch(
+      //   updateTasks({
+      //     projectId,
+      //     sectionName,
+      //     taskId,
+      //     taskProps: Fields.PREDICTED_MD,
+      //     updatedValue: predictedValue(),
+      //   })
+      // );
 
       return;
     }

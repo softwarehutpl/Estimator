@@ -8,6 +8,7 @@ import TableDraggableRow from '../TableRow/TableDraggableRow/TableDraggableRow';
 
 interface IProps {
   openedMenuId: string | null;
+  parentOrderNumber: number;
   setopenedMenuId: Dispatch<SetStateAction<string | null>>;
   subtasks: Task[];
   taskId: string;
@@ -16,6 +17,7 @@ interface IProps {
 
 const TableSubtasks: FC<IProps> = ({
   openedMenuId,
+  parentOrderNumber,
   setopenedMenuId,
   subtasks,
   taskId,
@@ -27,10 +29,10 @@ const TableSubtasks: FC<IProps> = ({
         {subtasks.map((subtask, index) => (
           <TableDraggableRow
             data={subtask}
-            index={index}
             key={subtask.id}
             openedMenuId={openedMenuId}
             orderNumber={index + 1}
+            parentOrderNumber={parentOrderNumber}
             parentTaskId={taskId}
             sectionName={sectionName}
             setopenedMenuId={setopenedMenuId}
