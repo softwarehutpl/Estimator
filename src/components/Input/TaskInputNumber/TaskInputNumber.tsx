@@ -1,8 +1,10 @@
-import { ChangeEvent, FC, useState } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { useAppDispatch } from '../../../store/hooks';
 import { updateTasks } from '../../../store/reducers/projectReducer';
+
+import { Params, PressableKeys } from '../../../types/Interface';
 
 import styles from './TaskInputNumber.module.scss';
 
@@ -15,28 +17,17 @@ interface IProps {
 
 const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
   const [inputValue, setInputValue] = useState<number>(value || 0);
-  const [isActive, setIsActive] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId } = useParams<Params>();
 
-  const activeStyles = isActive ? styles.numberInputControlsActive : '';
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleCloseControls = () => setIsActive(false);
-  const handleOpenControls = () => setIsActive(true);
-
-  const handleCancelValue = () => {
-    setInputValue(value || 0);
-    handleCloseControls();
-  };
+  const handleCancelValue = () => setInputValue(value || 0);
 
   const handleUpdateValue = () => {
-    console.log(inputValue);
-    if (inputValue === value) {
-      handleCloseControls();
-      return;
-    }
+    if (inputValue === value) return;
 
     dispatch(
       updateTasks({
@@ -47,8 +38,6 @@ const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
         updatedValue: String(inputValue),
       })
     );
-
-    handleCloseControls();
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,27 +50,31 @@ const TaskInputNumber: FC<IProps> = ({ role, sectionName, taskId, value }) => {
     setInputValue(Number(value));
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    const { key } = e;
+
+    if (key === PressableKeys.ENTER) {
+      handleUpdateValue();
+      inputRef.current!.blur();
+    } else if (key === PressableKeys.ESCAPE) {
+      handleCancelValue();
+      inputRef.current!.blur();
+    }
+  };
+
   return (
     <div className={styles.inputWrapper}>
-      <div className={`${styles.numberInputControls} ${activeStyles}`}>
-        <i
-          onClick={handleUpdateValue}
-          className={`far fa-check-circle ${styles.inputCotrol} ${styles.inputCotrolApprove}`}
-        ></i>
-        <i
-          onClick={handleCancelValue}
-          className={`far fa-times-circle ${styles.inputCotrol} ${styles.inputCotrolCancel}`}
-        ></i>
-      </div>
       <input
         type='number'
+        ref={inputRef}
         min='0'
         max='100'
         step='0.25'
         placeholder='0'
+        onKeyDown={(e) => handleKeyDown(e)}
+        onBlur={handleUpdateValue}
         onChange={(e) => handleInputChange(e)}
         value={inputValue}
-        onClick={handleOpenControls}
         className={styles.taskNumberInput}
       />
     </div>

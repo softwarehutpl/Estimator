@@ -1,9 +1,9 @@
 .inputWrapper {
-  position: relative;
+  display: flex;
 }
 
-.taskNumberInput {
-  max-width: 100%;
+.taskTextInput {
+  flex-grow: 1;
   padding: 5px 10px;
   font-size: 16px;
   font-family: inherit;
