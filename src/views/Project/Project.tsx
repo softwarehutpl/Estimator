@@ -8,7 +8,9 @@ import { useAppSelector } from '../../store/hooks';
 //Router
 import { useParams } from 'react-router';
 //Types
+
 import { Project, Params } from '../../types/Interface';
+
 //Styles
 import styles from './project.module.scss';
 

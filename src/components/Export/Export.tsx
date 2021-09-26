@@ -2,6 +2,8 @@
 import ReactExport from "react-data-export";
 import { SymbolDisplayPartKind } from "typescript";
 import myProject from "./exampleProject";
+import { useAppSelector } from "../../store/hooks";
+import { getProjectSelector } from "../../store/selectors/selectors";
 
 const greyBackgroundColor: ReactExport.ExcelStyle = {fill: { patternType: "solid", fgColor: { rgb: "dddddd" }}};
 
@@ -175,10 +177,20 @@ const totalValuesStyle: ReactExport.ExcelStyle = {
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
 
-interface Props {}
+interface Props {
+  projectId: string;
+  project: Project;
+}
 
-export default function Export() {
-  
+const Export: FC<Props> = ({ projectId, project }) => {
+
+  const projectToExport = useAppSelector(
+    getProjectSelector("22f2db43-cb8f-475d-8b62-1ee60814efd2")
+  ); //=> PUSH PROJECT ID!
+
+  //TODO if project with given Id does not exist display something else than table
+  // if (!project) return null;
+
   function createDataSetToExport(project) {
     const exampleProject = project;
     let fullDataArray = [
@@ -568,7 +580,7 @@ export default function Export() {
 
   };
 
-  const dataSetToExport = createDataSetToExport(myProject);
+  const dataSetToExport = createDataSetToExport(projectToExport);
 
   return (
     <div className="App">
@@ -578,3 +590,6 @@ export default function Export() {
     </div>
   );
 };
+
+export default Export;
+
