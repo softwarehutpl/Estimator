@@ -10,10 +10,11 @@ import { error } from "console";
 import { v4 as uuidv4 } from "uuid";
 
 import initialProject from "../../store/initials/initialProject";
-import { addTask } from "../../store/reducers/projectReducer";
+import { addTask, addSubtask } from "../../store/reducers/projectReducer";
 import { taskPropsContstants } from "../../store/actions/updateTask";
 import { Type, Role } from "../../types/Interface";
 import createTask from "../../store/actions/createTask";
+import projectReducer from "../../store/reducers/projectReducer";
 
 
 // const Export: FC<Props> = ({ projectId, project }) => {
@@ -91,16 +92,54 @@ function Import() {
           if (name.slice(0,4) !== "    ") { // name != "    ...." => task 
             
             let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
-            newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);       
-            // newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks[newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.length-1].subtasks.push(subtaskTask);
+            newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
           }
-          // else { // name = "    ...." => subtask 
-          //   console.log("subtask!!!!!!!!1:");
-          //   console.log(name);
-          //   let subtaskTask = createTask(getSectionName(data[i]._4), name.trim(), Type.Task);
-          //   (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1)).subtasks.push(subtaskTask);
-          //   // newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.slice(-1)[0].subtasks.push(subtaskTask);
-          // }          
+          if (name.slice(0,4) === "    ") { // name = "    ...." => subtask 
+            console.log("subtask!!!!!!!!1:");
+            console.log(name);
+            let lastGroupTask = (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1));
+            console.log("lastGroupTask");
+            // console.log(lastGroupTask);
+            // let subtaskTask = createTask(getSectionName(data[i]._4), name.trim(), Type.Task);
+            // lastGroupTask.subtasks.push(subtaskTask);
+            let projectId = newProject.projectId;
+            let sectionName = (getSectionName(data[i]._4));
+            let taskId = lastGroupTask.id;
+
+            console.log(projectId+" "+sectionName+" "+taskId+" "+name);
+            
+            // addSubtask({
+            //   projectId: projectId,
+            //   sectionName: sectionName,
+            //   taskId: taskId,
+            //   subtaskName: name,
+            // });
+
+            let newProjectState = projectReducer(
+              newProject,
+              addSubtask({
+                projectId: projectId,
+                sectionName: sectionName,
+                taskId: taskId,
+                subtaskName: name,
+              })
+            );
+
+            newProject = newProjectState;
+
+            // newProject = projectReducer(
+            //   newProject,
+            //   addSubtask({
+            //     projectId: projectId,
+            //     sectionName: sectionName,
+            //     taskId: taskId,
+            //     subtaskName: name,
+            //   })
+            // );
+
+
+
+          }          
         }
 
         
