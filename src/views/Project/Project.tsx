@@ -8,9 +8,13 @@ import { useAppSelector } from '../../store/hooks';
 //Router
 import { useParams } from 'react-router';
 //Types
+<<<<<<< HEAD
+import { Project, Params } from "../../types/Interface";
+=======
 
 import { Project, Params } from '../../types/Interface';
 
+>>>>>>> 952693c9039ea67bfce8bc7c4fd023d580fceb1e
 //Styles
 import styles from './project.module.scss';
 

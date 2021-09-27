@@ -12,22 +12,38 @@ function App() {
   return (
     <div>
       <Switch>
+<<<<<<< HEAD
+        <Route exact path="/">
+          <Nav />
+          <Home />
+        </Route>
+        <Route path="/project/:projectId">
+=======
         <Route exact path='/'>
           <Nav />
           <Home />
         </Route>
         <Route path='/project/:projectId'>
+>>>>>>> 952693c9039ea67bfce8bc7c4fd023d580fceb1e
           <Nav />
           <Project />
         </Route>
         <Route path='/root'>
           <RootStore />
         </Route>
+<<<<<<< HEAD
+        <Route path="/export">
+          <Nav />
+          <Export />
+        </Route>
+        <Route path="*">
+=======
         <Route path='/export'>
           <Nav />
           <Export />
         </Route>
         <Route path='*'>
+>>>>>>> 952693c9039ea67bfce8bc7c4fd023d580fceb1e
           <Nav />
           <NotFound404 />
         </Route>
