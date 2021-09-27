@@ -185,8 +185,12 @@ interface Props {
 const Export: FC<Props> = ({ projectId, project }) => {
 
   const projectToExport = useAppSelector(
-    getProjectSelector("22f2db43-cb8f-475d-8b62-1ee60814efd2")
+    getProjectSelector("75fc9f66-d4f6-4304-b98c-46841b301d44")
   ); //=> PUSH PROJECT ID!
+
+  console.log(projectToExport);
+
+  // const projectToExport = myProject;
 
   //TODO if project with given Id does not exist display something else than table
   // if (!project) return null;
@@ -212,7 +216,7 @@ const Export: FC<Props> = ({ projectId, project }) => {
       [ //5
         { value: "" },
         { value: "Project name:", style: projectKeyStyle },
-        { value: "Test project", style: projectValueStyle },
+        { value: exampleProject.projectName, style: projectValueStyle },
         { value: "" },
         { value: "Est. Start:", style: projectKeyStyle },
         { value: exampleProject.estStart, style: projectValueCenterStyle },
@@ -330,11 +334,19 @@ const Export: FC<Props> = ({ projectId, project }) => {
       section.tasks.forEach(function(task) {
         let taskName = task.name;
         let newArray = [];
-        let taskSymbol = task.role;  
-        let minMd = task.minMd;
-        let maxMd = task.maxMd;
-        let predictedMd = task.predictedMd;
+        let taskSymbol = task.role;          
         let risk = task.risk;
+
+        let minMd = "";
+        let maxMd = "";
+        let predictedMd = "";
+
+        if(task.type === "task") {
+          minMd = task.minMd;
+          maxMd = task.maxMd;
+          predictedMd = task.predictedMd;
+        }
+
         taskNumber++;
 
         let commentText = task.comment.text;
