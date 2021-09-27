@@ -1,4 +1,4 @@
-.editableInputWrapper {
+.taskCommentInputWrapper {
   flex-grow: 1;
   display: flex;
   justify-content: space-between;
@@ -14,7 +14,7 @@
   cursor: pointer;
 }
 
-.editableInput {
+.taskCommentInput {
   flex-grow: 1;
   padding: 5px 10px;
   margin-left: 10px;
@@ -35,46 +35,5 @@
   &:focus {
     border-bottom: 2px solid var(--indigo-200);
     cursor: text;
-  }
-}
-
-.editableInputControls {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  overflow: hidden;
-  width: 0;
-  transition: width 0.2s ease;
-  cursor: pointer;
-
-  &Active {
-    width: 110px;
-  }
-}
-
-.inputCotrol {
-  padding: 5px;
-  border-radius: 50%;
-  font-size: 16px;
-  transition: 0.3s ease;
-
-  &Approve {
-    color: var(--green-400);
-  }
-
-  &Cancel {
-    color: var(--pink-400);
-  }
-
-  &Delete {
-    color: var(--bluegray-700);
-  }
-
-  &Important {
-    color: var(--orange-600);
-  }
-
-  &:hover {
-    background-color: var(--indigo-100);
   }
 }

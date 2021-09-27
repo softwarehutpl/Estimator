@@ -1,68 +1,122 @@
-import { FC, MouseEvent, SetStateAction } from 'react';
+import { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
 import { useParams } from 'react-router';
 
-import { useAppDispatch } from '../../../store/hooks';
-import { updateTasks } from '../../../store/reducers/projectReducer';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 import { getSeverityLevel } from '../../../utils/getSeverityLevel';
+import { getProjectSelector } from '../../../store/selectors/selectors';
 
-import { RiskMultiplicator } from '../../../types/Interface';
+import { Multiplicators, Params, Fields, Task, Project } from '../../../types/Interface';
 
 import { Badge } from 'primereact/badge';
 import styles from './RiskBadge.module.scss';
-
-const riskMultiplicator: RiskMultiplicator = {
-  L: 1,
-  M: 1.25,
-  H: 1.5,
-};
+import { riskMultiplicator } from '../../../constants/constants';
 
 interface IProps {
-  openTooltipId: number | null;
-  orderNumber: number;
+  openedMenuId: string | null;
+  parentTaskId?: string;
   risk: string;
   sectionName: string;
-  setOpenTooltipId: (value: SetStateAction<number | null>) => void;
+  setopenedMenuId: Dispatch<SetStateAction<string | null>>;
   taskId: string;
 }
 
 const RiskBadge: FC<IProps> = ({
-  openTooltipId,
-  orderNumber,
+  openedMenuId,
+  parentTaskId,
   risk,
   sectionName,
-  setOpenTooltipId,
+  setopenedMenuId,
   taskId,
 }) => {
   const dispatch = useAppDispatch();
 
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId } = useParams<Params>();
+
+  const project: Project = useAppSelector(getProjectSelector(projectId));
+
+  const task = project.sections
+    ?.find((section) => section.name === sectionName)
+    ?.tasks.find((task) => task.id === taskId)!;
+
+  const predictedValue = (data: Task, risk: string): number => {
+    if (!data) return 0;
+
+    // console.log(data);
+
+    const { maxMd, minMd } = data;
+
+    if (!maxMd || !minMd) return 0;
+
+    // console.log((maxMd - minMd) / 2);
+    // console.log(riskMultiplicator[risk]);
+    // console.log(((maxMd - minMd) / 2) * riskMultiplicator[risk]);
+
+    return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
+  };
 
   const handleRiskChange = (newRisk: string) => {
+    //TODO add recalculate values !!
+
+    if (risk === newRisk) return;
+
+    if (!parentTaskId) {
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: Fields.RISK,
+          updatedValue: newRisk,
+        })
+      );
+
+      // console.log('new predict', predictedValue(task, newRisk));
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedValue(task, newRisk),
+        })
+      );
+
+      return;
+    }
+
     dispatch(
-      updateTasks({ projectId, sectionName, taskId, taskProps: 'risk', updatedValue: newRisk })
+      updateSubtask({
+        projectId,
+        sectionName,
+        taskId: parentTaskId,
+        subtaskId: taskId,
+        taskProps: Fields.RISK,
+        updatedValue: newRisk,
+      })
     );
   };
 
   const handleToggleRiskMenu = (e: MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
-    if (orderNumber === openTooltipId) {
-      setOpenTooltipId(null);
+    if (openedMenuId === taskId) {
+      setopenedMenuId(null);
       return;
     }
 
-    setOpenTooltipId(orderNumber);
+    setopenedMenuId(taskId);
   };
 
   return (
     <div className={styles.riskWrapper} onClick={(e) => handleToggleRiskMenu(e)}>
       <Badge className={styles.badge} value={risk} severity={getSeverityLevel(risk)}></Badge>
       <div className={styles.tooltip}>Risk multiplicator {riskMultiplicator[risk]}</div>
-      {openTooltipId === orderNumber && (
+      {openedMenuId === taskId && (
         <div className={`${styles.riskMenu}`}>
           <div
             className={styles.riskMenuField}
             onClick={() => {
-              handleRiskChange('L');
+              handleRiskChange(Multiplicators.L);
             }}
           >
             Low
@@ -70,7 +124,7 @@ const RiskBadge: FC<IProps> = ({
           <div
             className={styles.riskMenuField}
             onClick={() => {
-              handleRiskChange('M');
+              handleRiskChange(Multiplicators.M);
             }}
           >
             Medium
@@ -78,7 +132,7 @@ const RiskBadge: FC<IProps> = ({
           <div
             className={styles.riskMenuField}
             onClick={() => {
-              handleRiskChange('H');
+              handleRiskChange(Multiplicators.H);
             }}
           >
             High

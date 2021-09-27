@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
+
 import { Project, Section } from '../../../types/Interface';
 
 import TableHeader from '../TableHeader/TableHeader';

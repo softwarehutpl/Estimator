@@ -15,10 +15,8 @@ import {
   updateTasks,
   delSubtask,
   updateSubtask,
-
 } from '../reducers/projectReducer';
 import { getProjectsDataSelector, getProjectSelector } from '../selectors/selectors';
-
 
 export default function RootStore() {
   const [projectName, setProjectName] = useState('');

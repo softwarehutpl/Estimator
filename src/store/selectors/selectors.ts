@@ -20,3 +20,7 @@ export const getProjectsDataSelector = () =>
     );
     return projectData ? projectData : null;
   });
+
+export const getProjects = (state: RootState) => state.projects;
+
+export const getProjectId = (state: RootState, id: string) => id;

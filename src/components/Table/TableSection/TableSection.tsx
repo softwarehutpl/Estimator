@@ -1,11 +1,10 @@
 import { ChangeEvent, FC, useState } from 'react';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
 
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { addTask, delTask, reorder } from '../../../store/reducers/projectReducer';
-import { getProjectSelector } from '../../../store/selectors/selectors';
+import { useAppDispatch } from '../../../store/hooks';
+import { addTask, reorder } from '../../../store/reducers/projectReducer';
 
-import { Section, Task } from '../../../types/Interface';
+import { Section } from '../../../types/Interface';
 
 import DroppableWrapper from '../DroppableWrapper/DroppableWrapper';
 import InputPanel from '../../Input/InputPanel/InputPanel';
@@ -21,9 +20,8 @@ interface IProps {
 
 const TableSection: FC<IProps> = ({ projectId, section }) => {
   const [inputValue, setInputValue] = useState<string>('');
-  const dispatch = useAppDispatch();
 
-  const project = useAppSelector(getProjectSelector(projectId));
+  const dispatch = useAppDispatch();
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -34,12 +32,6 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
   const handleTaskAdd = (type: string) => {
     dispatch(addTask({ projectId, sectionName: section.name, taskName: inputValue, type }));
   };
-
-  // const getNewSections = (tasks: any) => {
-  //   const newSection = { ...section, tasks };
-
-  //   return sections.map((item: any) => (item.sectionId === section.sectionId ? newSection : item));
-  // };
 
   const onDragEnd = (result: DropResult) => {
     //TODO add action to persist reorder changes in store
@@ -56,29 +48,8 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
       const start = source.index;
       const end = destination.index;
 
-      console.log('Start', start);
-      console.log('End', end);
-
-      const task: Task = project.sections.find(
-        (item: Section) => item.sectionId === section.sectionId
-      ).tasks[start];
-
-      console.log(task);
-
-      dispatch(delTask({ projectId, sectionName: section.name, id: task.id }));
-      dispatch(addTask);
-
-      // const [removedTask] = tasks?.splice(start, 1);
-
-      // console.log(removedTask);
-
-      // console.log(tasks);
-      // dispatch(reorder({ projectId, sectionName: section.name, startIndex: start, endIndex: end }));
-
-      // const [removedTask] = newSectionTasks.splice(start, 1);
-      // newSectionTasks.splice(end, 0, removedTask);
-
-      // setSections(getNewSections(newSectionTasks));
+      //TODO add recalculate after reorder??
+      dispatch(reorder({ projectId, sectionName: section.name, startIndex: start, endIndex: end }));
     } else {
       // const start = source.index;
       // const [removedTask] = newSectionTasks.splice(start, 1);

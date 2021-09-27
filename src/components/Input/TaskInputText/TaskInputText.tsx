@@ -1,23 +1,22 @@
-import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from 'react';
+import { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { useAppDispatch } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 
-import { Params, PressableKeys } from '../../../types/Interface';
+import { Fields, Params, PressableKeys } from '../../../types/Interface';
 
-import styles from './TaskInputNumber.module.scss';
+import styles from './TaskInputText.module.scss';
 
 interface IProps {
-  parentTaskId?: string;
-  role: string;
   sectionName: string;
+  parentTaskId?: string;
   taskId: string;
-  value: number | null;
+  value: string;
 }
 
-const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, value }) => {
-  const [inputValue, setInputValue] = useState<number>(value || 0);
+const TaskInputText: FC<IProps> = ({ sectionName, parentTaskId, taskId, value }) => {
+  const [inputValue, setInputValue] = useState<string>(value);
 
   const dispatch = useAppDispatch();
 
@@ -25,10 +24,8 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleCancelValue = () => setInputValue(value || 0);
-
-  const handleUpdateValue = () => {
-    if (inputValue === value) return;
+  const handleSave = () => {
+    if (!inputValue || inputValue === value) return;
 
     if (!parentTaskId) {
       dispatch(
@@ -36,65 +33,61 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
           projectId,
           sectionName,
           taskId,
-          taskProps: role,
+          taskProps: Fields.NAME,
           updatedValue: inputValue,
         })
       );
 
       return;
     }
-
     dispatch(
       updateSubtask({
         projectId,
         sectionName,
         taskId: parentTaskId,
         subtaskId: taskId,
-        taskProps: role,
+        taskProps: Fields.NAME,
         updatedValue: inputValue,
       })
     );
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-
-    if (Number(value) > 100 || Number(value) < 0) {
-      return;
-    }
-
-    setInputValue(Number(value));
+  const handleCancel = () => {
+    setInputValue(value);
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
 
     if (key === PressableKeys.ENTER) {
-      handleUpdateValue();
+      handleSave();
       inputRef.current!.blur();
     } else if (key === PressableKeys.ESCAPE) {
-      handleCancelValue();
+      handleCancel();
       inputRef.current!.blur();
     }
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+
+    setInputValue(value);
   };
 
   return (
     <div className={styles.inputWrapper}>
       <input
-        type='number'
+        type='text'
+        placeholder='Add your task name'
         ref={inputRef}
-        min='0'
-        max='100'
-        step='0.25'
-        // placeholder='0'
-        onKeyDown={(e) => handleKeyDown(e)}
-        onBlur={handleUpdateValue}
+        value={inputValue || ''}
         onChange={(e) => handleInputChange(e)}
-        value={inputValue}
-        className={styles.taskNumberInput}
+        className={styles.taskTextInput}
+        onBlur={handleSave}
+        onKeyDown={(e) => handleKeyDown(e)}
       />
     </div>
   );
 };
 
-export default TaskInputNumber;
+export default TaskInputText;
