@@ -23,6 +23,7 @@ export default function RootStore() {
   const [projectName, setProjectName] = useState("");
   const [sectionName, setSectionName] = useState("");
   const [taskName, setTaskName] = useState("");
+  const [setInIndex, setSetInIndex] = useState(0);
   const [taskId, setTaskId] = useState("");
   const [type, setType] = useState("group");
   const [taskProps, setTaskProps] = useState("");
@@ -141,6 +142,7 @@ export default function RootStore() {
               sectionName: sectionName,
               taskName: taskName,
               type: type,
+              setInIndex: setInIndex,
             })
           );
           setSectionName("");
@@ -224,6 +226,7 @@ export default function RootStore() {
               sectionName: sectionName,
               taskId: taskId,
               subtaskName: taskName,
+              setInIndex: setInIndex,
             })
           );
           setSectionName("");

@@ -16,7 +16,7 @@ export interface Project {
   teamSize?: number;
   timeBudget?: number;
   effort?: number;
-  sections?: Section[];
+  sections: Section[];
   rawDevelopmentEffortSum?: RawDevelopmentEffortSum;
   summary?: Main[];
   assumptions?: Assumption[];
