@@ -1,11 +1,12 @@
 import { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
 import { useParams } from 'react-router';
 
-import { useAppDispatch } from '../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 import { getSeverityLevel } from '../../../utils/getSeverityLevel';
+import { getProjectSelector } from '../../../store/selectors/selectors';
 
-import { Multiplicators, Params, Fields, Task } from '../../../types/Interface';
+import { Multiplicators, Params, Fields, Task, Project } from '../../../types/Interface';
 
 import { Badge } from 'primereact/badge';
 import styles from './RiskBadge.module.scss';
@@ -32,13 +33,27 @@ const RiskBadge: FC<IProps> = ({
 
   const { projectId } = useParams<Params>();
 
-  // const predictedValue = (data: Task): number => {
-  //   const { maxMd, minMd, risk } = data;
+  const project: Project = useAppSelector(getProjectSelector(projectId));
 
-  //   if (!maxMd || !minMd) return 0;
+  const task = project.sections
+    ?.find((section) => section.name === sectionName)
+    ?.tasks.find((task) => task.id === taskId)!;
 
-  //   return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
-  // };
+  const predictedValue = (data: Task, risk: string): number => {
+    if (!data) return 0;
+
+    // console.log(data);
+
+    const { maxMd, minMd } = data;
+
+    if (!maxMd || !minMd) return 0;
+
+    // console.log((maxMd - minMd) / 2);
+    // console.log(riskMultiplicator[risk]);
+    // console.log(((maxMd - minMd) / 2) * riskMultiplicator[risk]);
+
+    return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
+  };
 
   const handleRiskChange = (newRisk: string) => {
     //TODO add recalculate values !!
@@ -56,15 +71,16 @@ const RiskBadge: FC<IProps> = ({
         })
       );
 
-      // dispatch(
-      //   updateTasks({
-      //     projectId,
-      //     sectionName,
-      //     taskId,
-      //     taskProps: Fields.PREDICTED_MD,
-      //     updatedValue: predictedValue(),
-      //   })
-      // );
+      // console.log('new predict', predictedValue(task, newRisk));
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedValue(task, newRisk),
+        })
+      );
 
       return;
     }

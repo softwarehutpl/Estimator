@@ -166,6 +166,9 @@ const projectSlice = createSlice({
         case 'maxMd':
           task.maxMd = updatedValue as number;
           break;
+        case 'predictedMd':
+          task.predictedMd = updatedValue as number;
+          break;
         case 'risk':
           task.risk = updatedValue as string;
           break;
@@ -178,60 +181,6 @@ const projectSlice = createSlice({
         default:
           break;
       }
-      // const newState = [...state.projects].map((project) =>
-      //   project.projectId === action.payload.projectId
-      //     ? {
-      //         ...project,
-      //         sections: project.sections
-      //           ? [...project.sections].map((section) =>
-      //               section.name === action.payload.sectionName
-      //                 ? {
-      //                     ...section,
-      //                     tasks: section.tasks?.map((task) =>
-      //                       task.id === action.payload.taskId
-      //                         ? {
-      //                             ...task,
-      //                             name:
-      //                               action.payload.taskProps === 'name'
-      //                                 ? action.payload.updatedValue
-      //                                 : task.name,
-      //                             minMd:
-      //                               action.payload.taskProps === 'minMd'
-      //                                 ? Number(action.payload.updatedValue)
-      //                                 : task.minMd,
-      //                             maxMd:
-      //                               action.payload.taskProps === 'maxMd'
-      //                                 ? Number(action.payload.updatedValue)
-      //                                 : task.maxMd,
-      //                             risk:
-      //                               action.payload.taskProps === 'risk'
-      //                                 ? action.payload.updatedValue
-      //                                 : task.risk,
-      //                             comment: {
-      //                               text:
-      //                                 action.payload.taskProps === 'commentText'
-      //                                   ? action.payload.updatedValue
-      //                                   : task.comment.text,
-      //                               isImportant:
-      //                                 action.payload.taskProps === 'commentImportant'
-      //                                   ? action.payload.updatedValue === 'true'
-      //                                     ? true
-      //                                     : action.payload.updatedValue === 'false'
-      //                                     ? false
-      //                                     : task.comment.isImportant
-      //                                   : task.comment.isImportant,
-      //                             },
-      //                           }
-      //                         : task
-      //                     ),
-      //                   }
-      //                 : section
-      //             )
-      //           : [],
-      //       }
-      //     : project
-      // );
-      // state.projects = newState;
     },
     updateSubtask: (
       state,
