@@ -39,6 +39,11 @@ const RiskBadge: FC<IProps> = ({
     ?.find((section) => section.name === sectionName)
     ?.tasks.find((task) => task.id === taskId)!;
 
+  const subtask = project.sections
+    ?.find((section) => section.name === sectionName)
+    ?.tasks.find((task) => task.id === parentTaskId)
+    ?.subtasks?.find((subtask) => subtask.id === taskId)!;
+
   const predictedValue = (data: Task, risk: string): number => {
     if (!data) return 0;
 
@@ -93,6 +98,18 @@ const RiskBadge: FC<IProps> = ({
         subtaskId: taskId,
         taskProps: Fields.RISK,
         updatedValue: newRisk,
+      })
+    );
+    console.log('new predict', predictedValue(subtask, newRisk));
+    console.log(subtask);
+    dispatch(
+      updateSubtask({
+        projectId,
+        sectionName,
+        taskId: parentTaskId,
+        subtaskId: taskId,
+        taskProps: Fields.PREDICTED_MD,
+        updatedValue: predictedValue(subtask, newRisk),
       })
     );
   };
