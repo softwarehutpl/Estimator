@@ -113,11 +113,6 @@ export enum Type {
   Task = "task",
 }
 
-<<<<<<< HEAD
-export interface Params {
-  projectId: string;
-}
-=======
 export interface RiskMultiplicator {
   [key: string]: number;
 }
@@ -155,4 +150,3 @@ export interface Row {
   name: RowField;
   role: RowField;
 }
->>>>>>> 952693c9039ea67bfce8bc7c4fd023d580fceb1e
