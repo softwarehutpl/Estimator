@@ -8,10 +8,14 @@ import { Route, Switch } from "react-router-dom";
 import RootStore from "./store/interface/RootStore";
 
 function App() {
-  //TODO change nav to be in one place
   return (
     <div>
       <Switch>
+        <Route exact path="/">
+          <Nav />
+          <Home />
+        </Route>
+
         <Route exact path="/">
           <Nav />
           <Home />
@@ -23,6 +27,12 @@ function App() {
         <Route path="/root">
           <RootStore />
         </Route>
+
+        <Route path="/export">
+          <Nav />
+          <Export />
+        </Route>
+
         <Route path="/export">
           <Nav />
           <Export />
