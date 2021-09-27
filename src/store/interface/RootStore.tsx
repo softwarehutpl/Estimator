@@ -36,8 +36,9 @@ export default function RootStore() {
   const dispatch = useAppDispatch();
 
   // const project = useAppSelector(
-  //   getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
+  //   getProjectSelector("43825af1-68cf-4912-9598-8950cc0a3331")
   // ); //=> PUSH PROJECT ID!
+  // console.log(project);
 
   const projectsData = useAppSelector(getProjectsDataSelector());
 

@@ -30,7 +30,6 @@ const Nav: FC<Props> = () => {
   const { projectId } = useParams<Params>();
   const project = useAppSelector(getProjectSelector(projectId));
   const projectsData = useAppSelector(getProjectsDataSelector());
-  console.log(projectsData);
   //Dialogs state
   const [selectedProject, setSelectedProject] = useState(
     projectId && project.projectName
@@ -55,10 +54,7 @@ const Nav: FC<Props> = () => {
   }, [projectId]);
 
   const selectHandler = (e: DropdownChangeParams) => {
-    console.log("dzialam");
-    //TODO: handel Route here
     setSelectedProject(e.target.value);
-    console.log(e.target.value);
     history.push(`/project/${e.target.value}`);
   };
 

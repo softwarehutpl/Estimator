@@ -1,3 +1,43 @@
+@import "../../../styles//mixins";
+
 .row {
-  height: 100px;
+  display: flex;
+  min-width: 900px;
+  background-color: #fff;
+  padding: 5px 25px 2px 7rem;
+  border-radius: 6px;
+}
+
+.bold {
+  @include bold;
+}
+.name {
+  min-width: 230px;
+  // border: solid 1px blue;
+  flex-grow: 1;
+}
+.role {
+  min-width: 55px;
+}
+.predict {
+  min-width: 145px;
+}
+.cell {
+  padding: 10px;
+  align-self: center;
+}
+.procent {
+  min-width: 55px;
+}
+.min {
+  min-width: 95px;
+}
+.max {
+  min-width: 95px;
+}
+.predict {
+  min-width: 145px;
+}
+.risk {
+  min-width: 55px;
 }
