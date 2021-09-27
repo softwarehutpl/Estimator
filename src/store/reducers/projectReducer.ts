@@ -183,6 +183,7 @@ const projectSlice = createSlice({
           ?.sections?.find((section) => section.name === sectionName)?.tasks || [];
 
       const [removedTask] = sectionTasks?.splice(startIndex, 1);
+
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
   },
