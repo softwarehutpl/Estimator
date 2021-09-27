@@ -1,6 +1,15 @@
+.tableRow {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5px 25px;
+  border-radius: 6px;
+  box-shadow: 0 6px 4px -6px rgba(0, 0, 0, 0.5);
+}
+
 .header {
-	margin-bottom: 20px;
-	background-color: var(--gray-300);
-	color: var(--gray-600);
-	font-weight: 700;
+  margin-bottom: 20px;
+  background-color: var(--gray-300);
+  color: var(--gray-600);
+  font-weight: 700;
 }

@@ -16,7 +16,7 @@ export interface Project {
   teamSize?: number;
   timeBudget?: number;
   effort?: number;
-  sections?: Section[];
+  sections: Section[];
   rawDevelopmentEffortSum?: RawDevelopmentEffortSum;
   summary?: Main[];
   assumptions?: Assumption[];
@@ -31,7 +31,6 @@ export interface RawDevelopmentEffortSum {
   name: string;
   main: Main;
   parts: Part[];
-  total: Total;
 }
 
 export interface Main {
@@ -43,7 +42,7 @@ export interface Main {
   predictedMdFormula?: string;
   risk?: number;
   riskFormula?: string;
-  // name?: string;
+  name?: string;
   estDeliveryDate?: string;
 }
 
@@ -83,7 +82,7 @@ export interface Section {
 
 export interface Task {
   id: string;
-  type?: Type;
+  type: Type;
   name: string;
   role: Role;
   minMd: number | null;
@@ -114,6 +113,46 @@ export enum Type {
   Task = "task",
 }
 
+<<<<<<< HEAD
 export interface Params {
   projectId: string;
 }
+=======
+export interface RiskMultiplicator {
+  [key: string]: number;
+}
+
+export enum Multiplicators {
+  L = "L",
+  M = "M",
+  H = "H",
+}
+
+export enum PressableKeys {
+  ENTER = "Enter",
+  ESCAPE = "Escape",
+  CONTROL = "Control",
+  DELETE = "Delete",
+}
+export interface Params {
+  projectId: string;
+}
+
+export enum Fields {
+  SECTION_ID = "sectionId",
+  NAME = "name",
+  ROLE = "role",
+  MIN_MD = "minMd",
+  MAX_MD = "maxMd",
+  PREDICTED_MD = "predictedMd",
+  RISK = "risk",
+}
+
+export interface RowField {
+  [key: string]: string;
+}
+export interface Row {
+  name: RowField;
+  role: RowField;
+}
+>>>>>>> 952693c9039ea67bfce8bc7c4fd023d580fceb1e
