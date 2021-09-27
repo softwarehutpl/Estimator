@@ -30,6 +30,7 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
   const handleUpdateValue = () => {
     if (inputValue === value) return;
 
+    //TODO add recalculation after dispatch
     if (!parentTaskId) {
       dispatch(
         updateTasks({
@@ -59,6 +60,7 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
+    //TODO add protection for having max value smaller than min
     if (Number(value) > 100 || Number(value) < 0) {
       return;
     }
@@ -86,7 +88,6 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
         min='0'
         max='100'
         step='0.25'
-        // placeholder='0'
         onKeyDown={(e) => handleKeyDown(e)}
         onBlur={handleUpdateValue}
         onChange={(e) => handleInputChange(e)}

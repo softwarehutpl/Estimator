@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Section, Task } from '../../../../types/Interface';
+import { Fields, Section, Task } from '../../../../types/Interface';
 import { rowOrder } from '../../../../constants/constants';
 
 import TableCell from '../../TableCell/TableCell';
@@ -57,12 +57,12 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
     <div className={`${styles.tableRow} ${styles.expandableRow}`}>
       {rowOrder.map(({ role }) => (
         <TableCell key={role} role={role}>
-          {role === 'name' && data[role as keyof Section]}
-          {role === 'role' && null}
-          {role === 'minMd' && sumMinValue(data.tasks)}
-          {role === 'maxMd' && sumMaxValue(data.tasks)}
-          {role === 'predictedMd' && sumPredicatedValue(data.tasks)}
-          {role === 'risk' &&
+          {role === Fields.NAME && data[role as keyof Section]}
+          {role === Fields.ROLE && null}
+          {role === Fields.MIN_MD && sumMinValue(data.tasks)}
+          {role === Fields.MIN_MD && sumMaxValue(data.tasks)}
+          {role === Fields.PREDICTED_MD && sumPredicatedValue(data.tasks)}
+          {role === Fields.RISK &&
             `${calculateRisk(sumMaxValue(data.tasks), sumPredicatedValue(data.tasks))}%`}
         </TableCell>
       ))}

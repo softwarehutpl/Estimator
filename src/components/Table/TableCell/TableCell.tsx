@@ -1,32 +1,26 @@
 import { FC } from 'react';
+import classNames from 'classnames';
 
 import styles from './TableCell.module.scss';
+import { Fields } from '../../../types/Interface';
 
 const smallCells = ['role', 'risk'];
 const medciumCells = ['minMd', 'maxMd'];
 
 interface IProps {
-	role?: string;
+  role?: string;
 }
 
 const TableCell: FC<IProps> = ({ children, role = '' }) => {
-	const idCellStyles = role === 'sectionId' ? styles.idCell : '';
+  const cellStyles = classNames(styles.tableCell, {
+    [styles.idCell]: role === Fields.SECTION_ID,
+    [styles.taskCell]: role === Fields.NAME,
+    [styles.smallCell]: smallCells.includes(role),
+    [styles.mediumCell]: medciumCells.includes(role),
+    [styles.largeCell]: role === Fields.PREDICTED_MD,
+  });
 
-	const taskCellStyles = role === 'name' ? styles.taskCell : '';
-
-	const smallCellStyles = smallCells.includes(role) ? styles.smallCell : '';
-
-	const mediumCellStyles = medciumCells.includes(role) ? styles.mediumCell : '';
-
-	const largeCellStyles = role === 'predictedMd' ? styles.largeCell : '';
-
-	return (
-		<div
-			className={`${styles.tableCell} ${taskCellStyles} ${idCellStyles} ${smallCellStyles} ${mediumCellStyles} ${largeCellStyles}`}
-		>
-			{children}
-		</div>
-	);
+  return <div className={cellStyles}>{children}</div>;
 };
 
 export default TableCell;

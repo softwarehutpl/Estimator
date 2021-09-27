@@ -1,10 +1,11 @@
+import classNames from 'classnames';
 import { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { useAppDispatch } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 
-import { Comment, Params, PressableKeys } from '../../../types/Interface';
+import { Comment, Fields, Params, PressableKeys } from '../../../types/Interface';
 
 import styles from './TaskCommentInput.module.scss';
 
@@ -33,7 +34,9 @@ const TaskCommentInput: FC<IProps> = ({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const importantStyles = isImportant ? styles.taskCommentInputImportant : '';
+  const inputStyles = classNames(styles.taskCommentInput, {
+    [styles.taskCommentInputImportant]: isImportant,
+  });
 
   const handleSaveComment = () => {
     if (!inputValue) {
@@ -47,7 +50,7 @@ const TaskCommentInput: FC<IProps> = ({
           projectId,
           sectionName,
           taskId,
-          taskProps: 'commentText',
+          taskProps: Fields.COMMENT_TEXT,
           updatedValue: inputValue,
         })
       );
@@ -61,7 +64,7 @@ const TaskCommentInput: FC<IProps> = ({
         sectionName,
         taskId: parentTaskId,
         subtaskId: taskId,
-        taskProps: 'commentText',
+        taskProps: Fields.COMMENT_TEXT,
         updatedValue: inputValue,
       })
     );
@@ -87,21 +90,21 @@ const TaskCommentInput: FC<IProps> = ({
           projectId,
           sectionName,
           taskId,
-          taskProps: 'commentImportant',
+          taskProps: Fields.COMMENT_IMPORTANT,
           updatedValue: importantComment,
         })
       );
 
       return;
     }
-    console.log('here');
+
     dispatch(
       updateSubtask({
         projectId,
         sectionName,
         taskId: parentTaskId,
         subtaskId: taskId,
-        taskProps: 'commentImportant',
+        taskProps: Fields.COMMENT_IMPORTANT,
         updatedValue: importantComment,
       })
     );
@@ -110,13 +113,14 @@ const TaskCommentInput: FC<IProps> = ({
   const handleCommentDelete = () => {
     setInputValue('');
 
+    //Can I simplify this?
     if (!parentTaskId) {
       dispatch(
         updateTasks({
           projectId,
           sectionName,
           taskId,
-          taskProps: 'commentText',
+          taskProps: Fields.COMMENT_TEXT,
           updatedValue: '',
         })
       );
@@ -126,7 +130,7 @@ const TaskCommentInput: FC<IProps> = ({
           projectId,
           sectionName,
           taskId,
-          taskProps: 'commentImportant',
+          taskProps: Fields.COMMENT_IMPORTANT,
           updatedValue: false,
         })
       );
@@ -140,7 +144,7 @@ const TaskCommentInput: FC<IProps> = ({
         sectionName,
         taskId: parentTaskId,
         subtaskId: taskId,
-        taskProps: 'commentText',
+        taskProps: Fields.COMMENT_TEXT,
         updatedValue: '',
       })
     );
@@ -151,7 +155,7 @@ const TaskCommentInput: FC<IProps> = ({
         sectionName,
         taskId: parentTaskId,
         subtaskId: taskId,
-        taskProps: 'commentImportant',
+        taskProps: Fields.COMMENT_IMPORTANT,
         updatedValue: false,
       })
     );
@@ -162,6 +166,7 @@ const TaskCommentInput: FC<IProps> = ({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
 
+    //TODO add key sequence CONTROL + I
     if (key === PressableKeys.ENTER) {
       handleSaveComment();
       inputRef.current!.blur();
@@ -195,7 +200,7 @@ const TaskCommentInput: FC<IProps> = ({
           placeholder='Add your comment'
           onBlur={handleSaveComment}
           onKeyDown={(e) => handleKeyDown(e)}
-          className={`${styles.taskCommentInput} ${importantStyles}`}
+          className={inputStyles}
         ></input>
       </label>
     </div>

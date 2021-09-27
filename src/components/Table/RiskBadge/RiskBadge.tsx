@@ -5,12 +5,12 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
 import { getSeverityLevel } from '../../../utils/getSeverityLevel';
 import { getProjectSelector } from '../../../store/selectors/selectors';
+import { riskMultiplicator } from '../../../constants/constants';
 
 import { Multiplicators, Params, Fields, Task, Project } from '../../../types/Interface';
 
 import { Badge } from 'primereact/badge';
 import styles from './RiskBadge.module.scss';
-import { riskMultiplicator } from '../../../constants/constants';
 
 interface IProps {
   openedMenuId: string | null;
@@ -47,15 +47,9 @@ const RiskBadge: FC<IProps> = ({
   const predictedValue = (data: Task, risk: string): number => {
     if (!data) return 0;
 
-    // console.log(data);
-
     const { maxMd, minMd } = data;
 
     if (!maxMd || !minMd) return 0;
-
-    // console.log((maxMd - minMd) / 2);
-    // console.log(riskMultiplicator[risk]);
-    // console.log(((maxMd - minMd) / 2) * riskMultiplicator[risk]);
 
     return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
   };
@@ -76,7 +70,6 @@ const RiskBadge: FC<IProps> = ({
         })
       );
 
-      // console.log('new predict', predictedValue(task, newRisk));
       dispatch(
         updateTasks({
           projectId,
@@ -94,14 +87,13 @@ const RiskBadge: FC<IProps> = ({
       updateSubtask({
         projectId,
         sectionName,
-        taskId: parentTaskId,
+        taskId: parentTaskId || taskId,
         subtaskId: taskId,
         taskProps: Fields.RISK,
         updatedValue: newRisk,
       })
     );
-    console.log('new predict', predictedValue(subtask, newRisk));
-    console.log(subtask);
+
     dispatch(
       updateSubtask({
         projectId,
@@ -129,7 +121,7 @@ const RiskBadge: FC<IProps> = ({
       <Badge className={styles.badge} value={risk} severity={getSeverityLevel(risk)}></Badge>
       <div className={styles.tooltip}>Risk multiplicator {riskMultiplicator[risk]}</div>
       {openedMenuId === taskId && (
-        <div className={`${styles.riskMenu}`}>
+        <div className={styles.riskMenu}>
           <div
             className={styles.riskMenuField}
             onClick={() => {
