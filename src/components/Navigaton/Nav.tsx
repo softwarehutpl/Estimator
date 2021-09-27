@@ -12,7 +12,7 @@ import TerminateDialog from "../Dialogs/TerminateDialog";
 //Types
 import { Params, Project } from "../../types/Interface";
 //Router
-import { Route, useParams, Link } from "react-router-dom";
+import { Route, useParams, useHistory, Link } from "react-router-dom";
 //Store
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -25,6 +25,7 @@ import styles from "./nav.module.scss";
 interface Props {}
 
 const Nav: FC<Props> = () => {
+  const history = useHistory();
   //Selectors
   const { projectId } = useParams<Params>();
   const project = useAppSelector(getProjectSelector(projectId));
@@ -44,11 +45,7 @@ const Nav: FC<Props> = () => {
 
   const projectTitles = projectsData.map((project: Project) => {
     return {
-      label: (
-        <Link className={styles.link} to={`/project/${project.projectId}`}>
-          {project.projectName}
-        </Link>
-      ),
+      label: project.projectName,
       value: project.projectId,
     };
   });
@@ -57,8 +54,13 @@ const Nav: FC<Props> = () => {
     setSelectedProject(projectId && project.projectName);
   }, [projectId]);
 
-  const selectHandler = (e: DropdownChangeParams) =>
+  const selectHandler = (e: DropdownChangeParams) => {
+    console.log("dzialam");
+    //TODO: handel Route here
     setSelectedProject(e.target.value);
+    console.log(e.target.value);
+    history.push(`/project/${e.target.value}`);
+  };
 
   const dialogFooter = (
     <div>
@@ -80,7 +82,9 @@ const Nav: FC<Props> = () => {
 
   const leftContents = (
     <div className="p-d-flex">
-      <div className={`${styles.estimator} p-text-center`}>Estimator</div>
+      <Link className={styles.link} to="/">
+        <div className={`${styles.estimator} p-text-center`}>Estimator</div>
+      </Link>
 
       <Route path="/project">
         <>
