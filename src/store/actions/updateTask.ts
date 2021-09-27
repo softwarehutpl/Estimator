@@ -12,25 +12,24 @@ export const taskPropsContstants = {
 export default function updateTask(
   task: Task,
   taskProps: string,
-  updatedValue: string
+  updatedValue: string | number | boolean
 ) {
   const { NAME, MIN_MD, MAX_MD, RISK, COMMENT_TEXT, COMMENT_IMPORTANT } =
     taskPropsContstants;
   const updatedTask = {
     ...task,
-    name: taskProps === NAME ? updatedValue : task.name,
+    name: taskProps === NAME ? (updatedValue as string) : task.name,
     minMd: taskProps === MIN_MD ? Number(updatedValue) : task.minMd,
     maxMd: taskProps === MAX_MD ? Number(updatedValue) : task.maxMd,
-    risk: taskProps === RISK ? updatedValue : task.risk,
+    risk: taskProps === RISK ? (updatedValue as string) : task.risk,
     comment: {
-      text: taskProps === COMMENT_TEXT ? updatedValue : task.comment.text,
+      text:
+        taskProps === COMMENT_TEXT
+          ? (updatedValue as string)
+          : task.comment.text,
       isImportant:
         taskProps === COMMENT_IMPORTANT
-          ? updatedValue === "true"
-            ? true
-            : updatedValue === "false"
-            ? false
-            : task.comment.isImportant
+          ? (updatedValue as boolean)
           : task.comment.isImportant,
     },
   };

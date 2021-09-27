@@ -1,11 +1,11 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-import { rowOrder } from "../TableRow/TableRow";
+import { Section, Task } from '../../../../types/Interface';
+import { rowOrder } from '../../../../constants/constants';
 
-import TableCell from "../../TableCell/TableCell";
-import { Section, Task } from "../../../../types/Interface";
+import TableCell from '../../TableCell/TableCell';
 
-import styles from "./TableExpandableRow.module.scss";
+import styles from './TableExpandableRow.module.scss';
 
 interface IProps {
   data: Section;
@@ -14,7 +14,8 @@ interface IProps {
 }
 
 const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
-  //TODO move to utils or make separate hook for calculating all
+  //TODO move all logic to reducer
+
   const sumMinValue = (tasks: Task[]): number =>
     tasks.reduce((total, curr) => {
       if (curr.subtasks?.length) {
@@ -31,7 +32,6 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
         total += curr.maxMd || 0;
         return (total += sumMaxValue(curr.subtasks));
       }
-
       return (total += curr.maxMd || 0);
     }, 0);
 
@@ -46,7 +46,7 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
     }, 0);
 
   const calculateRisk = (maxValue: number, predictedValue: number): number => {
-    const resultValue = ((maxValue - predictedValue) / predictedValue) * 100;
+    const resultValue = ((maxValue - predictedValue) / (predictedValue || 1)) * 100;
 
     if (isNaN(resultValue)) return 0;
 
@@ -57,16 +57,13 @@ const TableExpandableRow: FC<IProps> = ({ data, icon, onClick }) => {
     <div className={`${styles.tableRow} ${styles.expandableRow}`}>
       {rowOrder.map(({ role }) => (
         <TableCell key={role} role={role}>
-          {role === "name" && data[role as keyof Section]}
-          {role === "role" && null}
-          {role === "minMd" && sumMinValue(data.tasks)}
-          {role === "maxMd" && sumMaxValue(data.tasks)}
-          {role === "predictedMd" && sumPredicatedValue(data.tasks)}
-          {role === "risk" &&
-            `${calculateRisk(
-              sumMaxValue(data.tasks),
-              sumPredicatedValue(data.tasks)
-            )}%`}
+          {role === 'name' && data[role as keyof Section]}
+          {role === 'role' && null}
+          {role === 'minMd' && sumMinValue(data.tasks)}
+          {role === 'maxMd' && sumMaxValue(data.tasks)}
+          {role === 'predictedMd' && sumPredicatedValue(data.tasks)}
+          {role === 'risk' &&
+            `${calculateRisk(sumMaxValue(data.tasks), sumPredicatedValue(data.tasks))}%`}
         </TableCell>
       ))}
       <button onClick={onClick} className={styles.expanderBtn}>

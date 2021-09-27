@@ -151,7 +151,7 @@ const projectSlice = createSlice({
         sectionName: string;
         taskId: string;
         taskProps: string;
-        updatedValue: string;
+        updatedValue: string | number | boolean;
       }>
     ) => {
       const project =
@@ -180,7 +180,7 @@ const projectSlice = createSlice({
         taskId: string;
         subtaskId: string;
         taskProps: string;
-        updatedValue: string;
+        updatedValue: string | boolean | number;
       }>
     ) => {
       const project =
@@ -208,16 +208,17 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         sectionName: string;
-        startIndex?: number;
+        startIndex: number;
         endIndex: number;
       }>
     ) => {
+      const { projectId, sectionName, startIndex, endIndex } = action.payload;
+
       const sectionTasks =
         state.projects
-          .find((project) => project.projectId === action.payload.projectId)
-          ?.sections?.find(
-            (section) => section.name === action.payload.sectionName
-          )?.tasks || [];
+          .find((project) => project.projectId === projectId)
+          ?.sections?.find((section) => section.name === sectionName)?.tasks ||
+        [];
 
       const [removedTask] =
         sectionTasks?.splice(sectionTasks.length - 1, 1) || [];

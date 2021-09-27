@@ -1,5 +1,6 @@
 @import "../../styles/variables";
 @import "../../styles//colors";
+@import "../../styles//mixins";
 
 .nav {
   text-align: center;
@@ -11,9 +12,15 @@
   color: $text-light;
 }
 .select {
-  // background-color: $btn-bgc;
   color: $text-light;
+  min-width: 150px;
+  width: 100%;
 }
 .estimator {
   font-size: 2rem;
+}
+.link {
+  @include link;
+  display: block;
+  width: 150px;
 }

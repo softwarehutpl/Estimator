@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
+
 import { Project } from "../../types/Interface";
+
 import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   clearProjects,
@@ -13,10 +16,9 @@ import {
   delSubtask,
   updateSubtask,
 } from "../reducers/projectReducer";
-import { v4 as uuidv4 } from "uuid";
 import {
   getProjectsDataSelector,
-  // getProjectSelector,
+  getProjectSelector,
 } from "../selectors/selectors";
 
 export default function RootStore() {
@@ -32,9 +34,11 @@ export default function RootStore() {
   const [subtaskId, setSubtaskId] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const dispatch = useAppDispatch();
+
   // const project = useAppSelector(
   //   getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
   // ); //=> PUSH PROJECT ID!
+
   const projectsData = useAppSelector(getProjectsDataSelector());
 
   useEffect(() => {

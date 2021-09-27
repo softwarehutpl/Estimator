@@ -1,23 +1,24 @@
 .tableCell {
-	padding: 10px;
+  align-self: center;
+  padding: 10px;
 }
 
 .idCell {
-	width: 40px;
+  width: 40px;
 }
 
 .taskCell {
-	flex-grow: 1;
+  flex-grow: 1;
 }
 
 .smallCell {
-	width: 55px;
+  width: 55px;
 }
 
 .mediumCell {
-	width: 95px;
+  width: 95px;
 }
 
 .largeCell {
-	width: 145px;
+  width: 145px;
 }

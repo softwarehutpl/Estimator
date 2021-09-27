@@ -125,18 +125,36 @@ const initialProject: Project = {
         predictedMd: 0,
         predictedMdFormula: "",
       },
-    ],
-    total: {
-      name: "Total (MD):",
-      minMd: 0,
-      minMdFormula: "",
-      maxMd: 0,
-      maxMdFormula: "",
-      predictedMd: 0,
-    },
+    ]
   },
-  summary: [],
-  assumptions: [],
+  summary: [
+		{
+			name: "Total (MD):",
+			minMd: 0,
+			minMdFormula: "",
+			maxMd: 0,
+			maxMdFormula: "",
+			predictedMd: 0,
+			predictedMdFormula: "",
+			risk: 0,
+			riskFormula: ""
+		},
+		{
+			name: "Per Team Member:",
+			minMd: 0,
+			minMdFormula: "",
+			maxMd: 0,
+			maxMdFormula: "",
+			predictedMd: 0,
+			predictedMdFormula: ""
+		},
+		{
+			name: "Est. Delivery Date:",
+			estDeliveryDate: ""
+		}
+	],
+	assumptions: [
+	],
 };
 
 export default initialProject;

@@ -1,178 +1,153 @@
 import { Dispatch, FC, SetStateAction, useState, MouseEvent } from 'react';
+import { useParams } from 'react-router';
 
-import { rowOrder } from '../TableRow/TableRow';
-import { Task } from '../../../../types/Interface';
-import { getSeverityLevel } from '../../../../utils/getSeverityLevel';
+import { Fields, Params, Task, Type } from '../../../../types/Interface';
+import { rowOrder } from '../../../../constants/constants';
 
+import ContextMenu from '../../../ContextMenu/ContextMenu';
 import TableCell from '../../TableCell/TableCell';
 import TaskComment from '../../TaskComment/TaskComment';
+import TaskInputText from '../../../Input/TaskInputText/TaskInputText';
+import TaskInputNumber from '../../../Input/TaskInputNumber/TaskInputNumber';
+import RiskBadge from '../../RiskBadge/RiskBadge';
 
-import { Badge } from 'primereact/badge';
 import styles from './TableDraggableRow.module.scss';
-import { useAppDispatch } from '../../../../store/hooks';
-import { addTask, delTask, reorder } from '../../../../store/reducers/projectReducer';
-import { useParams } from 'react-router';
-import CellInput from '../../../Input/CellInput/CellInput';
 
 interface IProps {
-	data: Task;
-	index: number;
-	openTooltipId: number | null;
-	orderNumber: number;
-	sectionName: string;
-	stylingClass?: string;
-	setOpenTooltipId: Dispatch<SetStateAction<number | null>>;
-}
+  data: Task;
 
-interface RiskMultiplicator {
-	[key: string]: number;
+  openedMenuId: string | null;
+  orderNumber: number;
+  parentOrderNumber?: number;
+  parentTaskId?: string;
+  sectionName: string;
+  setopenedMenuId: Dispatch<SetStateAction<string | null>>;
+  stylingClass?: string;
 }
-
-const riskMultiplicator: RiskMultiplicator = {
-	L: 1,
-	M: 1.25,
-	H: 1.5,
-};
 
 const TableDraggableRow: FC<IProps> = ({
-	data,
-	index,
-	openTooltipId,
-	orderNumber,
-	sectionName,
-	stylingClass,
-	setOpenTooltipId,
+  data,
+  openedMenuId,
+  orderNumber,
+  parentOrderNumber,
+  parentTaskId,
+  sectionName,
+  setopenedMenuId,
+  stylingClass,
 }) => {
-	const [newRisk, setNewRisk] = useState<string>('');
-	const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isEditable, setIsEditable] = useState<boolean>(false);
 
-	const dispatch = useAppDispatch();
+  const { projectId } = useParams<Params>();
 
-	const { projectId } = useParams<{ projectId: string }>();
+  const handleToggleComment = () => {
+    setIsEditable(!isEditable);
+  };
 
-	const disabledComment = data.comment.text ? styles.rowControllerTaskButtonDisabled : '';
+  const handleToggleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
+    if (e.type === 'mouseleave' && !isOpen) {
+      return;
+    }
 
-	const handleTaskAdd = () => {
-		//TODO posibility to create task with diffrent type
-		dispatch(addTask({ projectId, sectionName, type: 'task' }));
-		dispatch(reorder({ projectId, sectionName, endIndex: index }));
-	};
+    setIsOpen(!isOpen);
+  };
 
-	const handleTaskDelete = () => {
-		dispatch(delTask({ projectId, sectionName, id: data.id }));
-	};
+  //TODO change this function name?
+  const handleTooltipClosed = () => setopenedMenuId(null);
 
-	const handleCommentAdd = () => console.log('Adding comment');
-
-	const handleToggleContextMenu = (e: MouseEvent<HTMLDivElement>) => {
-		if (e.type === 'mouseleave' && !isOpen) {
-			return;
-		}
-
-		setIsOpen(!isOpen);
-	};
-
-	const handleToggleTooltip = (e: MouseEvent<HTMLDivElement>) => {
-		e.stopPropagation();
-		if (orderNumber === openTooltipId) {
-			setOpenTooltipId(null);
-			return;
-		}
-
-		setOpenTooltipId(orderNumber);
-	};
-
-	const handleTooltipClosed = () => setOpenTooltipId(null);
-
-	return (
-		<>
-			<div
-				className={`${styles.tableRow} ${stylingClass}`}
-				onClick={handleTooltipClosed}
-				onMouseLeave={(e) => handleToggleContextMenu(e)}
-			>
-				<div className={styles.rowController} onClick={(e) => handleToggleContextMenu(e)}>
-					<button className={styles.rowControllerButton}>+</button>
-					{isOpen && (
-						<div className={styles.rowControllerButtonsWrapper}>
-							<div className={styles.rowControllerTaskButton} onClick={handleTaskDelete}>
-								<i className='pi pi-trash'></i>
-							</div>
-							<div className={styles.rowControllerTaskButton} onClick={handleTaskAdd}>
-								<i className='pi pi-calendar-plus'></i>
-							</div>
-							<div
-								className={`${styles.rowControllerTaskButton} ${disabledComment}`}
-								onClick={handleCommentAdd}
-							>
-								<i className='pi pi-comment'></i>
-							</div>
-						</div>
-					)}
-				</div>
-				{rowOrder.map(({ role }) => {
-					if (role === 'risk') {
-						return (
-							<TableCell key={role} role={role}>
-								{data.type === 'group' ? null : (
-									<>
-										<div className={styles.riskWrapper} onClick={(e) => handleToggleTooltip(e)}>
-											<Badge
-												className={styles.badge}
-												value={newRisk || data[role as keyof Task]}
-												severity={getSeverityLevel(newRisk || data[role])}
-											></Badge>
-											<div className={styles.tooltip}>
-												Risk multiplicator {riskMultiplicator[newRisk || data[role]]}
-											</div>
-											{openTooltipId === orderNumber && (
-												<div className={`${styles.riskTooltip}`}>
-													<div
-														className={styles.riskTooltipField}
-														onClick={() => {
-															setNewRisk('L');
-														}}
-													>
-														Low
-													</div>
-													<div
-														className={styles.riskTooltipField}
-														onClick={() => {
-															setNewRisk('M');
-														}}
-													>
-														Medium
-													</div>
-													<div
-														className={styles.riskTooltipField}
-														onClick={() => {
-															setNewRisk('H');
-														}}
-													>
-														High
-													</div>
-												</div>
-											)}
-										</div>
-									</>
-								)}
-							</TableCell>
-						);
-					}
-					return (
-						<TableCell key={role} role={role}>
-							{role === 'sectionId' ? orderNumber : data[role as keyof Task]}
-							{role === 'name' && <input type='text'></input>}
-							{role === 'minMd' && <CellInput value={data['minMd']} />}
-							{role === 'maxMd' && <input type='number' min='0' max='1000'></input>}
-							{role === 'predictedMd' && <input type='number' min='0' max='1000'></input>}
-						</TableCell>
-					);
-				})}
-				<TaskComment text={data.comment.text} isImportant={data.comment.isImportant} />
-			</div>
-		</>
-	);
+  return (
+    <>
+      <div
+        className={`${styles.tableRow} ${stylingClass}`}
+        onClick={handleTooltipClosed}
+        onMouseLeave={(e) => handleToggleContextMenu(e)}
+      >
+        <ContextMenu
+          data={data}
+          handleToggleComment={handleToggleComment}
+          handleToggleContextMenu={handleToggleContextMenu}
+          isOpen={isOpen}
+          parentTaskId={parentTaskId}
+          projectId={projectId}
+          sectionName={sectionName}
+        />
+        {rowOrder.map(({ role }) => {
+          if (data.type === Type.Group) {
+            return (
+              <TableCell key={role} role={role}>
+                {role === 'sectionId' && orderNumber}
+                {role === 'name' && (
+                  <TaskInputText sectionName={sectionName} taskId={data.id} value={data[role]} />
+                )}
+              </TableCell>
+            );
+          } else {
+            if (role === Fields.NAME) {
+              return (
+                <TableCell key={role} role={role}>
+                  {role === 'name' && (
+                    <TaskInputText
+                      sectionName={sectionName}
+                      taskId={data.id}
+                      parentTaskId={parentTaskId}
+                      value={data[role]}
+                    />
+                  )}
+                </TableCell>
+              );
+            } else if (role === Fields.MIN_MD || role === Fields.MAX_MD) {
+              return (
+                <TableCell key={role} role={role}>
+                  <TaskInputNumber
+                    parentTaskId={parentTaskId}
+                    role={role}
+                    sectionName={sectionName}
+                    taskId={data.id}
+                    value={data[role]}
+                  />
+                </TableCell>
+              );
+            } else if (role === Fields.RISK) {
+              return (
+                <TableCell key={role} role={role}>
+                  <RiskBadge
+                    openedMenuId={openedMenuId}
+                    parentTaskId={parentTaskId}
+                    risk={data[role]}
+                    sectionName={sectionName}
+                    setopenedMenuId={setopenedMenuId}
+                    taskId={data.id}
+                  />
+                </TableCell>
+              );
+            } else if (role === Fields.SECTION_ID) {
+              return (
+                <TableCell key={role} role={role}>
+                  {parentTaskId ? `${parentOrderNumber}.${orderNumber}` : orderNumber}
+                </TableCell>
+              );
+            } else {
+              return (
+                <TableCell key={role} role={role}>
+                  {role === 'sectionId' ? orderNumber : data[role as keyof Task]}
+                </TableCell>
+              );
+            }
+          }
+        })}
+        {data.type === 'task' && (
+          <TaskComment
+            comment={data.comment}
+            isEditable={isEditable}
+            parentTaskId={parentTaskId}
+            sectionName={sectionName}
+            taskId={data.id}
+            toggleComment={handleToggleComment}
+          />
+        )}
+      </div>
+    </>
+  );
 };
 
 export default TableDraggableRow;

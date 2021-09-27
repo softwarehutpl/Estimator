@@ -9,57 +9,43 @@ import TableSubtasks from '../TableSubtasks/TableSubtasks';
 import styles from './TableTask.module.scss';
 
 interface IProps {
-	sectionName: string;
-	tasks: Task[];
+  sectionName: string;
+  tasks: Task[];
 }
 
 const TableTasks: FC<IProps> = ({ sectionName, tasks }) => {
-	const [openTooltipId, setOpenTooltipId] = useState<number | null>(null);
+  const [openedMenuId, setopenedMenuId] = useState<string | null>(null);
 
-	return (
-		<>
-			{tasks.map((task, index) => {
-				if (task.subtasks?.length) {
-					return (
-						<DraggableWrapper
-							key={`draggable-${task.id}`}
-							draggableId={`draggable-${task.id}`}
-							index={index}
-						>
-							<TableDraggableRow
-								data={task}
-								index={index}
-								orderNumber={index + 1}
-								stylingClass={styles.task}
-								openTooltipId={openTooltipId}
-								sectionName={sectionName}
-								setOpenTooltipId={setOpenTooltipId}
-							/>
-							<TableSubtasks subtasks={task.subtasks} taskId={task.id} />
-						</DraggableWrapper>
-					);
-				}
-
-				return (
-					<DraggableWrapper
-						key={`draggable-${task.id}`}
-						draggableId={`draggable-${task.id}`}
-						index={index}
-					>
-						<TableDraggableRow
-							data={task}
-							index={index}
-							orderNumber={index + 1}
-							stylingClass={styles.task}
-							openTooltipId={openTooltipId}
-							sectionName={sectionName}
-							setOpenTooltipId={setOpenTooltipId}
-						/>
-					</DraggableWrapper>
-				);
-			})}
-		</>
-	);
+  return (
+    <>
+      {tasks.map((task, index) => (
+        <DraggableWrapper
+          key={`draggable-${task.id}`}
+          draggableId={`draggable-${task.id}`}
+          index={index}
+        >
+          <TableDraggableRow
+            data={task}
+            orderNumber={index + 1}
+            openedMenuId={openedMenuId}
+            sectionName={sectionName}
+            setopenedMenuId={setopenedMenuId}
+            stylingClass={styles.task}
+          />
+          {Boolean(task.subtasks?.length) && (
+            <TableSubtasks
+              openedMenuId={openedMenuId}
+              parentOrderNumber={index + 1}
+              sectionName={sectionName}
+              setopenedMenuId={setopenedMenuId}
+              subtasks={task.subtasks || []}
+              taskId={task.id}
+            />
+          )}
+        </DraggableWrapper>
+      ))}
+    </>
+  );
 };
 
 export default TableTasks;
