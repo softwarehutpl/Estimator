@@ -1,12 +1,13 @@
-import { Task } from "../../types/Interface";
+import { Task } from '../../types/Interface';
 
 export const taskPropsContstants = {
-  NAME: "name",
-  MIN_MD: "minMd",
-  MAX_MD: "maxMd",
-  RISK: "risk",
-  COMMENT_TEXT: "commentText",
-  COMMENT_IMPORTANT: "commentImportant",
+  NAME: 'name',
+  MIN_MD: 'minMd',
+  MAX_MD: 'maxMd',
+  RISK: 'risk',
+  COMMENT_TEXT: 'commentText',
+  COMMENT_IMPORTANT: 'commentImportant',
+  PREDICTED_MD: 'predictedMd',
 };
 
 export default function updateTask(
@@ -14,7 +15,7 @@ export default function updateTask(
   taskProps: string,
   updatedValue: string | number | boolean
 ) {
-  const { NAME, MIN_MD, MAX_MD, RISK, COMMENT_TEXT, COMMENT_IMPORTANT } =
+  const { NAME, MIN_MD, MAX_MD, RISK, COMMENT_TEXT, COMMENT_IMPORTANT, PREDICTED_MD } =
     taskPropsContstants;
   const updatedTask = {
     ...task,
@@ -22,15 +23,11 @@ export default function updateTask(
     minMd: taskProps === MIN_MD ? Number(updatedValue) : task.minMd,
     maxMd: taskProps === MAX_MD ? Number(updatedValue) : task.maxMd,
     risk: taskProps === RISK ? (updatedValue as string) : task.risk,
+    predictedMd: taskProps === PREDICTED_MD ? Number(updatedValue) : task.predictedMd,
     comment: {
-      text:
-        taskProps === COMMENT_TEXT
-          ? (updatedValue as string)
-          : task.comment.text,
+      text: taskProps === COMMENT_TEXT ? (updatedValue as string) : task.comment.text,
       isImportant:
-        taskProps === COMMENT_IMPORTANT
-          ? (updatedValue as boolean)
-          : task.comment.isImportant,
+        taskProps === COMMENT_IMPORTANT ? (updatedValue as boolean) : task.comment.isImportant,
     },
   };
   return updatedTask;

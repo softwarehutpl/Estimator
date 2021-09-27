@@ -79,7 +79,7 @@ const projectSlice = createSlice({
         setInIndex?: number;
       }>
     ) => {
-      const setInIndex = action.payload.setInIndex ?? 0;
+      const setInIndex = action.payload.setInIndex || 0;
 
       const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
