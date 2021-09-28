@@ -4,10 +4,11 @@ import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
 import TableTasks from "../../components/Table/TableTasks/TableTasks";
 import findIndexProject from "../actions/findIndexProject";
+import findIndexPart from "../actions/findIndexPart";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Type } from "../../types/Interface";
+import { Type, Part, Main } from "../../types/Interface";
 
 const projectSlice = createSlice({
   name: "project",
@@ -224,6 +225,22 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updatePart: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        partName: string;
+        parts: Part[];
+      }>
+    ) => {
+      const project =
+        state.projects[findIndexProject(state, action.payload.projectId)];
+      const part = project.rawDevelopmentEffortSum?.parts[findIndexPart(
+        project,
+        action.payload.partName)];
+        //TODO: dla Mariusza
+      );
+    },
   },
 });
 
@@ -239,6 +256,7 @@ export const {
   updateTasks,
   updateSubtask,
   reorder,
+  updatePart,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
