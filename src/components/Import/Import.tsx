@@ -54,6 +54,8 @@ function Import() {
   }
 
   function convertJsonToProjectStructure(data){
+    console.log("data:");
+    console.log(data);
     let newProject = Object.assign({}, initialProject);
     
     newProject.projectName = data[2]._2;
@@ -83,42 +85,82 @@ function Import() {
         section.predictedMd = data[i]._7;
         section.risk = risk*100; // 0.2162 
       }
-      else{ // risk: string => task/group/subtask
+      else{ // risk: string => task/group/subtask or comment
 
-        if(risk === "" || risk == undefined) { // risk === "" => add group
+        if( (risk === "" || risk === undefined) && data[i]._4 !== undefined) { // (risk === "" => add group                 
           let name = data[i]._1; // nazwa taska
           let groupTask = createTask(getSectionName(data[i]._4), name, Type.Group);
-          newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(groupTask);
+          newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(groupTask);  
         }
        
         else {  // risk !== "" => add task/subtask
 
           let name = data[i]._1; // nazwa taska
-          if (name.slice(0,4) !== "    ") { // name != "    ...." => task             
+
+
+
+          if (data[i]._1.slice(0,4) !== "    " && data[i]._4 !== undefined) { // name != "    ...." => task  
+            console.log("dodaje task: "+data[i]._1+", przejscie do linijki "+i);
+            // let name = data[i]._1; // nazwa taska        
             let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
             newTask.minMd = data[i]._5;
             newTask.maxMd = data[i]._6;
             newTask.predictedMd = data[i]._7;
             newTask.risk = data[i]._8;
-            newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
+
+            // add comment to task
+            let commentIndex = i+1;
+
+            if(data[commentIndex]._1 !== "" && data[commentIndex]._7 === "" && data[commentIndex]._4 === undefined ){
+              newTask.comment = {text: data[commentIndex]._1, isImportant: false};
+              console.log("Z KOM");
+              console.log(newTask);
+              newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
+              i++;
+            }
+            else{
+              newTask.comment.text = "";
+              console.log("BEZ KOM");
+              console.log(newTask);
+              newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
+            }
             
           }
 
-          if (name.slice(0,4) === "    ") { // name = "    ...." => subtask
+          if (data[i]._1.slice(0,4) === "    " && data[i]._4 !== undefined) { // name = "    ...." => subtask
+            // let name = data[i]._1; // nazwa taska            
             let j = i;
+            
             let subtasks = [];
             while(data[j]._1.slice(0,4) === "    ")
             {
+              console.log("dodaje subtask, przejscie do linijki "+j);
               let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);
               newSubtask.minMd = data[j]._5;
               newSubtask.maxMd = data[j]._6;
               newSubtask.predictedMd = data[j]._7;
               newSubtask.risk = data[j]._8;
 
+              // add comment to subtask
+              // let subtaskCommentIndex = j+1;
+
+              // if(data[subtaskCommentIndex]._1 !== "" &&  data[subtaskCommentIndex]._7 === "" && data[subtaskCommentIndex]._4 === undefined){
+              //   //it's comment
+              //   newSubtask.comment.text = data[subtaskCommentIndex]._1;
+              //   console.log("sub comment!!!!!:");
+              //   console.log(data[subtaskCommentIndex]._1);              
+              // }
+
               // creating subtasks list
               subtasks.push(newSubtask);  
+              console.log("pushed new subtask to temp list");
+
+              // if(newSubtask.comment.text !== ""){j++;};// j++; przejscie do kolejnej linijki po komentarzu
+              // console.log("dodano kom do subtaska, przejscie do linijki "+j);
               j++;
+              // console.log("przejscie do linijki "+j);
             }
+            console.log("wyscie z listy sub, przejscie do linijki "+i);
             i = j;
             let lastGroupTask = (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1));
             let taskId = lastGroupTask.id;
@@ -126,7 +168,8 @@ function Import() {
             // adding subtasks to group
             group.subtasks = subtasks;
             subtasks = [];
-            --i;
+            i--;
+            
           }
         }
       }   
@@ -182,8 +225,7 @@ function Import() {
 
     
     
-    console.log("data:");
-    console.log(data);
+    
     console.log("new project:");
     console.log(newProject);
   };
