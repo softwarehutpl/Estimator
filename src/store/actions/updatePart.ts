@@ -30,6 +30,5 @@ export default function updatePart(
         : part.predictedMdFormula,
     role: partProps === ROLE ? (updatedValue as string) : part.role,
   };
-  console.log(updatePart);
   return updatePart;
 }

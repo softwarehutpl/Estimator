@@ -6,16 +6,12 @@ import Export from "./components/Export/Export";
 import NotFound404 from "./views/NotFound404/NotFound404";
 import { Route, Switch } from "react-router-dom";
 import RootStore from "./store/interface/RootStore";
+import Import from "./components/Import/Import";
 
 function App() {
   return (
     <div>
       <Switch>
-        <Route exact path="/">
-          <Nav />
-          <Home />
-        </Route>
-
         <Route exact path="/">
           <Nav />
           <Home />
@@ -27,15 +23,13 @@ function App() {
         <Route path="/root">
           <RootStore />
         </Route>
-
         <Route path="/export">
           <Nav />
           <Export />
         </Route>
-
-        <Route path="/export">
+        <Route path="/import">
           <Nav />
-          <Export />
+          <Import />
         </Route>
         <Route path="*">
           <Nav />
