@@ -5,7 +5,7 @@ interface Props {}
 const ExportDialog = (props: Props) => {
   return (
     <div>
-      <h1>Export Dialog</h1>
+      <h2>Are you sure you want to export this project?</h2>
     </div>
   );
 };
