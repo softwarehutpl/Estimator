@@ -11,8 +11,10 @@ export const partPropsContstants = {
 export default function updatePart(
   part: Part,
   partProps: string,
-  updatedValue: string
+  updatedValue: string | boolean | number
 ) {
+  console.log(partProps);
+  console.log(updatedValue);
   const { ROLE, MIN_MD, MAX_MD, PREDICTED_MD, PREDICTED_MD_FORMULA } =
     partPropsContstants;
 

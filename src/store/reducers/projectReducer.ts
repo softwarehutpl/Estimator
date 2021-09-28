@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -8,7 +8,8 @@ import findIndexPart from "../actions/findIndexPart";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Type, Part, Main } from "../../types/Interface";
+import { Part, RawDevelopmentEffortSum, Type } from "../../types/Interface";
+import updatePart from "../actions/updatePart";
 
 const projectSlice = createSlice({
   name: "project",
@@ -171,6 +172,8 @@ const projectSlice = createSlice({
           : task
       );
 
+      console.log(updatedTasks);
+
       section.tasks = updatedTasks;
     },
     updateSubtask: (
@@ -225,6 +228,34 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updateParts: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        partName: string;
+        partProps: string;
+        updatedValue: string | boolean | number;
+      }>
+    ) => {
+      const project =
+        state.projects[findIndexProject(state, action.payload.projectId)];
+
+      const rawDevelopmentEffortSum =
+        project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
+
+      const newState =
+        rawDevelopmentEffortSum.parts.map((part) =>
+          part.name === action.payload.partName
+            ? updatePart(
+                part,
+                action.payload.partProps,
+                action.payload.updatedValue
+              )
+            : part
+        ) || [];
+
+      rawDevelopmentEffortSum.parts = newState;
+    },
   },
 });
 
@@ -240,6 +271,7 @@ export const {
   updateTasks,
   updateSubtask,
   reorder,
+  updateParts,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
