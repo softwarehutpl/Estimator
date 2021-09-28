@@ -225,22 +225,6 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
-    updatePart: (
-      state,
-      action: PayloadAction<{
-        projectId: string;
-        partName: string;
-        parts: Part[];
-      }>
-    ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
-      const part = project.rawDevelopmentEffortSum?.parts[findIndexPart(
-        project,
-        action.payload.partName)];
-        //TODO: dla Mariusza
-      );
-    },
   },
 });
 
@@ -256,7 +240,6 @@ export const {
   updateTasks,
   updateSubtask,
   reorder,
-  updatePart,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
