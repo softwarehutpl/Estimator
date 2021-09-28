@@ -1,0 +1,13 @@
+.btn {
+  border: none;
+  background-color: transparent;
+  align-self: center;
+  padding: 0.5rem 1rem;
+  color: #607d8b;
+  &:hover {
+    background: rgba(96, 125, 139, 0.04);
+  }
+}
+.icon {
+  margin-right: 0.5rem;
+}
