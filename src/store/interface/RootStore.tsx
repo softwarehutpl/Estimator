@@ -15,6 +15,7 @@ import {
   updateTasks,
   delSubtask,
   updateSubtask,
+  updateParts,
 } from "../reducers/projectReducer";
 import {
   getProjectsDataSelector,
@@ -32,6 +33,8 @@ export default function RootStore() {
   const [updatedValue, setUpdatedValue] = useState("");
   const [projectId, setProjectId] = useState("");
   const [subtaskId, setSubtaskId] = useState("");
+  const [partProps, setPartProps] = useState("");
+  const [partName, setPartName] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const dispatch = useAppDispatch();
 
@@ -405,6 +408,51 @@ export default function RootStore() {
         }}
       >
         updateSubtask
+      </button>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE PART -----------
+      </p>
+      <br />
+      <input
+        type="text"
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder="Project ID To Update Subtask"
+      />
+      <input
+        type="text"
+        value={partName}
+        onChange={(event) => setPartName(event.target.value)}
+        placeholder="Part name To Update Subtask"
+      />
+      <input
+        type="text"
+        value={partProps}
+        onChange={(event) => setPartProps(event.target.value)}
+        placeholder="Part Props To Update Subtask"
+      />
+      <input
+        type="text"
+        value={updatedValue}
+        onChange={(event) => setUpdatedValue(event.target.value)}
+        placeholder="Updated value"
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            updateParts({
+              projectId: projectId,
+              partProps: partProps,
+              partName: partName,
+              updatedValue: updatedValue,
+            })
+          );
+          setProjectId("");
+          setPartProps("");
+          setPartName("");
+        }}
+      >
+        updatePart
       </button>
     </div>
   );

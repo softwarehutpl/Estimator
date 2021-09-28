@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -7,7 +7,9 @@ import findIndexProject from "../actions/findIndexProject";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Type } from "../../types/Interface";
+import { Part, Type } from "../../types/Interface";
+import updatePart from "../actions/updatePart";
+import findIndexPart from "../actions/findIndexPart";
 
 const projectSlice = createSlice({
   name: "project",
@@ -224,6 +226,43 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updateParts: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        partName: string;
+        partProps: string;
+        updatedValue: string | boolean | number;
+
+        // parts: Part[];`
+      }>
+    ) => {
+      const project =
+        state.projects[findIndexProject(state, action.payload.projectId)];
+
+      const rawDevelopmentEffortSum = project.rawDevelopmentEffortSum;
+
+      // const parts = rawDevelopmentEffortSum.parts;
+
+      // parts.map((part) =>
+      //   part.name === action.payload.partName
+      //     ? part === updatePart(part, "role", "costam")
+      //     : part
+      // );
+
+      const newParts = rawDevelopmentEffortSum?.parts.map((part) =>
+        part.name === action.payload.partName
+          ? (part = updatePart(
+              part,
+              "role",
+              "costam"
+              // action.payload.partName,
+              // action.payload.updatedValue
+            ))
+          : part
+      );
+      console.log(newParts);
+    },
   },
 });
 
@@ -239,6 +278,7 @@ export const {
   updateTasks,
   updateSubtask,
   reorder,
+  updateParts,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;
