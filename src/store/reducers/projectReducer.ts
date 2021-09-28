@@ -220,17 +220,9 @@ const projectSlice = createSlice({
           ?.sections?.find((section) => section.name === sectionName)?.tasks ||
         [];
 
-      const [removedTask] =
-        sectionTasks?.splice(sectionTasks.length - 1, 1) || [];
-      sectionTasks?.splice(action.payload.endIndex + 1, 0, removedTask);
+      const [removedTask] = sectionTasks?.splice(startIndex, 1);
 
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
-
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
-
-      section.tasks = sectionTasks;
+      sectionTasks?.splice(endIndex, 0, removedTask);
     },
   },
 });
