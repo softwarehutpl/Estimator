@@ -7,5 +7,5 @@ export default function findIndexPart(
   const indexPart = rawDevelopmentEffortSum.parts.findIndex(
     (part) => part.name === partName
   );
-  return indexPart;
+  return indexPart || 0;
 }

@@ -7,9 +7,10 @@ import findIndexProject from "../actions/findIndexProject";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Part, Type } from "../../types/Interface";
+import { Part, RawDevelopmentEffortSum, Type } from "../../types/Interface";
 import updatePart from "../actions/updatePart";
 import findIndexPart from "../actions/findIndexPart";
+import { parseJsonText } from "typescript";
 
 const projectSlice = createSlice({
   name: "project",
@@ -172,6 +173,8 @@ const projectSlice = createSlice({
           : task
       );
 
+      console.log(updatedTasks);
+
       section.tasks = updatedTasks;
     },
     updateSubtask: (
@@ -240,28 +243,21 @@ const projectSlice = createSlice({
       const project =
         state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const rawDevelopmentEffortSum = project.rawDevelopmentEffortSum;
+      const rawDevelopmentEffortSum =
+        project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
 
-      // const parts = rawDevelopmentEffortSum.parts;
+      const newState =
+        rawDevelopmentEffortSum.parts.map((part) =>
+          part.name === action.payload.partName
+            ? updatePart(
+                part,
+                action.payload.partProps,
+                action.payload.updatedValue
+              )
+            : part
+        ) || [];
 
-      // parts.map((part) =>
-      //   part.name === action.payload.partName
-      //     ? part === updatePart(part, "role", "costam")
-      //     : part
-      // );
-
-      const newParts = rawDevelopmentEffortSum?.parts.map((part) =>
-        part.name === action.payload.partName
-          ? (part = updatePart(
-              part,
-              "role",
-              "costam"
-              // action.payload.partName,
-              // action.payload.updatedValue
-            ))
-          : part
-      );
-      console.log(newParts);
+      rawDevelopmentEffortSum.parts = newState;
     },
   },
 });

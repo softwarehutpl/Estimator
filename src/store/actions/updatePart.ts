@@ -13,6 +13,8 @@ export default function updatePart(
   partProps: string,
   updatedValue: string | boolean | number
 ) {
+  console.log(partProps);
+  console.log(updatedValue);
   const { ROLE, MIN_MD, MAX_MD, PREDICTED_MD, PREDICTED_MD_FORMULA } =
     partPropsContstants;
 
@@ -28,5 +30,6 @@ export default function updatePart(
         : part.predictedMdFormula,
     role: partProps === ROLE ? (updatedValue as string) : part.role,
   };
+  console.log(updatePart);
   return updatePart;
 }

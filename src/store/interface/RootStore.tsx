@@ -450,6 +450,7 @@ export default function RootStore() {
           setProjectId("");
           setPartProps("");
           setPartName("");
+          setUpdatedValue("");
         }}
       >
         updatePart
