@@ -2,7 +2,7 @@
 import ReactExport from "react-data-export";
 import { SymbolDisplayPartKind } from "typescript";
 import myProject from "./exampleProject";
-import { useAppSelector } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getProjectSelector } from "../../store/selectors/selectors";
 import * as XLSX from "xlsx";
 import { resolveCname } from "dns";
@@ -33,6 +33,8 @@ import projectReducer from "../../store/reducers/projectReducer";
 // };
 
 function Import() {
+
+  const dispatch = useAppDispatch();
 
   function getSectionName(sectionId){
     switch (sectionId) {
@@ -71,10 +73,11 @@ function Import() {
 
       if(data[i]._1 === "") break; // pusta linijka po taskach
 
-      let name = data[i]._1; // nazwa sekcji/taska
+      
       let risk = data[i]._8; // risk - sekcja: number, task: string
       
       if(typeof(risk) == 'number') { //if risk: number => section
+        let name = data[i]._1; // nazwa sekcji
         let section = newProject.sections.find(section => section.name === name);
         section.maxMd = data[i]._6;
         section.minMd = data[i]._5;
@@ -82,63 +85,63 @@ function Import() {
         section.risk = risk*100; // 0.2162 
       }
       else{ // risk: string => task/group/subtask
-        
+
         if(risk === "") { // risk === "" => add group
+          let name = data[i]._1; // nazwa taska
           let groupTask = createTask(getSectionName(data[i]._4), name, Type.Group);
           newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(groupTask);
         }
        
         else {  // risk !== "" => add task/subtask
-          if (name.slice(0,4) !== "    ") { // name != "    ...." => task 
-            
+
+          let name = data[i]._1; // nazwa taska
+          if (name.slice(0,4) !== "    ") { // name != "    ...." => task             
             let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
             newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
+            console.log(newTask);
           }
-          if (name.slice(0,4) === "    ") { // name = "    ...." => subtask 
-            console.log("subtask!!!!!!!!1:");
-            console.log(name);
+
+          if (name.slice(0,4) === "    ") { // name = "    ...." => subtask
+            let j = i;
+            let subtasks = [];
+            while(data[j]._1.slice(0,4) === "    ")
+            {
+              console.log("subtask!!!!!!!!1:");
+              console.log(data[j]._1);
+  
+              let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);   
+              
+              subtasks.push(newSubtask);  
+              // console.log(subtasks);
+              j++;
+            }
+            i = j;
             let lastGroupTask = (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1));
-            console.log("lastGroupTask");
-            // console.log(lastGroupTask);
-            // let subtaskTask = createTask(getSectionName(data[i]._4), name.trim(), Type.Task);
-            // lastGroupTask.subtasks.push(subtaskTask);
-            let projectId = newProject.projectId;
-            let sectionName = (getSectionName(data[i]._4));
             let taskId = lastGroupTask.id;
+            // console.log("lastGroupTask:");
 
-            console.log(projectId+" "+sectionName+" "+taskId+" "+name);
+            // console.log(lastGroupTask);
+            // console.log(lastGroupTask.id);
+            let group = newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.find(task => task.id === taskId);
+            console.log(group);
+            group.subtasks = subtasks.reverse();
+            subtasks = [];
+            i = i-1;
+
+            // let foundtask = newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId);//.subtasks.push(newSubtask);
+            // let foundtask = newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId);
+
+           
+            // console.log("found task:");
+            // console.log(foundtask);
+            // console.log(foundtask?.type)
+
+            // if(foundtask.role === newSubtask.role && foundtask.type === Type.Group) {
+            //   foundtask.subtasks.push(newSubtask);
+            // }
+                          
             
-            // addSubtask({
-            //   projectId: projectId,
-            //   sectionName: sectionName,
-            //   taskId: taskId,
-            //   subtaskName: name,
-            // });
-
-            let newProjectState = projectReducer(
-              newProject,
-              addSubtask({
-                projectId: projectId,
-                sectionName: sectionName,
-                taskId: taskId,
-                subtaskName: name,
-              })
-            );
-
-            newProject = newProjectState;
-
-            // newProject = projectReducer(
-            //   newProject,
-            //   addSubtask({
-            //     projectId: projectId,
-            //     sectionName: sectionName,
-            //     taskId: taskId,
-            //     subtaskName: name,
-            //   })
-            // );
-
-
-
+            // newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId).subtasks.push(newSubtask);
           }          
         }
 
