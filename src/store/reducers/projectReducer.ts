@@ -13,11 +13,14 @@ import {
   RowUpdateData,
   Type,
   UpdateData,
+  Part,
+  RawDevelopmentEffortSum,
 } from '../../types/Interface';
 import { RootState } from '../store';
 import { recalculateTask } from '../../utils/reclaculateTask';
 import { sectionUpdate } from '../actions/sectionUpdate';
 import { recalculateRow } from '../../utils/recalculateRow';
+import updatePart from '../actions/updatePart';
 
 export const recalculateRowAfterUpdate = createAsyncThunk(
   'project/recalculateAfterUpdate',
@@ -267,6 +270,8 @@ const projectSlice = createSlice({
           : task
       );
 
+      console.log(updatedTasks);
+
       section.tasks = updatedTasks;
     },
     updateSubtask: (
@@ -314,6 +319,28 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updateParts: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        partName: string;
+        partProps: string;
+        updatedValue: string | boolean | number;
+      }>
+    ) => {
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
+
+      const rawDevelopmentEffortSum = project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
+
+      const newState =
+        rawDevelopmentEffortSum.parts.map((part) =>
+          part.name === action.payload.partName
+            ? updatePart(part, action.payload.partProps, action.payload.updatedValue)
+            : part
+        ) || [];
+
+      rawDevelopmentEffortSum.parts = newState;
+    },
   },
 });
 
@@ -330,6 +357,7 @@ export const {
   updateSubtask,
   updateSection,
   reorder,
+  updateParts,
 } = projectSlice.actions;
 
 const projectReducer = projectSlice.reducer;

@@ -9,6 +9,7 @@ import ExportDialog from '../Dialogs/ExportDialog';
 import InviteDialog from '../Dialogs/InviteDialog';
 import JoinDialog from '../Dialogs/JoinDialog';
 import TerminateDialog from '../Dialogs/TerminateDialog';
+import Export from '../Export/Export';
 //Types
 import { Params, Project } from '../../types/Interface';
 //Router
@@ -27,7 +28,6 @@ const Nav: FC<Props> = () => {
   const { projectId } = useParams<Params>();
   const project = useAppSelector(getProjectSelector(projectId));
   const projectsData = useAppSelector(getProjectsDataSelector());
-
   //Dialogs state
   const [selectedProject, setSelectedProject] = useState(projectId && project.projectName);
   const [importDialog, setImportDialog] = useState(false);
@@ -50,7 +50,6 @@ const Nav: FC<Props> = () => {
   }, [projectId]);
 
   const selectHandler = (e: DropdownChangeParams) => {
-    //TODO: handel Route here
     setSelectedProject(e.target.value);
     history.push(`/project/${e.target.value}`);
   };
@@ -70,6 +69,18 @@ const Nav: FC<Props> = () => {
         autoFocus
         className='p-button-secondary p-button-text'
       />
+    </div>
+  );
+
+  const exportDialogFooter = (
+    <div className={styles.exportFooter}>
+      <Button
+        label='No'
+        icon='pi pi-times'
+        onClick={() => setExportDialog(false)}
+        className='p-button-secondary p-button-text'
+      />
+      <Export />
     </div>
   );
 
@@ -118,7 +129,7 @@ const Nav: FC<Props> = () => {
         visible={exportDialog}
         onHide={() => setExportDialog(false)}
         modal
-        footer={dialogFooter}
+        footer={exportDialogFooter}
       >
         <ExportDialog />
       </Dialog>

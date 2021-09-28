@@ -15,6 +15,7 @@ import {
   updateTasks,
   delSubtask,
   updateSubtask,
+  updateParts,
 } from '../reducers/projectReducer';
 import { getProjectsDataSelector, getProjectSelector } from '../selectors/selectors';
 
@@ -29,12 +30,15 @@ export default function RootStore() {
   const [updatedValue, setUpdatedValue] = useState('');
   const [projectId, setProjectId] = useState('');
   const [subtaskId, setSubtaskId] = useState('');
+  const [partProps, setPartProps] = useState('');
+  const [partName, setPartName] = useState('');
   const projects = useAppSelector((state) => state.projects.projects);
   const dispatch = useAppDispatch();
 
   // const project = useAppSelector(
-  //   getProjectSelector("798f3fb6-76c4-41d9-88e1-9ed46fda1d58")
+  //   getProjectSelector("43825af1-68cf-4912-9598-8950cc0a3331")
   // ); //=> PUSH PROJECT ID!
+  // console.log(project);
 
   const projectsData = useAppSelector(getProjectsDataSelector());
 
@@ -390,6 +394,50 @@ export default function RootStore() {
         }}
       >
         updateSubtask
+      </button>
+      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- UPDATE PART -----------</p>
+      <br />
+      <input
+        type='text'
+        value={projectId}
+        onChange={(event) => setProjectId(event.target.value)}
+        placeholder='Project ID To Update Subtask'
+      />
+      <input
+        type='text'
+        value={partName}
+        onChange={(event) => setPartName(event.target.value)}
+        placeholder='Part name To Update Subtask'
+      />
+      <input
+        type='text'
+        value={partProps}
+        onChange={(event) => setPartProps(event.target.value)}
+        placeholder='Part Props To Update Subtask'
+      />
+      <input
+        type='text'
+        value={updatedValue}
+        onChange={(event) => setUpdatedValue(event.target.value)}
+        placeholder='Updated value'
+      />
+      <button
+        onClick={() => {
+          dispatch(
+            updateParts({
+              projectId: projectId,
+              partProps: partProps,
+              partName: partName,
+              updatedValue: updatedValue,
+            })
+          );
+          setProjectId('');
+          setPartProps('');
+          setPartName('');
+          setUpdatedValue('');
+        }}
+      >
+        updatePart
       </button>
     </div>
   );

@@ -57,6 +57,18 @@ export interface Part {
   predictedMd: number;
   predictedMdFormula: string;
 }
+
+export interface Part {
+  name: string;
+  procent: number;
+  role: string;
+  minMd: number;
+  minMdFormula: string;
+  maxMd: number;
+  maxMdFormula: string;
+  predictedMd: number;
+  predictedMdFormula: string;
+}
 export interface Total {
   name: string;
   minMd: number;
