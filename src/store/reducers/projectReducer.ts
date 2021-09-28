@@ -4,10 +4,11 @@ import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
 import TableTasks from "../../components/Table/TableTasks/TableTasks";
 import findIndexProject from "../actions/findIndexProject";
+import findIndexPart from "../actions/findIndexPart";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Type } from "../../types/Interface";
+import { Type, Part, Main } from "../../types/Interface";
 
 const projectSlice = createSlice({
   name: "project",
