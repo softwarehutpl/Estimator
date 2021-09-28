@@ -69,11 +69,10 @@ function Import() {
     newProject.effort= parseInt((data[5]._7).substring(0, (data[5]._7).length - 1)); //"12h" => 12
 
     let i;
-    for(i = 10; i < data.length; i++){
+    for(i = 10; i < data.length; i++) {
 
       if(data[i]._1 === "") break; // pusta linijka po taskach
 
-      
       let risk = data[i]._8; // risk - sekcja: number, task: string
       
       if(typeof(risk) == 'number') { //if risk: number => section
@@ -86,7 +85,7 @@ function Import() {
       }
       else{ // risk: string => task/group/subtask
 
-        if(risk === "") { // risk === "" => add group
+        if(risk === "" || risk == undefined) { // risk === "" => add group
           let name = data[i]._1; // nazwa taska
           let groupTask = createTask(getSectionName(data[i]._4), name, Type.Group);
           newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(groupTask);
@@ -97,8 +96,12 @@ function Import() {
           let name = data[i]._1; // nazwa taska
           if (name.slice(0,4) !== "    ") { // name != "    ...." => task             
             let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
+            newTask.minMd = data[i]._5;
+            newTask.maxMd = data[i]._6;
+            newTask.predictedMd = data[i]._7;
+            newTask.risk = data[i]._8;
             newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
-            console.log(newTask);
+            
           }
 
           if (name.slice(0,4) === "    ") { // name = "    ...." => subtask
@@ -106,58 +109,79 @@ function Import() {
             let subtasks = [];
             while(data[j]._1.slice(0,4) === "    ")
             {
-              console.log("subtask!!!!!!!!1:");
-              console.log(data[j]._1);
-  
-              let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);   
-              
+              let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);
+              newSubtask.minMd = data[j]._5;
+              newSubtask.maxMd = data[j]._6;
+              newSubtask.predictedMd = data[j]._7;
+              newSubtask.risk = data[j]._8;
+
+              // creating subtasks list
               subtasks.push(newSubtask);  
-              // console.log(subtasks);
               j++;
             }
             i = j;
             let lastGroupTask = (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1));
             let taskId = lastGroupTask.id;
-            // console.log("lastGroupTask:");
-
-            // console.log(lastGroupTask);
-            // console.log(lastGroupTask.id);
             let group = newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.find(task => task.id === taskId);
-            console.log(group);
-            group.subtasks = subtasks.reverse();
+            // adding subtasks to group
+            group.subtasks = subtasks;
             subtasks = [];
-            i = i-1;
-
-            // let foundtask = newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId);//.subtasks.push(newSubtask);
-            // let foundtask = newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId);
-
-           
-            // console.log("found task:");
-            // console.log(foundtask);
-            // console.log(foundtask?.type)
-
-            // if(foundtask.role === newSubtask.role && foundtask.type === Type.Group) {
-            //   foundtask.subtasks.push(newSubtask);
-            // }
-                          
-            
-            // newProject.sections.find(section => section.name === sectionName).tasks.find(task => task.id === taskId).subtasks.push(newSubtask);
-          }          
+            --i;
+          }
         }
+      }   
+    }
+    
+    i++; // wskazuje na index "raw development..."" 
 
-        
-        }
-        // -----
-      
+    newProject.rawDevelopmentEffortSum.name = data[i]._1;
+    newProject.rawDevelopmentEffortSum.main.minMd = data[i]._5;
+    newProject.rawDevelopmentEffortSum.main.maxMd = data[i]._6;
+    newProject.rawDevelopmentEffortSum.main.predictedMd = data[i]._7;
+    newProject.rawDevelopmentEffortSum.main.risk = data[i]._8*100;
 
-      
-  }
+    i++; // wskazuje na index "raw development... . parts"
+    let partsIndex = 0;
+    for(i; i < data.length; i++) {
 
-    // console.log("index:");
-    // console.log(i);
-    // console.log("data.length:");
-    // console.log(data.length);
+      if(data[i]._1 === "") break; // pusta linijka po "raw development... . parts"
 
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].name = data[i]._1;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].procent = data[i]._3;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].role = data[i]._4;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].minMd = data[i]._5;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].maxMd = data[i]._6;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].predictedMd = data[i]._7;
+
+      partsIndex++;
+    }
+    
+    i++; // i wskazuje na index Total(MD)
+    newProject.summary[0].minMd = data[i]._5; // Total(MD) min
+    newProject.summary[0].maxMd = data[i]._6; // Total(MD) max
+    newProject.summary[0].predictedMd = data[i]._7; // Total(MD) predicted
+    newProject.summary[0].risk = data[i]._8*100; // Total(MD) risk
+
+    i++; // i wskazuje na index Per Team Member
+    newProject.summary[1].minMd = data[i]._5; // Per Team Member min
+    newProject.summary[1].maxMd = data[i]._6; // Per Team Member max
+    newProject.summary[1].predictedMd = data[i]._7; // Per Team Member predicted
+
+    i++; // i wskazuje na index Est. Delivery Date:
+    newProject.summary[2].estDeliveryDate = data[i]._5; // estDeliveryDate
+
+    if(i !== data.length-2){
+      i = i+2;
+      let assumptionIndex = 1;
+      for(i; i<= data.length-1; i++){
+        // adding important assumptions
+        newProject.assumptions.push({id:assumptionIndex, text:data[i]._1});
+        assumptionIndex++;
+      }
+    }
+
+    
+    
     console.log("data:");
     console.log(data);
     console.log("new project:");
@@ -191,11 +215,7 @@ function Import() {
     });
 
     promise.then((d)=>{
-
       convertJsonToProjectStructure(d);
-
-
-      // console.log(d);
     })
 
   };
@@ -206,7 +226,6 @@ function Import() {
       <p>import</p>
       <input type="file" onChange={(e) => {
           const file = e.target.files[0];
-
           readExcel(file);
         }
       } />
