@@ -27,6 +27,7 @@ const TaskCommentInput: FC<IProps> = ({
   const { text, isImportant } = comment;
 
   const [inputValue, setInputValue] = useState<string>(text);
+  const [previousKey, setPreviousKey] = useState<string>('');
 
   const dispatch = useAppDispatch();
 
@@ -166,14 +167,15 @@ const TaskCommentInput: FC<IProps> = ({
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     const { key } = e;
 
-    //TODO add key sequence CONTROL + I
+    setPreviousKey(key);
+
     if (key === PressableKeys.ENTER) {
       handleSaveComment();
       inputRef.current!.blur();
     } else if (key === PressableKeys.ESCAPE) {
       handleCancelComment();
       inputRef.current!.blur();
-    } else if (key === PressableKeys.CONTROL) {
+    } else if (key === PressableKeys.I && previousKey === PressableKeys.CONTROL) {
       handleToggleCommentImportant();
     } else if (key === PressableKeys.DELETE) {
       handleCommentDelete();

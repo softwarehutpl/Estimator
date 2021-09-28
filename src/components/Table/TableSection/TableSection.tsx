@@ -46,7 +46,6 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
       const start = source.index;
       const end = destination.index;
 
-      //TODO add recalculate after reorder??
       dispatch(reorder({ projectId, sectionName: section.name, startIndex: start, endIndex: end }));
     } else {
       //TODO add reorder reducer for moving between diffrent droppables

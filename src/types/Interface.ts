@@ -128,6 +128,7 @@ export enum PressableKeys {
   ESCAPE = 'Escape',
   CONTROL = 'Control',
   DELETE = 'Delete',
+  I = 'i',
 }
 export interface Params {
   projectId: string;
@@ -144,12 +145,23 @@ export enum Fields {
   COMMENT_TEXT = 'commentText',
   COMMENT_IMPORTANT = 'commentImportant',
 }
-//TODO delete later
-// export interface RowField {
-//   [key: string]: string;
-// }
+
 export interface Row {
   name: string;
   role: string;
   [key: string]: string;
+}
+
+export interface RowUpdateData {
+  projectId: string;
+  sectionName: string;
+}
+
+export interface DeleteData extends RowUpdateData {
+  taskId: string;
+  subtaskId: string;
+}
+export interface UpdateData extends DeleteData {
+  taskProps: string;
+  updatedValue: number | string;
 }

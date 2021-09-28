@@ -1,7 +1,7 @@
 import { FC, MouseEvent } from 'react';
 
 import { useAppDispatch } from '../../store/hooks';
-import { addSubtask, addTask, delSubtask, delTask } from '../../store/reducers/projectReducer';
+import { addSubtask, addTask, recalculateAfterDelete } from '../../store/reducers/projectReducer';
 
 import { Task, Type } from '../../types/Interface';
 
@@ -61,13 +61,14 @@ const ContextMenu: FC<IProps> = ({
   };
 
   const handleTaskDelete = () => {
-    //TODO recalculation after delete !!
-    if (!parentTaskId) {
-      dispatch(delTask({ projectId, sectionName, id: taskId }));
-      return;
-    }
-
-    dispatch(delSubtask({ projectId, sectionName, taskId: parentTaskId, subtaskId: taskId }));
+    dispatch(
+      recalculateAfterDelete({
+        projectId,
+        sectionName,
+        taskId: parentTaskId || taskId,
+        subtaskId: (parentTaskId && taskId) || '',
+      })
+    );
   };
 
   return (

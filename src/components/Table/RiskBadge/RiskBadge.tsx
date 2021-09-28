@@ -1,13 +1,12 @@
 import { Dispatch, FC, MouseEvent, SetStateAction } from 'react';
 import { useParams } from 'react-router';
 
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
+import { useAppDispatch } from '../../../store/hooks';
+import { recalculateAfterInputChange } from '../../../store/reducers/projectReducer';
 import { getSeverityLevel } from '../../../utils/getSeverityLevel';
-import { getProjectSelector } from '../../../store/selectors/selectors';
 import { riskMultiplicator } from '../../../constants/constants';
 
-import { Multiplicators, Params, Fields, Task, Project } from '../../../types/Interface';
+import { Multiplicators, Params, Fields } from '../../../types/Interface';
 
 import { Badge } from 'primereact/badge';
 import styles from './RiskBadge.module.scss';
@@ -33,75 +32,17 @@ const RiskBadge: FC<IProps> = ({
 
   const { projectId } = useParams<Params>();
 
-  const project: Project = useAppSelector(getProjectSelector(projectId));
-
-  const task = project.sections
-    ?.find((section) => section.name === sectionName)
-    ?.tasks.find((task) => task.id === taskId)!;
-
-  const subtask = project.sections
-    ?.find((section) => section.name === sectionName)
-    ?.tasks.find((task) => task.id === parentTaskId)
-    ?.subtasks?.find((subtask) => subtask.id === taskId)!;
-
-  const predictedValue = (data: Task, risk: string): number => {
-    if (!data) return 0;
-
-    const { maxMd, minMd } = data;
-
-    if (!maxMd || !minMd) return 0;
-
-    return ((maxMd - minMd) / 2) * riskMultiplicator[risk];
-  };
-
   const handleRiskChange = (newRisk: string) => {
-    //TODO add recalculate values !!
-
     if (risk === newRisk) return;
 
-    if (!parentTaskId) {
-      dispatch(
-        updateTasks({
-          projectId,
-          sectionName,
-          taskId,
-          taskProps: Fields.RISK,
-          updatedValue: newRisk,
-        })
-      );
-
-      dispatch(
-        updateTasks({
-          projectId,
-          sectionName,
-          taskId,
-          taskProps: Fields.PREDICTED_MD,
-          updatedValue: predictedValue(task, newRisk),
-        })
-      );
-
-      return;
-    }
-
     dispatch(
-      updateSubtask({
+      recalculateAfterInputChange({
         projectId,
         sectionName,
         taskId: parentTaskId || taskId,
-        subtaskId: taskId,
+        subtaskId: (parentTaskId && taskId) || '',
         taskProps: Fields.RISK,
         updatedValue: newRisk,
-      })
-    );
-
-    dispatch(
-      updateSubtask({
-        projectId,
-        sectionName,
-        taskId: parentTaskId,
-        subtaskId: taskId,
-        taskProps: Fields.PREDICTED_MD,
-        updatedValue: predictedValue(subtask, newRisk),
       })
     );
   };
