@@ -37,8 +37,6 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
     //TODO add action to persist reorder changes in store
     const { destination, source } = result;
 
-    // const newSectionTasks = [...section.tasks];
-
     if (!destination || !source) return;
 
     if (source.index === destination.index && source.droppableId === destination.droppableId)
@@ -48,9 +46,10 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
       const start = source.index;
       const end = destination.index;
 
-      //TODO add recalculate after reorder??
       dispatch(reorder({ projectId, sectionName: section.name, startIndex: start, endIndex: end }));
     } else {
+      //TODO add reorder reducer for moving between diffrent droppables
+
       // const start = source.index;
       // const [removedTask] = newSectionTasks.splice(start, 1);
       // const endTaksId = Number(destination.droppableId.split('droppable-')[1]);
@@ -63,8 +62,6 @@ const TableSection: FC<IProps> = ({ projectId, section }) => {
       //   task.id === endTaksId ? { ...task, subtasks: [...task.subtasks, removedTask] } : task
       // );
       return;
-
-      // setSections(getNewSections(result));
     }
 
     return;

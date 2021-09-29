@@ -44,7 +44,16 @@ const TableSubtasks: FC<IProps> = ({
           //   draggableId={`subtask-${subtask.id}`}
           //   index={9 + index}
           // >
-          //   <TableRow data={subtask} />
+          //   <TableDraggableRow
+          //     data={subtask}
+          //     key={subtask.id}
+          //     openedMenuId={openedMenuId}
+          //     orderNumber={index + 1}
+          //     parentOrderNumber={parentOrderNumber}
+          //     parentTaskId={taskId}
+          //     sectionName={sectionName}
+          //     setopenedMenuId={setopenedMenuId}
+          //   />
           // </DraggableWrapper>
         ))}
       </DroppableWrapper>

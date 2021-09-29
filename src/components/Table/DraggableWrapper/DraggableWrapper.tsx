@@ -13,6 +13,7 @@ const DraggableWrapper: FC<IProps> = ({ children, draggableId, index }) => {
   return (
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
+        //TODO add classnames
         return (
           <div
             ref={provided.innerRef}

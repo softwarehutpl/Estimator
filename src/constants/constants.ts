@@ -1,6 +1,6 @@
-import { RiskMultiplicator, RowField } from '../types/Interface';
+import { RiskMultiplicator, Row } from '../types/Interface';
 
-export const rowOrder: RowField[] = [
+export const rowOrder: Row[] = [
   { name: 'Id', role: 'sectionId' },
   {
     name: 'Group/Task',

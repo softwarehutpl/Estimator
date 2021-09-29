@@ -1,47 +1,141 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
-import initialState from "../initials/initialState";
-import createProject from "../actions/createProject";
-import createTask from "../actions/createTask";
-import TableTasks from "../../components/Table/TableTasks/TableTasks";
-import findIndexProject from "../actions/findIndexProject";
-import findIndexPart from "../actions/findIndexPart";
-import findIndexSection from "../actions/findIndexSection";
-import findIndexTask from "../actions/findIndexSubtask";
-import updateTask from "../actions/updateTask";
-import { Part, RawDevelopmentEffortSum, Type } from "../../types/Interface";
-import updatePart from "../actions/updatePart";
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import initialState from '../initials/initialState';
+import createProject from '../actions/createProject';
+import createTask from '../actions/createTask';
+import findIndexProject from '../actions/findIndexProject';
+import findIndexSection from '../actions/findIndexSection';
+import findIndexTask from '../actions/findIndexSubtask';
+import updateTask from '../actions/updateTask';
+import {
+  DeleteData,
+  Fields,
+  Projects,
+  RowUpdateData,
+  Type,
+  UpdateData,
+  Part,
+  RawDevelopmentEffortSum,
+} from '../../types/Interface';
+import { RootState } from '../store';
+import { recalculateTask } from '../../utils/reclaculateTask';
+import { sectionUpdate } from '../actions/sectionUpdate';
+import { recalculateRow } from '../../utils/recalculateRow';
+import updatePart from '../actions/updatePart';
+
+export const recalculateRowAfterUpdate = createAsyncThunk(
+  'project/recalculateAfterUpdate',
+  async (props: RowUpdateData, { dispatch, getState }) => {
+    const { projectId, sectionName } = props;
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const section = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName);
+
+    if (!section) return;
+    const sectionValuesAfterRecalc = recalculateRow(section.tasks);
+
+    dispatch(
+      updateSection({
+        projectId,
+        sectionName,
+        updatedValues: sectionValuesAfterRecalc,
+      })
+    );
+  }
+);
+
+export const recalculateAfterDelete = createAsyncThunk(
+  'project/recalculateAfterDelete',
+  async (props: DeleteData, { dispatch, getState }) => {
+    const { projectId, sectionName, subtaskId } = props;
+
+    if (subtaskId) {
+      dispatch(delSubtask(props));
+    } else {
+      dispatch(delTask(props));
+    }
+
+    dispatch(recalculateRowAfterUpdate({ projectId, sectionName }));
+  }
+);
+
+export const recalculateAfterInputChange = createAsyncThunk(
+  'project/recalculateInputNumber',
+  async (props: UpdateData, { dispatch, getState }) => {
+    const { projectId, sectionName, taskId, subtaskId } = props;
+
+    if (subtaskId) {
+      dispatch(updateSubtask(props));
+    } else {
+      dispatch(updateTasks(props));
+    }
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const task = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName)
+      ?.tasks.find((task) => task.id === taskId);
+
+    const subtask = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName)
+      ?.tasks.find((task) => task.id === taskId)
+      ?.subtasks?.find((subtask) => subtask.id === subtaskId);
+
+    if (subtaskId) {
+      const predictedMd = recalculateTask(subtask);
+
+      dispatch(
+        updateSubtask({
+          projectId,
+          sectionName,
+          taskId,
+          subtaskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedMd,
+        })
+      );
+    } else {
+      const predictedMd = recalculateTask(task);
+
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedMd,
+        })
+      );
+    }
+
+    dispatch(recalculateRowAfterUpdate({ projectId, sectionName }));
+  }
+);
 
 const projectSlice = createSlice({
-  name: "project",
+  name: 'project',
   initialState,
   reducers: {
     clearProjects: (state) => {
       state.projects = [];
     },
-    addProject: (
-      state,
-      action: PayloadAction<{ projectName: string; projectId: string }>
-    ) => {
+    addProject: (state, action: PayloadAction<{ projectName: string; projectId: string }>) => {
       action.payload.projectName.length === 0
-        ? console.log("Project name is empty!") // error handling add!!!
-        : state.projects.find(
-            (project) => project.projectName === action.payload.projectName
-          )
-        ? console.log("The project with the given title exists") // error handling add!!!
-        : state.projects.push(
-            createProject(action.payload.projectName, action.payload.projectId)
-          );
+        ? console.log('Project name is empty!') // error handling add!!!
+        : state.projects.find((project) => project.projectName === action.payload.projectName)
+        ? console.log('The project with the given title exists') // error handling add!!!
+        : state.projects.push(createProject(action.payload.projectName, action.payload.projectId));
     },
     delProject: (state, action: PayloadAction<{ projectId: string }>) => {
-      state.projects.find(
-        (project) => project.projectId === action.payload.projectId
-      )
+      state.projects.find((project) => project.projectId === action.payload.projectId)
         ? (state.projects = state.projects.filter(
             (project) => project.projectId !== action.payload.projectId
           ))
-        : console.log(
-            `Dont find project with ID "${action.payload.projectId}"`
-          );
+        : console.log(`Dont find project with ID "${action.payload.projectId}"`);
     },
     addTask: (
       state,
@@ -55,11 +149,9 @@ const projectSlice = createSlice({
     ) => {
       const setInIndex = action.payload.setInIndex ?? 0;
 
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
       const newTask = createTask(
         action.payload.sectionName,
@@ -74,18 +166,14 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         sectionName: string;
-        id: string;
+        taskId: string;
       }>
     ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
-      const newTasks = section.tasks.filter(
-        (task) => task.id !== action.payload.id
-      );
+      const newTasks = section.tasks.filter((task) => task.id !== action.payload.taskId);
 
       section.tasks = newTasks;
     },
@@ -99,20 +187,15 @@ const projectSlice = createSlice({
         setInIndex?: number;
       }>
     ) => {
-      const setInIndex = action.payload.setInIndex ?? 0;
+      const setInIndex = action.payload.setInIndex || 0;
 
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
       const task = section.tasks[findIndexTask(section, action.payload.taskId)];
 
-      const newSubtask = createTask(
-        action.payload.sectionName,
-        action.payload.subtaskName
-      );
+      const newSubtask = createTask(action.payload.sectionName, action.payload.subtaskName);
 
       // one test faild -> fcn set new value in props index..
       // test expected new value in last index of array
@@ -132,11 +215,9 @@ const projectSlice = createSlice({
         subtaskId: string;
       }>
     ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
       const task = section.tasks[findIndexTask(section, action.payload.taskId)];
 
@@ -145,6 +226,29 @@ const projectSlice = createSlice({
       );
 
       task.subtasks = newSubtasks;
+    },
+    updateSection: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        sectionName: string;
+        updatedValues: {
+          maxMd: number;
+          minMd: number;
+          predictedMd: number;
+          risk: number;
+        };
+      }>
+    ) => {
+      const { projectId, sectionName, updatedValues } = action.payload;
+
+      const project = state.projects[findIndexProject(state, projectId)];
+
+      const newSections = project.sections.map((section) =>
+        section.name !== sectionName ? section : sectionUpdate(section, updatedValues)
+      );
+
+      project.sections = newSections;
     },
     updateTasks: (
       state,
@@ -156,19 +260,13 @@ const projectSlice = createSlice({
         updatedValue: string | number | boolean;
       }>
     ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
       const updatedTasks = section.tasks.map((task) =>
         task.id === action.payload.taskId
-          ? updateTask(
-              task,
-              action.payload.taskProps,
-              action.payload.updatedValue
-            )
+          ? updateTask(task, action.payload.taskProps, action.payload.updatedValue)
           : task
       );
 
@@ -187,21 +285,15 @@ const projectSlice = createSlice({
         updatedValue: string | boolean | number;
       }>
     ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const section =
-        project.sections[findIndexSection(project, action.payload.sectionName)];
+      const section = project.sections[findIndexSection(project, action.payload.sectionName)];
 
       const task = section.tasks[findIndexTask(section, action.payload.taskId)];
 
       const updatedSubtask = task.subtasks?.map((subtask) =>
         subtask.id === action.payload.subtaskId
-          ? updateTask(
-              subtask,
-              action.payload.taskProps,
-              action.payload.updatedValue
-            )
+          ? updateTask(subtask, action.payload.taskProps, action.payload.updatedValue)
           : subtask
       );
 
@@ -221,8 +313,7 @@ const projectSlice = createSlice({
       const sectionTasks =
         state.projects
           .find((project) => project.projectId === projectId)
-          ?.sections?.find((section) => section.name === sectionName)?.tasks ||
-        [];
+          ?.sections?.find((section) => section.name === sectionName)?.tasks || [];
 
       const [removedTask] = sectionTasks?.splice(startIndex, 1);
 
@@ -237,20 +328,14 @@ const projectSlice = createSlice({
         updatedValue: string | boolean | number;
       }>
     ) => {
-      const project =
-        state.projects[findIndexProject(state, action.payload.projectId)];
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
-      const rawDevelopmentEffortSum =
-        project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
+      const rawDevelopmentEffortSum = project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
 
       const newState =
         rawDevelopmentEffortSum.parts.map((part) =>
           part.name === action.payload.partName
-            ? updatePart(
-                part,
-                action.payload.partProps,
-                action.payload.updatedValue
-              )
+            ? updatePart(part, action.payload.partProps, action.payload.updatedValue)
             : part
         ) || [];
 
@@ -270,6 +355,7 @@ export const {
   delSubtask,
   updateTasks,
   updateSubtask,
+  updateSection,
   reorder,
   updateParts,
 } = projectSlice.actions;
