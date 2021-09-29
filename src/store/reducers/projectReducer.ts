@@ -1,16 +1,120 @@
-import { createSlice, current, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
-import TableTasks from "../../components/Table/TableTasks/TableTasks";
 import findIndexProject from "../actions/findIndexProject";
-import findIndexPart from "../actions/findIndexPart";
 import findIndexSection from "../actions/findIndexSection";
 import findIndexTask from "../actions/findIndexSubtask";
 import updateTask from "../actions/updateTask";
-import { Part, RawDevelopmentEffortSum, Type } from "../../types/Interface";
-import updatePart from "../actions/updatePart";
+import {
+  DeleteData,
+  Fields,
+  Projects,
+  RowUpdateData,
+  Type,
+  UpdateData,
+  Part,
+  RawDevelopmentEffortSum,
+} from "../../types/Interface";
+import { RootState } from "../store";
+import { recalculateTask } from "../../utils/reclaculateTask";
 import { sectionUpdate } from "../actions/sectionUpdate";
+import { recalculateRow } from "../../utils/recalculateRow";
+import updatePart from "../actions/updatePart";
+
+export const recalculateRowAfterUpdate = createAsyncThunk(
+  "project/recalculateAfterUpdate",
+  async (props: RowUpdateData, { dispatch, getState }) => {
+    const { projectId, sectionName } = props;
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const section = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName);
+
+    if (!section) return;
+    const sectionValuesAfterRecalc = recalculateRow(section.tasks);
+
+    dispatch(
+      updateSection({
+        projectId,
+        sectionName,
+        updatedValues: sectionValuesAfterRecalc,
+      })
+    );
+  }
+);
+
+export const recalculateAfterDelete = createAsyncThunk(
+  "project/recalculateAfterDelete",
+  async (props: DeleteData, { dispatch, getState }) => {
+    const { projectId, sectionName, subtaskId } = props;
+
+    if (subtaskId) {
+      dispatch(delSubtask(props));
+    } else {
+      dispatch(delTask(props));
+    }
+
+    dispatch(recalculateRowAfterUpdate({ projectId, sectionName }));
+  }
+);
+
+export const recalculateAfterInputChange = createAsyncThunk(
+  "project/recalculateInputNumber",
+  async (props: UpdateData, { dispatch, getState }) => {
+    const { projectId, sectionName, taskId, subtaskId } = props;
+
+    if (subtaskId) {
+      dispatch(updateSubtask(props));
+    } else {
+      dispatch(updateTasks(props));
+    }
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const task = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName)
+      ?.tasks.find((task) => task.id === taskId);
+
+    const subtask = projects.projects
+      .find((project) => project.projectId === projectId)
+      ?.sections.find((section) => section.name === sectionName)
+      ?.tasks.find((task) => task.id === taskId)
+      ?.subtasks?.find((subtask) => subtask.id === subtaskId);
+
+    if (subtaskId) {
+      const predictedMd = recalculateTask(subtask);
+
+      dispatch(
+        updateSubtask({
+          projectId,
+          sectionName,
+          taskId,
+          subtaskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedMd,
+        })
+      );
+    } else {
+      const predictedMd = recalculateTask(task);
+
+      dispatch(
+        updateTasks({
+          projectId,
+          sectionName,
+          taskId,
+          taskProps: Fields.PREDICTED_MD,
+          updatedValue: predictedMd,
+        })
+      );
+    }
+
+    dispatch(recalculateRowAfterUpdate({ projectId, sectionName }));
+  }
+);
 
 const projectSlice = createSlice({
   name: "project",
