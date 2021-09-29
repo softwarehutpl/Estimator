@@ -187,7 +187,7 @@ export default function RootStore() {
             delTask({
               projectId: projectId,
               sectionName: sectionName,
-              id: taskId,
+              taskId: taskId,
             })
           );
           setSectionName("");
