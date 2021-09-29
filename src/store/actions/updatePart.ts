@@ -2,6 +2,7 @@ import { Part } from "../../types/Interface";
 
 export const partPropsContstants = {
   ROLE: "role",
+  PROCENT: "procent",
   MIN_MD: "minMd",
   MAX_MD: "maxMd",
   PREDICTED_MD: "predictedMd",
@@ -15,7 +16,7 @@ export default function updatePart(
 ) {
   console.log(partProps);
   console.log(updatedValue);
-  const { ROLE, MIN_MD, MAX_MD, PREDICTED_MD, PREDICTED_MD_FORMULA } =
+  const { ROLE, MIN_MD, MAX_MD, PREDICTED_MD, PREDICTED_MD_FORMULA, PROCENT } =
     partPropsContstants;
 
   const updatePart = {
@@ -29,6 +30,7 @@ export default function updatePart(
         ? (updatedValue as string)
         : part.predictedMdFormula,
     role: partProps === ROLE ? (updatedValue as string) : part.role,
+    procent: partProps === PROCENT ? Number(updatedValue) : part.procent,
   };
   return updatePart;
 }

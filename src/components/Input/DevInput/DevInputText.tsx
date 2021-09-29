@@ -1,25 +1,46 @@
-import { FC, useState } from "react";
+import { FC, useState, useEffect } from "react";
+import { useParams } from "react-router";
+import { Params } from "../../../types/Interface";
+
 //Components
 import { InputText } from "primereact/inputtext";
 //Store
 import { useAppDispatch } from "../../../store/hooks";
+import { updateParts } from "../../../store/reducers/projectReducer";
 //Styles
 import styles from "./devInput.module.scss";
 
 interface Props {
-  data: string;
+  data: string | number;
+  name: string;
+  type: string;
 }
 
-const DevInputText: FC<Props> = ({ data }) => {
+const DevInputText: FC<Props> = ({ data, name, type }) => {
+  const { projectId } = useParams<Params>();
   const [value, setValue] = useState(data);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    setValue(data);
+  }, [data, name]);
 
   return (
     <>
       <InputText
         className={`p-inputtext-sm p-d-block ${styles.input}`}
         value={value}
-        onBlur={(e) => setValue(e.target.value)}
+        onBlur={(e) => {
+          dispatch(
+            updateParts({
+              projectId,
+              partName: name,
+              partProps: type === "procent" ? "procent" : "role",
+              updatedValue: e.target.value,
+            })
+          );
+          setValue(e.target.value);
+        }}
         onChange={(e) => setValue(e.target.value)}
       />
     </>
