@@ -1,40 +1,12 @@
 // @ts-nocheck
-import ReactExport from "react-data-export";
-import { SymbolDisplayPartKind } from "typescript";
-import myProject from "./exampleProject";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { getProjectSelector } from "../../store/selectors/selectors";
 import * as XLSX from "xlsx";
-import { resolveCname } from "dns";
-import { error } from "console";
 import { v4 as uuidv4 } from "uuid";
 
 import initialProject from "../../store/initials/initialProject";
-import { addTask, addSubtask } from "../../store/reducers/projectReducer";
-import { taskPropsContstants } from "../../store/actions/updateTask";
 import { Type, Role } from "../../types/Interface";
 import createTask from "../../store/actions/createTask";
-import projectReducer from "../../store/reducers/projectReducer";
-
-
-// const Export: FC<Props> = ({ projectId, project }) => {
-
-//   const projectToExport = useAppSelector(
-//     getProjectSelector("75fc9f66-d4f6-4304-b98c-46841b301d44")
-//   ); //=> PUSH PROJECT ID!
-
-//   console.log(projectToExport);
-
-//   return (
-//     <div className="App">
-      
-//     </div>
-//   );
-// };
 
 function Import() {
-
-  const dispatch = useAppDispatch();
 
   function getSectionName(sectionId){
     switch (sectionId) {
@@ -54,8 +26,6 @@ function Import() {
   }
 
   function convertJsonToProjectStructure(data){
-    console.log("data:");
-    console.log(data);
     let newProject = Object.assign({}, initialProject);
     
     newProject.projectName = data[2]._2;
@@ -83,7 +53,7 @@ function Import() {
         section.maxMd = data[i]._6;
         section.minMd = data[i]._5;
         section.predictedMd = data[i]._7;
-        section.risk = risk*100; // 0.2162 
+        section.risk = risk*100; // 0.2162  => 21.62
       }
       else{ // risk: string => task/group/subtask or comment
 
@@ -96,12 +66,7 @@ function Import() {
         else {  // risk !== "" => add task/subtask
 
           let name = data[i]._1; // nazwa taska
-
-
-
-          if (data[i]._1.slice(0,4) !== "    " && data[i]._4 !== undefined) { // name != "    ...." => task  
-            console.log("dodaje task: "+data[i]._1+", przejscie do linijki "+i);
-            // let name = data[i]._1; // nazwa taska        
+          if (data[i]._1.slice(0,4) !== "    " && data[i]._4 !== undefined) { // name != "    ...." => task      
             let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
             newTask.minMd = data[i]._5;
             newTask.maxMd = data[i]._6;
@@ -113,15 +78,11 @@ function Import() {
 
             if(data[commentIndex]._1 !== "" && data[commentIndex]._7 === "" && data[commentIndex]._4 === undefined ){
               newTask.comment = {text: data[commentIndex]._1, isImportant: false};
-              console.log("Z KOM");
-              console.log(newTask);
               newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
               i++;
             }
             else{
               newTask.comment.text = "";
-              console.log("BEZ KOM");
-              console.log(newTask);
               newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.push(newTask);
             }
             
@@ -134,33 +95,28 @@ function Import() {
             let subtasks = [];
             while(data[j]._1.slice(0,4) === "    ")
             {
-              console.log("dodaje subtask, przejscie do linijki "+j);
               let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);
               newSubtask.minMd = data[j]._5;
               newSubtask.maxMd = data[j]._6;
               newSubtask.predictedMd = data[j]._7;
               newSubtask.risk = data[j]._8;
 
-              // add comment to subtask
-              // let subtaskCommentIndex = j+1;
+              // add comment to task
+              let subtaskCommentIndex = j+1;
 
-              // if(data[subtaskCommentIndex]._1 !== "" &&  data[subtaskCommentIndex]._7 === "" && data[subtaskCommentIndex]._4 === undefined){
-              //   //it's comment
-              //   newSubtask.comment.text = data[subtaskCommentIndex]._1;
-              //   console.log("sub comment!!!!!:");
-              //   console.log(data[subtaskCommentIndex]._1);              
-              // }
+              if(data[subtaskCommentIndex]._1 !== "" && data[subtaskCommentIndex]._7 === "" && data[subtaskCommentIndex]._4 === undefined ){
+                newSubtask.comment = {text: data[subtaskCommentIndex]._1, isImportant: false};
+                j++;
+              }
+              else{
+                newSubtask.comment.text = "";
+              }
+              
 
               // creating subtasks list
               subtasks.push(newSubtask);  
-              console.log("pushed new subtask to temp list");
-
-              // if(newSubtask.comment.text !== ""){j++;};// j++; przejscie do kolejnej linijki po komentarzu
-              // console.log("dodano kom do subtaska, przejscie do linijki "+j);
               j++;
-              // console.log("przejscie do linijki "+j);
             }
-            console.log("wyscie z listy sub, przejscie do linijki "+i);
             i = j;
             let lastGroupTask = (newProject.sections.find(section => section.name === getSectionName(data[i]._4)).tasks.at(-1));
             let taskId = lastGroupTask.id;
@@ -222,12 +178,6 @@ function Import() {
         assumptionIndex++;
       }
     }
-
-    
-    
-    
-    console.log("new project:");
-    console.log(newProject);
   };
 
   const readExcel=(file)=>{
@@ -265,7 +215,6 @@ function Import() {
 
   return (
     <div>
-      <p>import</p>
       <input type="file" onChange={(e) => {
           const file = e.target.files[0];
           readExcel(file);
