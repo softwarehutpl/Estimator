@@ -1,5 +1,7 @@
 import { ChangeEvent, FC } from 'react';
 
+import { Type } from '../../../types/Interface';
+
 import styles from './InputPanel.module.scss';
 
 interface IProps {
@@ -18,10 +20,10 @@ const InputPanel: FC<IProps> = ({ handleTaskAdd, inputValue, handleInputChange }
         placeholder='Add first task'
         className={styles.panelInput}
       />
-      <button onClick={() => handleTaskAdd('task')} className={styles.panelButton}>
+      <button onClick={() => handleTaskAdd(Type.Task)} className={styles.panelButton}>
         Add
       </button>
-      <button onClick={() => handleTaskAdd('group')} className={styles.panelButton}>
+      <button onClick={() => handleTaskAdd(Type.Group)} className={styles.panelButton}>
         Add Group
       </button>
     </div>

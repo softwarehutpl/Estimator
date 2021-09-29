@@ -2,7 +2,7 @@ import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { useAppDispatch } from '../../../store/hooks';
-import { updateSubtask, updateTasks } from '../../../store/reducers/projectReducer';
+import { recalculateAfterInputChange } from '../../../store/reducers/projectReducer';
 
 import { Params, PressableKeys } from '../../../types/Interface';
 
@@ -30,26 +30,12 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
   const handleUpdateValue = () => {
     if (inputValue === value) return;
 
-    if (!parentTaskId) {
-      dispatch(
-        updateTasks({
-          projectId,
-          sectionName,
-          taskId,
-          taskProps: role,
-          updatedValue: inputValue,
-        })
-      );
-
-      return;
-    }
-
     dispatch(
-      updateSubtask({
+      recalculateAfterInputChange({
         projectId,
         sectionName,
-        taskId: parentTaskId,
-        subtaskId: taskId,
+        taskId: parentTaskId || taskId,
+        subtaskId: (parentTaskId && taskId) || '',
         taskProps: role,
         updatedValue: inputValue,
       })
@@ -59,6 +45,7 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
+    //TODO add protection for having max value lower than min
     if (Number(value) > 100 || Number(value) < 0) {
       return;
     }
@@ -86,7 +73,6 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
         min='0'
         max='100'
         step='0.25'
-        // placeholder='0'
         onKeyDown={(e) => handleKeyDown(e)}
         onBlur={handleUpdateValue}
         onChange={(e) => handleInputChange(e)}
