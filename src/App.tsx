@@ -6,6 +6,7 @@ import Export from "./components/Export/Export";
 import NotFound404 from "./views/NotFound404/NotFound404";
 import { Route, Switch } from "react-router-dom";
 import RootStore from "./store/interface/RootStore";
+import Import from "./components/Import/Import";
 
 function App() {
   return (
@@ -25,6 +26,10 @@ function App() {
         <Route path="/export">
           <Nav />
           <Export />
+        </Route>
+        <Route path="/import">
+          <Nav />
+          <Import />
         </Route>
         <Route path="*">
           <Nav />

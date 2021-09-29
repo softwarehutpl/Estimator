@@ -9,10 +9,11 @@ import ExportDialog from "../Dialogs/ExportDialog";
 import InviteDialog from "../Dialogs/InviteDialog";
 import JoinDialog from "../Dialogs/JoinDialog";
 import TerminateDialog from "../Dialogs/TerminateDialog";
+import Export from "../Export/Export";
 //Types
 import { Params, Project } from "../../types/Interface";
 //Router
-import { Route, useParams, Link } from "react-router-dom";
+import { Route, useParams, useHistory, Link } from "react-router-dom";
 //Store
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -25,11 +26,11 @@ import styles from "./nav.module.scss";
 interface Props {}
 
 const Nav: FC<Props> = () => {
+  const history = useHistory();
   //Selectors
   const { projectId } = useParams<Params>();
   const project = useAppSelector(getProjectSelector(projectId));
   const projectsData = useAppSelector(getProjectsDataSelector());
-  console.log(projectsData);
   //Dialogs state
   const [selectedProject, setSelectedProject] = useState(
     projectId && project.projectName
@@ -44,11 +45,7 @@ const Nav: FC<Props> = () => {
 
   const projectTitles = projectsData.map((project: Project) => {
     return {
-      label: (
-        <Link className={styles.link} to={`/project/${project.projectId}`}>
-          {project.projectName}
-        </Link>
-      ),
+      label: project.projectName,
       value: project.projectId,
     };
   });
@@ -58,9 +55,8 @@ const Nav: FC<Props> = () => {
   }, [projectId]);
 
   const selectHandler = (e: DropdownChangeParams) => {
-    console.log("dzialam");
-    //TODO: handel Route here
     setSelectedProject(e.target.value);
+    history.push(`/project/${e.target.value}`);
   };
 
   const dialogFooter = (
@@ -81,9 +77,23 @@ const Nav: FC<Props> = () => {
     </div>
   );
 
+  const exportDialogFooter = (
+    <div className={styles.exportFooter}>
+      <Button
+        label="No"
+        icon="pi pi-times"
+        onClick={() => setExportDialog(false)}
+        className="p-button-secondary p-button-text"
+      />
+      <Export />
+    </div>
+  );
+
   const leftContents = (
     <div className="p-d-flex">
-      <div className={`${styles.estimator} p-text-center`}>Estimator</div>
+      <Link className={styles.link} to="/">
+        <div className={`${styles.estimator} p-text-center`}>Estimator</div>
+      </Link>
 
       <Route path="/project">
         <>
@@ -124,7 +134,7 @@ const Nav: FC<Props> = () => {
         visible={exportDialog}
         onHide={() => setExportDialog(false)}
         modal
-        footer={dialogFooter}
+        footer={exportDialogFooter}
       >
         <ExportDialog />
       </Dialog>

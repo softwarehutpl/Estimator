@@ -16,7 +16,7 @@ export interface Project {
   teamSize?: number;
   timeBudget?: number;
   effort?: number;
-  sections?: Section[];
+  sections: Section[];
   rawDevelopmentEffortSum?: RawDevelopmentEffortSum;
   summary?: Main[];
   assumptions?: Assumption[];
@@ -31,7 +31,6 @@ export interface RawDevelopmentEffortSum {
   name: string;
   main: Main;
   parts: Part[];
-  total: Total;
 }
 
 export interface Main {
@@ -43,8 +42,20 @@ export interface Main {
   predictedMdFormula?: string;
   risk?: number;
   riskFormula?: string;
-  // name?: string;
+  name?: string;
   estDeliveryDate?: string;
+}
+
+export interface Part {
+  name: string;
+  procent: number;
+  role: string;
+  minMd: number;
+  minMdFormula: string;
+  maxMd: number;
+  maxMdFormula: string;
+  predictedMd: number;
+  predictedMdFormula: string;
 }
 
 export interface Part {
@@ -83,7 +94,7 @@ export interface Section {
 
 export interface Task {
   id: string;
-  type?: Type;
+  type: Type;
   name: string;
   role: Role;
   minMd: number | null;
@@ -101,19 +112,68 @@ export interface Comment {
 }
 
 export enum Role {
-  Empty = "",
-  FD = "FD",
-  BD = "BD",
-  MD = "MD",
-  UD = "UD",
-  DO = "DO",
+  Empty = '',
+  FD = 'FD',
+  BD = 'BD',
+  MD = 'MD',
+  UD = 'UD',
+  DO = 'DO',
 }
 
 export enum Type {
-  Group = "group",
-  Task = "task",
+  Group = 'group',
+  Task = 'task',
 }
 
+export interface RiskMultiplicator {
+  [key: string]: number;
+}
+
+export enum Multiplicators {
+  L = 'L',
+  M = 'M',
+  H = 'H',
+}
+
+export enum PressableKeys {
+  ENTER = 'Enter',
+  ESCAPE = 'Escape',
+  CONTROL = 'Control',
+  DELETE = 'Delete',
+  I = 'i',
+}
 export interface Params {
   projectId: string;
+}
+
+export enum Fields {
+  SECTION_ID = 'sectionId',
+  NAME = 'name',
+  ROLE = 'role',
+  MIN_MD = 'minMd',
+  MAX_MD = 'maxMd',
+  PREDICTED_MD = 'predictedMd',
+  RISK = 'risk',
+  COMMENT_TEXT = 'commentText',
+  COMMENT_IMPORTANT = 'commentImportant',
+}
+
+export interface Row {
+  name: string;
+  role: string;
+  [key: string]: string;
+}
+
+export interface RowUpdateData {
+  projectId: string;
+  sectionName: string;
+}
+
+export interface DeleteData extends RowUpdateData {
+  taskId: string;
+  subtaskId: string;
+}
+export interface UpdateData extends DeleteData {
+  taskProps: string;
+  updatedValue: number | string;
 }

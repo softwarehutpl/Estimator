@@ -1,11 +1,24 @@
 import { FC } from 'react';
+import classNames from 'classnames';
 
-import TableRow from '../TableRow/TableRow/TableRow';
+import { rowOrder } from '../../../constants/constants';
+
+import TableCell from '../TableCell/TableCell';
 
 import styles from './TableHeader.module.scss';
 
 const TableHeader: FC = () => {
-	return <TableRow stylingClass={styles.header} />;
+  const tableHeaderStyles = classNames(styles.tableRow, styles.header);
+
+  return (
+    <div className={tableHeaderStyles}>
+      {rowOrder.map(({ name, role }) => (
+        <TableCell key={role} role={role}>
+          {name}
+        </TableCell>
+      ))}
+    </div>
+  );
 };
 
 export default TableHeader;

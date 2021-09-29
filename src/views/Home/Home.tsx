@@ -15,9 +15,11 @@ import { v4 as uuidv4 } from "uuid";
 interface Props {}
 
 const Home = (props: Props) => {
-  const dispatch = useAppDispatch();
   const [projectName, setProjectName] = useState("");
   const [joinId, setJoinId] = useState("");
+
+  const dispatch = useAppDispatch();
+
   const projectsData = useAppSelector((state) =>
     state.projects.projects.map((project: Project) =>
       Object.create({
@@ -32,18 +34,30 @@ const Home = (props: Props) => {
   const remoteId = "";
 
   const createProjectHandler = () => {
-    console.log("Create Project works");
-    dispatch(
-      addProject({
-        projectName: projectName,
-        projectId: generatedId,
-      })
-    );
+    if (!projectName) {
+      return;
+    } else {
+      dispatch(
+        addProject({
+          projectName: projectName,
+          projectId: generatedId,
+        })
+      );
+    }
+  };
+
+  const handelNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      setProjectName(e.target.value);
+    } else if (e.target.value === "") {
+      return;
+    }
   };
 
   const joinProjectHandler = () => {
     console.log("Join Project");
   };
+
   return (
     <>
       <div className={`${styles.home} p-d-flex`}>
@@ -53,7 +67,7 @@ const Home = (props: Props) => {
           title={projectName}
           placeholder="Project name"
           action={createProjectHandler}
-          change={(e) => setProjectName(e.target.value)}
+          change={(e) => handelNameChange(e)}
           projectId={generatedId}
         />
         <CardTile

@@ -1,0 +1,39 @@
+.taskCommentInputWrapper {
+  flex-grow: 1;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.label {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.taskCommentInput {
+  flex-grow: 1;
+  padding: 5px 10px;
+  margin-left: 10px;
+  font-size: 15px;
+  font-style: italic;
+  font-family: inherit;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  outline: none;
+  transition: 0.3s ease;
+  cursor: pointer;
+
+  &Important {
+    color: var(--pink-400);
+  }
+
+  &:focus {
+    border-bottom: 2px solid var(--indigo-200);
+    cursor: text;
+  }
+}
