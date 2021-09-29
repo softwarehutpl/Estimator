@@ -1,17 +1,19 @@
 import { FC, MouseEvent } from 'react';
 
 import { useAppDispatch } from '../../store/hooks';
-import { addSubtask, addTask, delSubtask, delTask } from '../../store/reducers/projectReducer';
+import { addSubtask, addTask, recalculateAfterDelete } from '../../store/reducers/projectReducer';
 
 import { Task, Type } from '../../types/Interface';
 
-import styles from './ContextMenu.module.scss';
 import ContextMenuButton from './ContextMenuButton/ContextMenuButton';
+
+import styles from './ContextMenu.module.scss';
 
 interface IProps {
   data: Task;
   handleToggleComment: () => void;
   handleToggleContextMenu: (e: MouseEvent<HTMLDivElement>) => void;
+  setInIndex: number;
   isOpen: boolean;
   parentTaskId?: string;
   projectId: string;
@@ -22,6 +24,7 @@ const ContextMenu: FC<IProps> = ({
   data,
   handleToggleComment,
   handleToggleContextMenu,
+  setInIndex,
   isOpen,
   parentTaskId,
   projectId,
@@ -41,28 +44,31 @@ const ContextMenu: FC<IProps> = ({
   const isSubtaskButtonDisabled = type === Type.Task && !isSubtask;
   const isTaskButtonDisabled = isSubtask;
 
-  //TODO update reducers to add task or subtask to specific index in the Array based
-
   const handleTaskAdd = (type: string) => {
-    dispatch(addTask({ projectId, sectionName, type }));
+    dispatch(addTask({ projectId, sectionName, type, setInIndex }));
   };
 
   const handleSubtaskAdd = () => {
-    if (!parentTaskId) {
-      dispatch(addSubtask({ projectId, sectionName, taskId, subtaskName: '' }));
-      return;
-    }
-
-    dispatch(addSubtask({ projectId, sectionName, taskId: parentTaskId, subtaskName: '' }));
+    dispatch(
+      addSubtask({
+        projectId,
+        sectionName,
+        taskId: parentTaskId || taskId,
+        subtaskName: '',
+        setInIndex,
+      })
+    );
   };
 
   const handleTaskDelete = () => {
-    if (!parentTaskId) {
-      dispatch(delTask({ projectId, sectionName, id: taskId }));
-      return;
-    }
-
-    dispatch(delSubtask({ projectId, sectionName, taskId: parentTaskId, subtaskId: taskId }));
+    dispatch(
+      recalculateAfterDelete({
+        projectId,
+        sectionName,
+        taskId: parentTaskId || taskId,
+        subtaskId: (parentTaskId && taskId) || '',
+      })
+    );
   };
 
   return (

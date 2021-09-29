@@ -1,23 +1,25 @@
-import { useState } from "react";
+import { useState } from 'react';
 //components
-import { Fieldset } from "primereact/fieldset";
-import ProjectTile from "../../components/Tiles/ProjectTile/ProjectTile";
-import CardTile from "../../components/Tiles/CardTile/CardTile";
+import { Fieldset } from 'primereact/fieldset';
+import ProjectTile from '../../components/Tiles/ProjectTile/ProjectTile';
+import CardTile from '../../components/Tiles/CardTile/CardTile';
 //Store Hooks
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { addProject } from "../../store/reducers/projectReducer";
+import { useAppSelector, useAppDispatch } from '../../store/hooks';
+import { addProject } from '../../store/reducers/projectReducer';
 //Styles
-import styles from "./home.module.scss";
-import { Project } from "../../types/Interface";
+import styles from './home.module.scss';
+import { Project } from '../../types/Interface';
 //Utils
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 interface Props {}
 
 const Home = (props: Props) => {
+  const [projectName, setProjectName] = useState('');
+  const [joinId, setJoinId] = useState('');
+
   const dispatch = useAppDispatch();
-  const [projectName, setProjectName] = useState("");
-  const [joinId, setJoinId] = useState("");
+
   const projectsData = useAppSelector((state) =>
     state.projects.projects.map((project: Project) =>
       Object.create({
@@ -29,10 +31,11 @@ const Home = (props: Props) => {
 
   const generatedId = uuidv4();
   //For Web RTC conncection;
-  const remoteId = "";
+  const remoteId = '';
 
   const createProjectHandler = () => {
-    console.log("Create Project works");
+    if (!projectName) return;
+
     dispatch(
       addProject({
         projectName: projectName,
@@ -42,31 +45,32 @@ const Home = (props: Props) => {
   };
 
   const joinProjectHandler = () => {
-    console.log("Join Project");
+    console.log('Join Project');
   };
+
   return (
     <>
       <div className={`${styles.home} p-d-flex`}>
         <CardTile
-          btn="Create New"
-          cardTitle="New Project"
+          btn='Create New'
+          cardTitle='New Project'
           title={projectName}
-          placeholder="Project name"
+          placeholder='Project name'
           action={createProjectHandler}
           change={(e) => setProjectName(e.target.value)}
           projectId={generatedId}
         />
         <CardTile
-          btn="Join"
-          cardTitle="Join Projects"
+          btn='Join'
+          cardTitle='Join Projects'
           title={joinId}
-          placeholder="Join"
+          placeholder='Join'
           action={() => joinProjectHandler}
           change={(e) => setJoinId(e.target.value)}
           projectId={remoteId}
         />
       </div>
-      <Fieldset legend="Projects" collapsed={false} toggleable>
+      <Fieldset legend='Projects' collapsed={false} toggleable>
         <ul className={styles.list}>
           {projectsData.map((project: Project) => (
             <ProjectTile

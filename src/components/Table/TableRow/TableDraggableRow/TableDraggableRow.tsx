@@ -15,7 +15,6 @@ import styles from './TableDraggableRow.module.scss';
 
 interface IProps {
   data: Task;
-
   openedMenuId: string | null;
   orderNumber: number;
   parentOrderNumber?: number;
@@ -70,13 +69,14 @@ const TableDraggableRow: FC<IProps> = ({
           parentTaskId={parentTaskId}
           projectId={projectId}
           sectionName={sectionName}
+          setInIndex={orderNumber}
         />
         {rowOrder.map(({ role }) => {
           if (data.type === Type.Group) {
             return (
               <TableCell key={role} role={role}>
-                {role === 'sectionId' && orderNumber}
-                {role === 'name' && (
+                {role === Fields.SECTION_ID && orderNumber}
+                {role === Fields.NAME && (
                   <TaskInputText sectionName={sectionName} taskId={data.id} value={data[role]} />
                 )}
               </TableCell>
@@ -85,7 +85,7 @@ const TableDraggableRow: FC<IProps> = ({
             if (role === Fields.NAME) {
               return (
                 <TableCell key={role} role={role}>
-                  {role === 'name' && (
+                  {role === Fields.NAME && (
                     <TaskInputText
                       sectionName={sectionName}
                       taskId={data.id}
@@ -129,13 +129,13 @@ const TableDraggableRow: FC<IProps> = ({
             } else {
               return (
                 <TableCell key={role} role={role}>
-                  {role === 'sectionId' ? orderNumber : data[role as keyof Task]}
+                  {role === Fields.SECTION_ID ? orderNumber : data[role as keyof Task]}
                 </TableCell>
               );
             }
           }
         })}
-        {data.type === 'task' && (
+        {data.type === Type.Task && (
           <TaskComment
             comment={data.comment}
             isEditable={isEditable}

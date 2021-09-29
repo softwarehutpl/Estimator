@@ -11,7 +11,7 @@ const DroppableWrapper: FC<IProps> = ({ children, droppableId }) => {
   return (
     <Droppable droppableId={droppableId}>
       {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => {
-        console.log(snapshot);
+        //TODO add classnames
         return (
           <div
             ref={provided.innerRef}
