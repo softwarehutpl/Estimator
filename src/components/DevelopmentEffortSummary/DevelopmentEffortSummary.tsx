@@ -2,22 +2,24 @@ import { FC } from "react";
 //Components
 import DevRow from "./DevRow/DevRow";
 //Types
-import { RawDevelopmentEffortSum } from "../../types/Interface";
+import { Part, Project, RawDevelopmentEffortSum } from "../../types/Interface";
 // import {DevCell} from "./DevCell/DevCell";
 //Styles
 import styles from "./developmentEffortSummary.module.scss";
+import { RDSmain } from "../../utils/formulas/RawDevelopmentSummary/main";
 interface Props {
   projectId: string;
-  data: RawDevelopmentEffortSum;
-  summary: any;
+  data: Project;
 }
 
-const DevelopmentEffortSummary: FC<Props> = ({ data, summary }) => {
-  console.log(summary, "SUM");
+const DevelopmentEffortSummary: FC<Props> = ({ data, projectId }) => {
+  // useEffect(() => {}, [data]);
+  const devData: any = data.rawDevelopmentEffortSum;
+  let main = RDSmain(data);
   return (
     <div className={styles.summary}>
-      <DevRow bold={true} name={data?.name} data={data?.main} />
-      {data?.parts.map((item) => (
+      <DevRow bold={true} name={devData?.name} data={main} />
+      {devData?.parts.map((item: Part) => (
         <DevRow key={item.name} name={item.name} data={item} />
       ))}
     </div>
