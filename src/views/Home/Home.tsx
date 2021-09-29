@@ -1,22 +1,22 @@
-import { useState } from 'react';
+import { useState } from "react";
 //components
-import { Fieldset } from 'primereact/fieldset';
-import ProjectTile from '../../components/Tiles/ProjectTile/ProjectTile';
-import CardTile from '../../components/Tiles/CardTile/CardTile';
+import { Fieldset } from "primereact/fieldset";
+import ProjectTile from "../../components/Tiles/ProjectTile/ProjectTile";
+import CardTile from "../../components/Tiles/CardTile/CardTile";
 //Store Hooks
-import { useAppSelector, useAppDispatch } from '../../store/hooks';
-import { addProject } from '../../store/reducers/projectReducer';
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { addProject } from "../../store/reducers/projectReducer";
 //Styles
-import styles from './home.module.scss';
-import { Project } from '../../types/Interface';
+import styles from "./home.module.scss";
+import { Project } from "../../types/Interface";
 //Utils
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {}
 
 const Home = (props: Props) => {
-  const [projectName, setProjectName] = useState('');
-  const [joinId, setJoinId] = useState('');
+  const [projectName, setProjectName] = useState("");
+  const [joinId, setJoinId] = useState("");
 
   const dispatch = useAppDispatch();
 
@@ -31,46 +31,56 @@ const Home = (props: Props) => {
 
   const generatedId = uuidv4();
   //For Web RTC conncection;
-  const remoteId = '';
+  const remoteId = "";
 
   const createProjectHandler = () => {
-    if (!projectName) return;
+    if (!projectName) {
+      return;
+    } else {
+      dispatch(
+        addProject({
+          projectName: projectName,
+          projectId: generatedId,
+        })
+      );
+    }
+  };
 
-    dispatch(
-      addProject({
-        projectName: projectName,
-        projectId: generatedId,
-      })
-    );
+  const handelNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value) {
+      setProjectName(e.target.value);
+    } else if (e.target.value === "") {
+      return;
+    }
   };
 
   const joinProjectHandler = () => {
-    console.log('Join Project');
+    console.log("Join Project");
   };
 
   return (
     <>
       <div className={`${styles.home} p-d-flex`}>
         <CardTile
-          btn='Create New'
-          cardTitle='New Project'
+          btn="Create New"
+          cardTitle="New Project"
           title={projectName}
-          placeholder='Project name'
+          placeholder="Project name"
           action={createProjectHandler}
-          change={(e) => setProjectName(e.target.value)}
+          change={(e) => handelNameChange(e)}
           projectId={generatedId}
         />
         <CardTile
-          btn='Join'
-          cardTitle='Join Projects'
+          btn="Join"
+          cardTitle="Join Projects"
           title={joinId}
-          placeholder='Join'
+          placeholder="Join"
           action={() => joinProjectHandler}
           change={(e) => setJoinId(e.target.value)}
           projectId={remoteId}
         />
       </div>
-      <Fieldset legend='Projects' collapsed={false} toggleable>
+      <Fieldset legend="Projects" collapsed={false} toggleable>
         <ul className={styles.list}>
           {projectsData.map((project: Project) => (
             <ProjectTile
