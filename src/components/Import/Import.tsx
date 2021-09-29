@@ -71,12 +71,10 @@ export const Import: FC<Props> = () => {
         let section = newProject.sections.find(
           (section) => section.name === name
         );
-        const newSection = Object.assign({ ...section });
-        newSection.maxMd = data[i]._6;
-        newSection.minMd = data[i]._5;
-        newSection.predictedMd = data[i]._7;
-        newSection.risk = risk * 100; // 0.2162  => 21.62
-        section = newSection;
+        section.maxMd = data[i]._6;
+        section.minMd = data[i]._5;
+        section.predictedMd = data[i]._7;
+        section.risk = risk * 100; // 0.2162  => 21.62
       } else {
         // risk: string => task/group/subtask or comment
 
