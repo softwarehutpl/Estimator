@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current, PayloadAction } from '@reduxjs/toolkit';
 import initialState from '../initials/initialState';
 import createProject from '../actions/createProject';
 import createTask from '../actions/createTask';
@@ -13,14 +13,62 @@ import {
   RowUpdateData,
   Type,
   UpdateData,
-  Part,
   RawDevelopmentEffortSum,
+  Main,
+  Project,
 } from '../../types/Interface';
 import { RootState } from '../store';
 import { recalculateTask } from '../../utils/reclaculateTask';
 import { sectionUpdate } from '../actions/sectionUpdate';
 import { recalculateRow } from '../../utils/recalculateRow';
 import updatePart from '../actions/updatePart';
+import { RDSmain } from '../../utils/recalculateRDSMain';
+import { recalculateTotalValues } from '../../utils/recalculateTotalValues';
+import { updateTotal } from '../actions/updateTotal';
+
+export const recalculateTotal = createAsyncThunk(
+  'project/recalculateTotal',
+  async (props: { projectId: string }, { dispatch, getState }) => {
+    const { projectId } = props;
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const developmentSum = projects.projects.find(
+      (project) => project.projectId === projectId
+    )?.rawDevelopmentEffortSum;
+
+    const main = developmentSum?.main;
+    const parts = developmentSum?.parts;
+
+    if (!main || !parts) return;
+
+    const result = recalculateTotalValues(main, parts);
+
+    dispatch(updateSummaryTotal({ projectId, updatedValues: result }));
+  }
+);
+
+export const recalculateDevelopmentSum = createAsyncThunk(
+  'project/recalculateDevelopmentSum',
+  async (props: { projectId: string }, { dispatch, getState }) => {
+    const { projectId } = props;
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const project = projects.projects.find((project) => project.projectId === projectId);
+
+    const main = projects.projects.find((project) => project.projectId === projectId)
+      ?.rawDevelopmentEffortSum?.main;
+
+    if (!main || !project) return;
+
+    const newMain = RDSmain(project);
+
+    dispatch(updateDevelopmentSum({ projectId, newMain }));
+
+    dispatch(recalculateTotal({ projectId }));
+  }
+);
 
 export const recalculateRowAfterUpdate = createAsyncThunk(
   'project/recalculateAfterUpdate',
@@ -43,6 +91,8 @@ export const recalculateRowAfterUpdate = createAsyncThunk(
         updatedValues: sectionValuesAfterRecalc,
       })
     );
+
+    dispatch(recalculateDevelopmentSum({ projectId }));
   }
 );
 
@@ -123,6 +173,16 @@ const projectSlice = createSlice({
     clearProjects: (state) => {
       state.projects = [];
     },
+    importProject: (
+      state,
+      action: PayloadAction<{ importedProject: Project; projectId: string }>
+    ) => {
+      console.log('O tu');
+      console.log(action.payload.importedProject);
+
+      state.projects[findIndexProject(state, action.payload.projectId)] =
+        action.payload.importedProject;
+    },
     addProject: (state, action: PayloadAction<{ projectName: string; projectId: string }>) => {
       action.payload.projectName.length === 0
         ? console.log('Project name is empty!') // error handling add!!!
@@ -147,7 +207,7 @@ const projectSlice = createSlice({
         setInIndex?: number;
       }>
     ) => {
-      const setInIndex = action.payload.setInIndex ?? 0;
+      const setInIndex = action.payload.setInIndex || 0;
 
       const project = state.projects[findIndexProject(state, action.payload.projectId)];
 
@@ -158,7 +218,7 @@ const projectSlice = createSlice({
         action.payload.taskName,
         action.payload.type
       );
-      // const newState = [...section.tasks, newTask];
+
       section.tasks.splice(setInIndex, 0, newTask);
     },
     delTask: (
@@ -270,8 +330,6 @@ const projectSlice = createSlice({
           : task
       );
 
-      console.log(updatedTasks);
-
       section.tasks = updatedTasks;
     },
     updateSubtask: (
@@ -319,6 +377,59 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updateSummaryTotal: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        updatedValues: {
+          minMd: number;
+          maxMd: number;
+          predictedMd: number;
+          risk: number;
+        };
+      }>
+    ) => {
+      const { projectId, updatedValues } = action.payload;
+
+      const project = state.projects[findIndexProject(state, projectId)];
+
+      const newSummary = project.summary?.map((item) =>
+        item.name?.includes('Total') ? updateTotal(item, updatedValues) : item
+      );
+
+      project.summary = newSummary;
+    },
+    updateDeliveryDate: (
+      state,
+      action: PayloadAction<{
+        newDate: string;
+        projectId: string;
+      }>
+    ) => {
+      const { newDate, projectId } = action.payload;
+
+      const project = state.projects[findIndexProject(state, projectId)];
+
+      const newSummary = project.summary?.map((item) =>
+        item.name?.includes('Delivery') ? { ...item, estDeliveryDate: newDate } : item
+      );
+
+      project.summary = newSummary;
+    },
+    updateDevelopmentSum: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        newMain: Main;
+      }>
+    ) => {
+      const { projectId, newMain } = action.payload;
+      const project = state.projects[findIndexProject(state, projectId)];
+
+      if (!project) return;
+
+      project.rawDevelopmentEffortSum!.main = newMain;
+    },
     updateParts: (
       state,
       action: PayloadAction<{
@@ -346,6 +457,7 @@ const projectSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  importProject,
   clearProjects,
   addProject,
   delProject,
@@ -355,8 +467,12 @@ export const {
   delSubtask,
   updateTasks,
   updateSubtask,
+  updateDeliveryDate,
+  updateDevelopmentSum,
   updateSection,
+  updateSummaryTotal,
   reorder,
+
   updateParts,
 } = projectSlice.actions;
 

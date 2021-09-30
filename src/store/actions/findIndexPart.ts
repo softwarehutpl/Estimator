@@ -1,4 +1,4 @@
-import { Part, Project, RawDevelopmentEffortSum } from "../../types/Interface";
+import { RawDevelopmentEffortSum } from "../../types/Interface";
 
 export default function findIndexPart(
   rawDevelopmentEffortSum: RawDevelopmentEffortSum,

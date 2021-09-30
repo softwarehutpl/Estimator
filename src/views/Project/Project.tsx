@@ -1,7 +1,7 @@
 import { FC } from "react";
 //Components
 import EstimateTable from "../../components/Table/EstimateTable/EstimateTable";
-import ProjectSummary from "../../components/ProjectSummary/ProjectSummary";
+import ProjectSummary from "../../components/ProjectSummary/SummaryTable/SummaryTable";
 import DevelopmentEffortSummary from "../../components/DevelopmentEffortSummary/DevelopmentEffortSummary";
 //Store
 import { useAppSelector } from "../../store/hooks";
@@ -10,7 +10,7 @@ import { getProjectSelector } from "../../store/selectors/selectors";
 import { useParams } from "react-router";
 //Types
 
-import { Params } from "../../types/Interface";
+import { Project, Params } from "../../types/Interface";
 
 //Styles
 import styles from "./project.module.scss";
@@ -25,8 +25,8 @@ const DataView: FC<Props> = () => {
   return (
     <main className={styles.contentWrapper}>
       <EstimateTable projectId={projectId} project={project} />
-      <DevelopmentEffortSummary projectId={projectId} data={project} />
-      <ProjectSummary projectId={projectId} />
+      <DevelopmentEffortSummary data={project} />
+      <ProjectSummary projectId={projectId} summary={project.summary} />
     </main>
   );
 };

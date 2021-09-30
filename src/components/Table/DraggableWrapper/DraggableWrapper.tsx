@@ -14,10 +14,11 @@ const DraggableWrapper: FC<IProps> = ({ children, draggableId, index }) => {
     <Draggable key={draggableId} draggableId={draggableId} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => {
         //TODO add classnames
+
         return (
           <div
-            ref={provided.innerRef}
             {...provided.draggableProps}
+            ref={provided.innerRef}
             className={`${
               snapshot.isDragging ? styles.draggableWrapperActive : styles.draggableWrapper
             } ${

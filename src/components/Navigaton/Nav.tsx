@@ -10,6 +10,7 @@ import InviteDialog from "../Dialogs/InviteDialog";
 import JoinDialog from "../Dialogs/JoinDialog";
 import TerminateDialog from "../Dialogs/TerminateDialog";
 import Export from "../Export/Export";
+import Import from "../Import/Import";
 //Types
 import { Params, Project } from "../../types/Interface";
 //Router
@@ -89,6 +90,18 @@ const Nav: FC<Props> = () => {
     </div>
   );
 
+  const importDialogFooter = (
+    <div className={styles.exportFooter}>
+      {/* <Button
+        label="No"
+        icon="pi pi-times"
+        onClick={() => setImportDialog(false)}
+        className="p-button-secondary p-button-text"
+      /> */}
+      <Import />
+    </div>
+  );
+
   const leftContents = (
     <div className="p-d-flex">
       <Link className={styles.link} to="/">
@@ -125,7 +138,7 @@ const Nav: FC<Props> = () => {
         visible={importDialog}
         onHide={() => setImportDialog(false)}
         modal
-        footer={dialogFooter}
+        footer={importDialogFooter}
       >
         <ImportDialog />
       </Dialog>

@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 
-import { Project } from '../../types/Interface';
+import { Project } from "../../types/Interface";
 
-import { useAppSelector, useAppDispatch } from '../hooks';
+import { useAppSelector, useAppDispatch } from "../hooks";
 import {
   clearProjects,
   addProject,
@@ -16,22 +16,25 @@ import {
   delSubtask,
   updateSubtask,
   updateParts,
-} from '../reducers/projectReducer';
-import { getProjectsDataSelector, getProjectSelector } from '../selectors/selectors';
+} from "../reducers/projectReducer";
+import {
+  getProjectsDataSelector,
+  getProjectSelector,
+} from "../selectors/selectors";
 
 export default function RootStore() {
-  const [projectName, setProjectName] = useState('');
-  const [sectionName, setSectionName] = useState('');
-  const [taskName, setTaskName] = useState('');
+  const [projectName, setProjectName] = useState("");
+  const [sectionName, setSectionName] = useState("");
+  const [taskName, setTaskName] = useState("");
   const [setInIndex, setSetInIndex] = useState(0);
-  const [taskId, setTaskId] = useState('');
-  const [type, setType] = useState('group');
-  const [taskProps, setTaskProps] = useState('');
-  const [updatedValue, setUpdatedValue] = useState('');
-  const [projectId, setProjectId] = useState('');
-  const [subtaskId, setSubtaskId] = useState('');
-  const [partProps, setPartProps] = useState('');
-  const [partName, setPartName] = useState('');
+  const [taskId, setTaskId] = useState("");
+  const [type, setType] = useState("group");
+  const [taskProps, setTaskProps] = useState("");
+  const [updatedValue, setUpdatedValue] = useState("");
+  const [projectId, setProjectId] = useState("");
+  const [subtaskId, setSubtaskId] = useState("");
+  const [partProps, setPartProps] = useState("");
+  const [partName, setPartName] = useState("");
   const projects = useAppSelector((state) => state.projects.projects);
   const dispatch = useAppDispatch();
 
@@ -51,18 +54,18 @@ export default function RootStore() {
   return (
     <div
       style={{
-        border: '2px solid black',
-        padding: '20px',
-        backgroundColor: '#E6E6E6',
+        border: "2px solid black",
+        padding: "20px",
+        backgroundColor: "#E6E6E6",
       }}
     >
-      <nav className='p-d-flex p-jc-around'>
-        <Link to='/'>Home</Link>
-        <Link to='/project'>Project</Link>
+      <nav className="p-d-flex p-jc-around">
+        <Link to="/">Home</Link>
+        <Link to="/project">Project</Link>
       </nav>
       <p>---------- CLEAR PROJECTS ----------</p>
       <button onClick={() => dispatch(clearProjects())}>clearProjects</button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         ---------- PROJECTS NAMES ----------
       </p>
       {projectsData.map((project: Project) => (
@@ -70,14 +73,14 @@ export default function RootStore() {
           key={project.projectId}
         >{`projectName ${project.projectName} id ${project.projectId}`}</li>
       ))}
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- ADD NEW PROJECT -----------
       </p>
       <input
-        type='text'
+        type="text"
         value={projectName}
         onChange={(event) => setProjectName(event.target.value)}
-        placeholder='Project Name'
+        placeholder="Project Name"
       />
       <button
         onClick={() => {
@@ -87,53 +90,57 @@ export default function RootStore() {
               projectId: uuidv4(),
             })
           );
-          setProjectName('');
+          setProjectName("");
         }}
       >
         addProject
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- DEL PROJECT -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- DEL PROJECT -----------
+      </p>
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Del'
+        placeholder="Project ID To Del"
       />
       <button
         onClick={() => {
           dispatch(delProject({ projectId: projectId }));
-          setProjectId('');
+          setProjectId("");
         }}
       >
         delProject
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- ADD TASK -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- ADD TASK -----------
+      </p>
       Frontend development <br />
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Add Task'
+        placeholder="Project ID To Add Task"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Add Task'
+        placeholder="Section Name To Add Task"
       />
       <input
-        type='text'
+        type="text"
         value={taskName}
         onChange={(event) => setTaskName(event.target.value)}
-        placeholder='Task Name To Add Task'
+        placeholder="Task Name To Add Task"
       />
       <p>Task / Group</p>
       <input
-        type='text'
+        type="text"
         value={type}
         onChange={(event) => setType(event.target.value)}
-        placeholder='Type Task / Group'
+        placeholder="Type Task / Group"
       />
       <button
         onClick={() => {
@@ -146,31 +153,33 @@ export default function RootStore() {
               setInIndex: setInIndex,
             })
           );
-          setSectionName('');
-          setProjectId('');
-          setTaskName('');
+          setSectionName("");
+          setProjectId("");
+          setTaskName("");
         }}
       >
         addTask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- DEL TASK -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- DEL TASK -----------
+      </p>
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Dell Task'
+        placeholder="Project ID To Dell Task"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Dell Task'
+        placeholder="Section Name To Dell Task"
       />
       <input
-        type='text'
+        type="text"
         value={taskId}
         onChange={(event) => setTaskId(event.target.value)}
-        placeholder='Task ID To Dell Task'
+        placeholder="Task ID To Dell Task"
       />
       <button
         onClick={() => {
@@ -181,39 +190,41 @@ export default function RootStore() {
               taskId: taskId,
             })
           );
-          setSectionName('');
-          setProjectId('');
-          setTaskId('');
+          setSectionName("");
+          setProjectId("");
+          setTaskId("");
         }}
       >
         delTask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- ADD SUBTASK -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- ADD SUBTASK -----------
+      </p>
       Frontend development <br />
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Add Subtask'
+        placeholder="Project ID To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Add Subtask'
+        placeholder="Section Name To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={taskId}
         onChange={(event) => setTaskId(event.target.value)}
-        placeholder='Task ID To Add Subtask'
+        placeholder="Task ID To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={taskName}
         onChange={(event) => setTaskName(event.target.value)}
-        placeholder='Task Name To Add Subtask'
+        placeholder="Task Name To Add Subtask"
       />
       <button
         onClick={() => {
@@ -226,40 +237,42 @@ export default function RootStore() {
               setInIndex: setInIndex,
             })
           );
-          setSectionName('');
-          setProjectId('');
-          setTaskName('');
-          setTaskId('');
+          setSectionName("");
+          setProjectId("");
+          setTaskName("");
+          setTaskId("");
         }}
       >
         addSubtask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- DEL SUBTASK -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- DEL SUBTASK -----------
+      </p>
       Frontend development <br />
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Add Subtask'
+        placeholder="Project ID To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Add Subtask'
+        placeholder="Section Name To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={taskId}
         onChange={(event) => setTaskId(event.target.value)}
-        placeholder='Task ID To Add Subtask'
+        placeholder="Task ID To Add Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={subtaskId}
         onChange={(event) => setSubtaskId(event.target.value)}
-        placeholder='Subtask ID To Dell Subtask'
+        placeholder="Subtask ID To Dell Subtask"
       />
       <button
         onClick={() => {
@@ -271,46 +284,48 @@ export default function RootStore() {
               subtaskId: subtaskId,
             })
           );
-          setSectionName('');
-          setProjectId('');
-          setTaskName('');
-          setProjectId('');
+          setSectionName("");
+          setProjectId("");
+          setTaskName("");
+          setProjectId("");
         }}
       >
         delSubtask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- UPDATE TASK -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE TASK -----------
+      </p>
       Frontend development <br />
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Update Task'
+        placeholder="Project ID To Update Task"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Update Task'
+        placeholder="Section Name To Update Task"
       />
       <input
-        type='text'
+        type="text"
         value={taskId}
         onChange={(event) => setTaskId(event.target.value)}
-        placeholder='Task ID To Update Task'
+        placeholder="Task ID To Update Task"
       />
       <input
-        type='text'
+        type="text"
         value={taskProps}
         onChange={(event) => setTaskProps(event.target.value)}
-        placeholder='Task Props To Update Task'
+        placeholder="Task Props To Update Task"
       />
       <input
-        type='text'
+        type="text"
         value={updatedValue}
         onChange={(event) => setUpdatedValue(event.target.value)}
-        placeholder='Updated value'
+        placeholder="Updated value"
       />
       <button
         onClick={() => {
@@ -323,55 +338,55 @@ export default function RootStore() {
               updatedValue: updatedValue,
             })
           );
-          setProjectId('');
-          setSectionName('');
-          setTaskId('');
-          setTaskProps('');
-          setUpdatedValue('');
+          setProjectId("");
+          setSectionName("");
+          setTaskId("");
+          setTaskProps("");
+          setUpdatedValue("");
         }}
       >
         updateTask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
         --------- UPDATE SUBTASK -----------
       </p>
       Frontend development <br />
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Update Subtask'
+        placeholder="Project ID To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={sectionName}
         onChange={(event) => setSectionName(event.target.value)}
-        placeholder='Section Name To Update Subtask'
+        placeholder="Section Name To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={taskId}
         onChange={(event) => setTaskId(event.target.value)}
-        placeholder='Task ID To Update Subtask'
+        placeholder="Task ID To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={subtaskId}
         onChange={(event) => setSubtaskId(event.target.value)}
-        placeholder='Subtask ID To Update Subtask'
+        placeholder="Subtask ID To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={taskProps}
         onChange={(event) => setTaskProps(event.target.value)}
-        placeholder='Subtask Props To Update Subtask'
+        placeholder="Subtask Props To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={updatedValue}
         onChange={(event) => setUpdatedValue(event.target.value)}
-        placeholder='Updated value'
+        placeholder="Updated value"
       />
       <button
         onClick={() => {
@@ -385,41 +400,43 @@ export default function RootStore() {
               updatedValue: updatedValue,
             })
           );
-          setProjectId('');
-          setSectionName('');
-          setTaskId('');
-          setSubtaskId('');
-          setTaskProps('');
-          setUpdatedValue('');
+          setProjectId("");
+          setSectionName("");
+          setTaskId("");
+          setSubtaskId("");
+          setTaskProps("");
+          setUpdatedValue("");
         }}
       >
         updateSubtask
       </button>
-      <p style={{ marginTop: '10px', marginBottom: '10px' }}>--------- UPDATE PART -----------</p>
+      <p style={{ marginTop: "10px", marginBottom: "10px" }}>
+        --------- UPDATE PART -----------
+      </p>
       <br />
       <input
-        type='text'
+        type="text"
         value={projectId}
         onChange={(event) => setProjectId(event.target.value)}
-        placeholder='Project ID To Update Subtask'
+        placeholder="Project ID To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={partName}
         onChange={(event) => setPartName(event.target.value)}
-        placeholder='Part name To Update Subtask'
+        placeholder="Part name To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={partProps}
         onChange={(event) => setPartProps(event.target.value)}
-        placeholder='Part Props To Update Subtask'
+        placeholder="Part Props To Update Subtask"
       />
       <input
-        type='text'
+        type="text"
         value={updatedValue}
         onChange={(event) => setUpdatedValue(event.target.value)}
-        placeholder='Updated value'
+        placeholder="Updated value"
       />
       <button
         onClick={() => {
@@ -431,10 +448,10 @@ export default function RootStore() {
               updatedValue: updatedValue,
             })
           );
-          setProjectId('');
-          setPartProps('');
-          setPartName('');
-          setUpdatedValue('');
+          setProjectId("");
+          setPartProps("");
+          setPartName("");
+          setUpdatedValue("");
         }}
       >
         updatePart
