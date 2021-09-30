@@ -13,9 +13,9 @@ import {
   RowUpdateData,
   Type,
   UpdateData,
-  Part,
   RawDevelopmentEffortSum,
   Main,
+  Project,
 } from '../../types/Interface';
 import { RootState } from '../store';
 import { recalculateTask } from '../../utils/reclaculateTask';
@@ -172,6 +172,16 @@ const projectSlice = createSlice({
   reducers: {
     clearProjects: (state) => {
       state.projects = [];
+    },
+    importProject: (
+      state,
+      action: PayloadAction<{ importedProject: Project; projectId: string }>
+    ) => {
+      console.log('O tu');
+      console.log(action.payload.importedProject);
+
+      state.projects[findIndexProject(state, action.payload.projectId)] =
+        action.payload.importedProject;
     },
     addProject: (state, action: PayloadAction<{ projectName: string; projectId: string }>) => {
       action.payload.projectName.length === 0
@@ -447,6 +457,7 @@ const projectSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  importProject,
   clearProjects,
   addProject,
   delProject,
