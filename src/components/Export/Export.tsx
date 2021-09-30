@@ -667,7 +667,9 @@ const Export: FC<Props> = () => {
     return multiDataSet;
   }
 
-  const dataSetToExport = createDataSetToExport(projectToExport);
+  const projectToExportJSON = JSON.parse(JSON.stringify(projectToExport));
+
+  const dataSetToExport = createDataSetToExport(projectToExportJSON);
 
   return (
     <div className="App">
