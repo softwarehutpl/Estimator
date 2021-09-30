@@ -140,7 +140,7 @@ const Nav: FC<Props> = () => {
         modal
         footer={importDialogFooter}
       >
-        <ImportDialog />
+        {/* <ImportDialog /> */}
       </Dialog>
       <Dialog
         header="Export to file"
