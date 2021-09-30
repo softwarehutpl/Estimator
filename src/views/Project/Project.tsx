@@ -11,7 +11,7 @@ import { useParams } from "react-router";
 import { Redirect } from "react-router-dom";
 //Types
 
-import { Project, Params } from "../../types/Interface";
+import { Params } from "../../types/Interface";
 
 //Styles
 import styles from "./project.module.scss";
