@@ -20,25 +20,21 @@ export default function WebRTCChat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const peer = new Peer();
 
-  useEffect(() => {
+  function openConnection(peer: Peer) {
     peer.on("open", function (id: string) {
       console.log("My peer ID is: " + id);
       setPeerId(() => id);
     });
-    return () => {
-      setPeerId("");
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reload]);
-
-  //   openConnection(peer);
+  }
 
   return (
     <div className={styles.projectChat}>
       <div className={styles.statusChat}>
         Status: <br /> {`My connection ID: ${peerId}`} <br /> Status: sdasd
       </div>
-      <div></div>
+      <div>
+        <button onClick={() => openConnection(peer)}>Open connection</button>
+      </div>
       <InputTextarea
         className={styles.inputChat}
         rows={2}
