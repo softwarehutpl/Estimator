@@ -32,7 +32,10 @@ const DevRow: FC<Props> = ({ data, name, bold }) => {
       <div className={`${styles.cell} ${styles.min}`}>{minMd}</div>
       <div className={`${styles.cell} ${styles.max}`}>{maxMd}</div>
       <div className={`${styles.cell} ${styles.predict}`}>{predictedMd}</div>
-      <div className={`${styles.cell} ${styles.risk}`}>{risk}%</div>
+      <div className={`${styles.cell} ${styles.risk}`}>
+        {risk}
+        {bold ? "%" : ""}
+      </div>
     </div>
   );
 };

@@ -3,23 +3,23 @@ import { FC } from "react";
 import DevRow from "./DevRow/DevRow";
 //Types
 import { Part, Project, RawDevelopmentEffortSum } from "../../types/Interface";
-// import {DevCell} from "./DevCell/DevCell";
 //Styles
 import styles from "./developmentEffortSummary.module.scss";
+//Calculations
 import { RDSmain } from "../../utils/formulas/RawDevelopmentSummary/main";
+import { RDSparts } from "../../utils/formulas/RawDevelopmentSummary/parts";
 interface Props {
-  projectId: string;
   data: Project;
 }
 
-const DevelopmentEffortSummary: FC<Props> = ({ data, projectId }) => {
-  // useEffect(() => {}, [data]);
+const DevelopmentEffortSummary: FC<Props> = ({ data }) => {
   const devData: any = data.rawDevelopmentEffortSum;
   let main = RDSmain(data);
+  let parts = RDSparts(devData);
   return (
     <div className={styles.summary}>
       <DevRow bold={true} name={devData?.name} data={main} />
-      {devData?.parts.map((item: Part) => (
+      {parts.map((item: Part) => (
         <DevRow key={item.name} name={item.name} data={item} />
       ))}
     </div>
