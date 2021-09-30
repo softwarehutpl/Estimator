@@ -13,7 +13,6 @@ interface Props {
 }
 
 const EstimateTable: FC<Props> = ({ projectId, project }) => {
-  //TODO if project with given Id does not exist display something else than table
   if (!project) return null;
 
   return (
