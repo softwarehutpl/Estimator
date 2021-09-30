@@ -51,12 +51,12 @@ const TableDraggableRow: FC<IProps> = ({
     setIsOpen(!isOpen);
   };
 
-  //TODO change this function name?
   const handleTooltipClosed = () => setopenedMenuId(null);
 
   return (
     <>
       <div
+        //TODO add classnames
         className={`${styles.tableRow} ${stylingClass}`}
         onClick={handleTooltipClosed}
         onMouseLeave={(e) => handleToggleContextMenu(e)}
@@ -103,6 +103,8 @@ const TableDraggableRow: FC<IProps> = ({
                     role={role}
                     sectionName={sectionName}
                     taskId={data.id}
+                    minMd={data.minMd || 0}
+                    maxMd={data.maxMd || 0}
                     value={data[role]}
                   />
                 </TableCell>

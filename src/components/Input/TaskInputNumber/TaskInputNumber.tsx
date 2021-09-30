@@ -4,11 +4,13 @@ import { useParams } from 'react-router';
 import { useAppDispatch } from '../../../store/hooks';
 import { recalculateAfterInputChange } from '../../../store/reducers/projectReducer';
 
-import { Params, PressableKeys } from '../../../types/Interface';
+import { Fields, Params, PressableKeys } from '../../../types/Interface';
 
 import styles from './TaskInputNumber.module.scss';
 
 interface IProps {
+  maxMd: number;
+  minMd: number;
   parentTaskId?: string;
   role: string;
   sectionName: string;
@@ -16,7 +18,15 @@ interface IProps {
   value: number | null;
 }
 
-const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, value }) => {
+const TaskInputNumber: FC<IProps> = ({
+  minMd,
+  maxMd,
+  parentTaskId,
+  role,
+  sectionName,
+  taskId,
+  value,
+}) => {
   const [inputValue, setInputValue] = useState<number>(value || 0);
 
   const dispatch = useAppDispatch();
@@ -45,10 +55,13 @@ const TaskInputNumber: FC<IProps> = ({ parentTaskId, role, sectionName, taskId, 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    //TODO add protection for having max value lower than min
-    if (Number(value) > 100 || Number(value) < 0) {
-      return;
+    if (role === Fields.MIN_MD) {
+      if (Number(value) >= maxMd) return;
+    } else if (role === Fields.MAX_MD) {
+      if (Number(value) < minMd) return;
     }
+
+    if (Number(value) > 100 || Number(value) < 0) return;
 
     setInputValue(Number(value));
   };

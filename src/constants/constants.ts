@@ -33,3 +33,23 @@ export const riskMultiplicator: RiskMultiplicator = {
   M: 1.25,
   H: 1.5,
 };
+
+export const summaryTableRowOrder: Row[] = [
+  { name: 'Name', role: 'name' },
+  {
+    name: 'Min (MD)',
+    role: 'minMd',
+  },
+  {
+    name: 'Max (MD)',
+    role: 'maxMd',
+  },
+  {
+    name: 'Predicted (MD)',
+    role: 'predictedMd',
+  },
+  {
+    name: 'Risk',
+    role: 'risk',
+  },
+];
