@@ -114,7 +114,6 @@ const TaskCommentInput: FC<IProps> = ({
   const handleCommentDelete = () => {
     setInputValue('');
 
-    //Can I simplify this?
     if (!parentTaskId) {
       dispatch(
         updateTasks({
@@ -174,7 +173,6 @@ const TaskCommentInput: FC<IProps> = ({
       inputRef.current!.blur();
     } else if (key === PressableKeys.ESCAPE) {
       handleCancelComment();
-      inputRef.current!.blur();
     } else if (key === PressableKeys.I && previousKey === PressableKeys.CONTROL) {
       handleToggleCommentImportant();
     } else if (key === PressableKeys.DELETE) {

@@ -1,32 +1,41 @@
 import { ChangeEvent, FC, KeyboardEvent, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 import { useAppDispatch } from '../../../store/hooks';
-import { updateDeliveryDate } from '../../../store/reducers/projectReducer';
-import { Params, PressableKeys } from '../../../types/Interface';
+import { updateProjectHeader } from '../../../store/reducers/projectReducer';
+import { PressableKeys } from '../../../types/Interface';
 
-import styles from './SummaryTableInput.module.scss';
+import styles from './HeaderInputText.module.scss';
 
 interface IProps {
+  field: string;
+  placeholder?: string;
+  projectId: string;
+  title: string;
   value: string;
 }
 
-const SummaryTableInput: FC<IProps> = ({ value }) => {
+const HeaderInputText: FC<IProps> = ({ field, placeholder, projectId, title, value }) => {
   const [inputValue, setInputValue] = useState<string>(value);
 
   const dispatch = useAppDispatch();
 
-  const { projectId } = useParams<Params>();
-
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleCancel = () => {
+    setInputValue(value);
+  };
 
   const handleSave = () => {
     if (!inputValue || inputValue === value) return;
 
-    dispatch(updateDeliveryDate({ newDate: inputValue, projectId }));
-  };
-
-  const handleCancel = () => {
-    setInputValue(value);
+    dispatch(
+      updateProjectHeader({
+        projectId,
+        updatedValue: {
+          field,
+          value: inputValue,
+        },
+      })
+    );
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -47,19 +56,20 @@ const SummaryTableInput: FC<IProps> = ({ value }) => {
   };
 
   return (
-    <div className={styles.inputWrapper}>
+    <label className={styles.headerLabel}>
+      {title}:
       <input
-        type='date'
-        placeholder='Add your task name'
         ref={inputRef}
-        value={inputValue || ''}
-        onChange={(e) => handleInputChange(e)}
-        className={styles.taskTextInput}
+        className={styles.headerInput}
+        type='text'
+        placeholder={placeholder || ''}
+        value={inputValue}
         onBlur={handleSave}
+        onChange={handleInputChange}
         onKeyDown={(e) => handleKeyDown(e)}
       />
-    </div>
+    </label>
   );
 };
 
-export default SummaryTableInput;
+export default HeaderInputText;

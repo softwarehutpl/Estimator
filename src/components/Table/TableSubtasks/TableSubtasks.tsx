@@ -27,34 +27,34 @@ const TableSubtasks: FC<IProps> = ({
     <>
       <DroppableWrapper droppableId={`droppable-${taskId}`}>
         {subtasks.map((subtask, index) => (
-          // <TableDraggableRow
-          //   data={subtask}
-          //   key={subtask.id}
-          //   openedMenuId={openedMenuId}
-          //   orderNumber={index + 1}
-          //   parentOrderNumber={parentOrderNumber}
-          //   parentTaskId={taskId}
-          //   sectionName={sectionName}
-          //   setopenedMenuId={setopenedMenuId}
-          // />
+          <TableDraggableRow
+            data={subtask}
+            key={subtask.id}
+            openedMenuId={openedMenuId}
+            orderNumber={index + 1}
+            parentOrderNumber={parentOrderNumber}
+            parentTaskId={taskId}
+            sectionName={sectionName}
+            setopenedMenuId={setopenedMenuId}
+          />
           // TODO add draggabel
 
-          <DraggableWrapper
-            key={`subtask-${subtask.id}`}
-            draggableId={`subtask-${subtask.id}`}
-            index={9 + index}
-          >
-            <TableDraggableRow
-              data={subtask}
-              key={subtask.id}
-              openedMenuId={openedMenuId}
-              orderNumber={index + 1}
-              parentOrderNumber={parentOrderNumber}
-              parentTaskId={taskId}
-              sectionName={sectionName}
-              setopenedMenuId={setopenedMenuId}
-            />
-          </DraggableWrapper>
+          // <DraggableWrapper
+          //   key={`subtask-${subtask.id}`}
+          //   draggableId={`subtask-${subtask.id}`}
+          //   index={9 + index}
+          // >
+          //   <TableDraggableRow
+          //     data={subtask}
+          //     key={subtask.id}
+          //     openedMenuId={openedMenuId}
+          //     orderNumber={index + 1}
+          //     parentOrderNumber={parentOrderNumber}
+          //     parentTaskId={taskId}
+          //     sectionName={sectionName}
+          //     setopenedMenuId={setopenedMenuId}
+          //   />
+          // </DraggableWrapper>
         ))}
       </DroppableWrapper>
     </>

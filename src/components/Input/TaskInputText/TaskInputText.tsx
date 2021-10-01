@@ -64,7 +64,6 @@ const TaskInputText: FC<IProps> = ({ sectionName, parentTaskId, taskId, value })
       inputRef.current!.blur();
     } else if (key === PressableKeys.ESCAPE) {
       handleCancel();
-      inputRef.current!.blur();
     }
   };
 

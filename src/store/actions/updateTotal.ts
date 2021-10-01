@@ -6,7 +6,7 @@ export const updateTotal = (
     minMd: number;
     maxMd: number;
     predictedMd: number;
-    risk: number;
+    risk?: number;
   }
 ) => {
   const { minMd, maxMd, predictedMd, risk } = updatedValue;

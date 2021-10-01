@@ -2,9 +2,10 @@
   position: fixed;
   top: 117px;
   right: 5%;
-  // background-color: var(--indigo-50);
 
-  // @media (max-width: 1450px) {
-  //   position: relative;
-  // }
+  @media (max-width: 1450px) {
+    position: static;
+    max-width: 900px;
+    margin: 20px auto 0 50px;
+  }
 }

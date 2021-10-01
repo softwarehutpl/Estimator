@@ -74,7 +74,6 @@ const TaskInputNumber: FC<IProps> = ({
       inputRef.current!.blur();
     } else if (key === PressableKeys.ESCAPE) {
       handleCancelValue();
-      inputRef.current!.blur();
     }
   };
 

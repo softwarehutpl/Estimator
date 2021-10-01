@@ -1,42 +1,40 @@
 // @ts-nocheck
-import * as XLSX from "xlsx";
-import { v4 as uuidv4 } from "uuid";
+import * as XLSX from 'xlsx';
+import { v4 as uuidv4 } from 'uuid';
 
-import initialProject from "../../store/initials/initialProject";
-import { Type, Role } from "../../types/Interface";
-import createTask from "../../store/actions/createTask";
+import initialProject from '../../store/initials/initialProject';
+import { Type, Role } from '../../types/Interface';
+import createTask from '../../store/actions/createTask';
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { importProject } from "../../store/reducers/projectReducer";
-import { useState, useEffect } from "react";
-import { Redirect, useParams } from "react-router";
-import { getProjectsDataSelector } from "../../store/selectors/selectors";
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { importProject } from '../../store/reducers/projectReducer';
+import { useState, useEffect } from 'react';
+import { Redirect, useParams } from 'react-router';
+import { getProjectsDataSelector } from '../../store/selectors/selectors';
 
 export const Import: FC<Props> = () => {
   const { projectId } = useParams();
   const dispatch = useAppDispatch();
   const [project, setProject] = useState(null);
   const projectsData = useAppSelector(getProjectsDataSelector());
-  const projectData = projectsData.find(
-    (data) => data.projectId === projectId ?? data.projectName
-  );
+  const projectData = projectsData.find((data) => data.projectId === projectId ?? data.projectName);
   // console.log(projectName.projectName);
 
   // let project = {};
   function getSectionName(sectionId) {
     switch (sectionId) {
       case Role.FD:
-        return "Frontend development";
+        return 'Frontend development';
       case Role.BD:
-        return "Backend development";
+        return 'Backend development';
       case Role.MD:
-        return "Mobile development";
+        return 'Mobile development';
       case Role.UD:
-        return "Design / UX / UI";
+        return 'Design / UX / UI';
       case Role.DO:
-        return "Configuration / Setup / Deployment";
+        return 'Configuration / Setup / Deployment';
       default:
-        return "";
+        return '';
     }
   }
 
@@ -52,25 +50,19 @@ export const Import: FC<Props> = () => {
     newProject.estStart = data[2]._5;
     newProject.estEns = data[2]._7;
     newProject.teamSize = data[3]._5;
-    newProject.timeBudget = parseInt(
-      data[3]._7.substring(0, data[3]._7.length - 3)
-    ); //"160 MD" => 160
-    newProject.effort = parseInt(
-      data[5]._7.substring(0, data[5]._7.length - 1)
-    ); //"12h" => 12
+    newProject.timeBudget = parseInt(data[3]._7.substring(0, data[3]._7.length - 3)); //"160 MD" => 160
+    newProject.effort = parseInt(data[5]._7.substring(0, data[5]._7.length - 1)); //"12h" => 12
 
     let i;
     for (i = 10; i < data.length; i++) {
-      if (data[i]._1 === "") break; // pusta linijka po taskach
+      if (data[i]._1 === '') break; // pusta linijka po taskach
 
       let risk = data[i]._8; // risk - sekcja: number, task: string
 
-      if (typeof risk == "number") {
+      if (typeof risk == 'number') {
         //if risk: number => section
         let name = data[i]._1; // nazwa sekcji
-        let section = newProject.sections.find(
-          (section) => section.name === name
-        );
+        let section = newProject.sections.find((section) => section.name === name);
         section.maxMd = data[i]._6;
         section.minMd = data[i]._5;
         section.predictedMd = data[i]._7;
@@ -78,14 +70,10 @@ export const Import: FC<Props> = () => {
       } else {
         // risk: string => task/group/subtask or comment
 
-        if ((risk === "" || risk === undefined) && data[i]._4 !== undefined) {
+        if ((risk === '' || risk === undefined) && data[i]._4 !== undefined) {
           // (risk === "" => add group
           let name = data[i]._1; // nazwa taska
-          let groupTask = createTask(
-            getSectionName(data[i]._4),
-            name,
-            Type.Group
-          );
+          let groupTask = createTask(getSectionName(data[i]._4), name, Type.Group);
           newProject.sections
             .find((section) => section.name === getSectionName(data[i]._4))
             .tasks.push(groupTask);
@@ -93,13 +81,9 @@ export const Import: FC<Props> = () => {
           // risk !== "" => add task/subtask
 
           let name = data[i]._1; // nazwa taska
-          if (data[i]._1.slice(0, 4) !== "    " && data[i]._4 !== undefined) {
+          if (data[i]._1.slice(0, 4) !== '    ' && data[i]._4 !== undefined) {
             // name != "    ...." => task
-            let newTask = createTask(
-              getSectionName(data[i]._4),
-              name,
-              Type.Task
-            );
+            let newTask = createTask(getSectionName(data[i]._4), name, Type.Task);
             newTask.minMd = data[i]._5;
             newTask.maxMd = data[i]._6;
             newTask.predictedMd = data[i]._7;
@@ -109,8 +93,8 @@ export const Import: FC<Props> = () => {
             let commentIndex = i + 1;
 
             if (
-              data[commentIndex]._1 !== "" &&
-              data[commentIndex]._7 === "" &&
+              data[commentIndex]._1 !== '' &&
+              data[commentIndex]._7 === '' &&
               data[commentIndex]._4 === undefined
             ) {
               newTask.comment = {
@@ -122,25 +106,21 @@ export const Import: FC<Props> = () => {
                 .tasks.push(newTask);
               i++;
             } else {
-              newTask.comment.text = "";
+              newTask.comment.text = '';
               newProject.sections
                 .find((section) => section.name === getSectionName(data[i]._4))
                 .tasks.push(newTask);
             }
           }
 
-          if (data[i]._1.slice(0, 4) === "    " && data[i]._4 !== undefined) {
+          if (data[i]._1.slice(0, 4) === '    ' && data[i]._4 !== undefined) {
             // name = "    ...." => subtask
             // let name = data[i]._1; // nazwa taska
             let j = i;
 
             let subtasks = [];
-            while (data[j]._1.slice(0, 4) === "    ") {
-              let newSubtask = createTask(
-                getSectionName(data[j]._4),
-                data[j]._1.trim(),
-                Type.Task
-              );
+            while (data[j]._1.slice(0, 4) === '    ') {
+              let newSubtask = createTask(getSectionName(data[j]._4), data[j]._1.trim(), Type.Task);
               newSubtask.minMd = data[j]._5;
               newSubtask.maxMd = data[j]._6;
               newSubtask.predictedMd = data[j]._7;
@@ -150,8 +130,8 @@ export const Import: FC<Props> = () => {
               let subtaskCommentIndex = j + 1;
 
               if (
-                data[subtaskCommentIndex]._1 !== "" &&
-                data[subtaskCommentIndex]._7 === "" &&
+                data[subtaskCommentIndex]._1 !== '' &&
+                data[subtaskCommentIndex]._7 === '' &&
                 data[subtaskCommentIndex]._4 === undefined
               ) {
                 newSubtask.comment = {
@@ -160,7 +140,7 @@ export const Import: FC<Props> = () => {
                 };
                 j++;
               } else {
-                newSubtask.comment.text = "";
+                newSubtask.comment.text = '';
               }
 
               // creating subtasks list
@@ -195,15 +175,14 @@ export const Import: FC<Props> = () => {
     i++; // wskazuje na index "raw development... . parts"
     let partsIndex = 0;
     for (i; i < data.length; i++) {
-      if (data[i]._1 === "") break; // pusta linijka po "raw development... . parts"
+      if (data[i]._1 === '') break; // pusta linijka po "raw development... . parts"
 
       newProject.rawDevelopmentEffortSum.parts[partsIndex].name = data[i]._1;
       newProject.rawDevelopmentEffortSum.parts[partsIndex].procent = data[i]._3;
       newProject.rawDevelopmentEffortSum.parts[partsIndex].role = data[i]._4;
       newProject.rawDevelopmentEffortSum.parts[partsIndex].minMd = data[i]._5;
       newProject.rawDevelopmentEffortSum.parts[partsIndex].maxMd = data[i]._6;
-      newProject.rawDevelopmentEffortSum.parts[partsIndex].predictedMd =
-        data[i]._7;
+      newProject.rawDevelopmentEffortSum.parts[partsIndex].predictedMd = data[i]._7;
 
       partsIndex++;
     }
@@ -242,7 +221,7 @@ export const Import: FC<Props> = () => {
       fileReader.onload = (e) => {
         const bufferArray = e.target.result;
 
-        const wb = XLSX.read(bufferArray, { type: "buffer" });
+        const wb = XLSX.read(bufferArray, { type: 'buffer' });
 
         const wsname = wb.SheetNames[0];
 
@@ -284,7 +263,7 @@ export const Import: FC<Props> = () => {
   return (
     <div>
       <input
-        type="file"
+        type='file'
         onChange={(e) => {
           const file = e.target.files[0];
           readExcel(file);

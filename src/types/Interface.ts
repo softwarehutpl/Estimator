@@ -8,7 +8,7 @@ export interface Project {
   projectName: string;
   projectId?: string;
   estimatedBy?: string;
-  estimationDate?: Object;
+  estimationDate?: string;
   verifiedBy?: string;
   verificationDate?: string;
   estStart?: string;
@@ -18,7 +18,7 @@ export interface Project {
   effort?: number;
   sections: Section[];
   rawDevelopmentEffortSum: RawDevelopmentEffortSum;
-  summary?: Main[];
+  summary: Main[];
   assumptions?: Assumption[];
 }
 
@@ -112,17 +112,17 @@ export interface Comment {
 }
 
 export enum Role {
-  Empty = "",
-  FD = "FD",
-  BD = "BD",
-  MD = "MD",
-  UD = "UD",
-  DO = "DO",
+  Empty = '',
+  FD = 'FD',
+  BD = 'BD',
+  MD = 'MD',
+  UD = 'UD',
+  DO = 'DO',
 }
 
 export enum Type {
-  Group = "group",
-  Task = "task",
+  Group = 'group',
+  Task = 'task',
 }
 
 export interface RiskMultiplicator {
@@ -130,32 +130,32 @@ export interface RiskMultiplicator {
 }
 
 export enum Multiplicators {
-  L = "L",
-  M = "M",
-  H = "H",
+  L = 'L',
+  M = 'M',
+  H = 'H',
 }
 
 export enum PressableKeys {
-  ENTER = "Enter",
-  ESCAPE = "Escape",
-  CONTROL = "Control",
-  DELETE = "Delete",
-  I = "i",
+  ENTER = 'Enter',
+  ESCAPE = 'Escape',
+  CONTROL = 'Control',
+  DELETE = 'Delete',
+  I = 'i',
 }
 export interface Params {
   projectId: string;
 }
 
 export enum Fields {
-  SECTION_ID = "sectionId",
-  NAME = "name",
-  ROLE = "role",
-  MIN_MD = "minMd",
-  MAX_MD = "maxMd",
-  PREDICTED_MD = "predictedMd",
-  RISK = "risk",
-  COMMENT_TEXT = "commentText",
-  COMMENT_IMPORTANT = "commentImportant",
+  SECTION_ID = 'sectionId',
+  NAME = 'name',
+  ROLE = 'role',
+  MIN_MD = 'minMd',
+  MAX_MD = 'maxMd',
+  PREDICTED_MD = 'predictedMd',
+  RISK = 'risk',
+  COMMENT_TEXT = 'commentText',
+  COMMENT_IMPORTANT = 'commentImportant',
 }
 
 export interface Row {
