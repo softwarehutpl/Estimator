@@ -4,6 +4,12 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import Peer from "peerjs";
 import { InputText } from "primereact/inputtext";
+import store from "../../store/store";
+import { useParams } from "react-router";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { getProjectSelector } from "../../store/selectors/selectors";
+import { Params, Project } from "../../types/Interface";
+import { synchronizeProject } from "../../store/reducers/projectReducer";
 
 // const tempId = "";
 
@@ -20,12 +26,14 @@ export default function RTCGuest() {
   const [recvId, setRecvId] = useState("");
   const [status, setStatus] = useState("");
   const [message, setMessage] = useState("");
+  const [messagesList, setMessagesList] = useState(["Initial message"]);
   const peer: any = useRef();
   const conn: any = useRef();
+  const { projectId } = useParams<Params>();
   const lastPeerId = useRef();
+  const dispatch = useAppDispatch();
 
-  //@ts-ignore
-  window.getInputId = () => inputId;
+  const project = useAppSelector(getProjectSelector(projectId));
 
   function initialize() {
     peer.current = new Peer();
@@ -104,8 +112,16 @@ export default function RTCGuest() {
       if (command) conn.current.send(command);
     });
     // Handle incoming data (messages only since this is the signal sender)
-    conn.current.on("data", function (data: string) {
-      addMessage(data);
+    conn.current.on("data", function (data: Project) {
+      // addMessage(data);
+      // // let tempList = [...messagesList.concat(data)];
+      // setMessagesList((prevState) => [...prevState, data]);
+      dispatch(
+        synchronizeProject({
+          synchronizeProject: data,
+          projectId: projectId,
+        })
+      );
     });
     conn.current.on("close", function () {
       setStatus("Connection closed");
@@ -136,6 +152,7 @@ export default function RTCGuest() {
         "</span>  -  " +
         value
     );
+
     console.log(value);
   }
 
@@ -146,6 +163,18 @@ export default function RTCGuest() {
     var results = regex.exec(window.location.href);
     if (results == null) return null;
     else return results[1];
+  }
+
+  function sendMessage() {
+    if (conn.current && conn.current.open) {
+      // conn.current.send(value);
+      conn.current.send(project);
+      // console.log("Sent: " + value);
+      console.log(project);
+      // addMessage(value);
+    } else {
+      console.log("Connection is closed");
+    }
   }
 
   useEffect(() => {
@@ -176,32 +205,31 @@ export default function RTCGuest() {
         <br />
         <br />
       </div>
-      <InputTextarea
+      {/* <InputTextarea
         className={styles.inputChat}
         rows={2}
         cols={30}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-      />
+      /> */}
       <br />
       <Button
         className={styles.buttonChat}
-        label="Send message"
+        label="Synchronize"
         icon="pi pi-check"
         iconPos="right"
-        onClick={() =>
-          addMessage('<span class="selfMsg">Self: </span> ' + value)
-        }
+        onClick={() => sendMessage()}
       />
       <br />
-      <div className={styles.messagesArea}>
-        <span>Text 1</span>
-        <br />
-        <span>Text 2</span>
-        <br />
-        <span>Text 3</span>
-        <br />
-      </div>
+      {/* <div className={styles.messagesArea}>
+        {messagesList.map((message) => {
+          return (
+            <span key={message}>
+              {message} <br />
+            </span>
+          );
+        })}
+      </div> */}
     </div>
   );
 }

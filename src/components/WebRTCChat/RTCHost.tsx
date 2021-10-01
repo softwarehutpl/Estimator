@@ -4,6 +4,12 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Button } from "primereact/button";
 import Peer from "peerjs";
 import { InputText } from "primereact/inputtext";
+import store from "../../store/store";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { synchronizeProject } from "../../store/reducers/projectReducer";
+import { Params, Project } from "../../types/Interface";
+import { useParams } from "react-router-dom";
+import { getProjectSelector } from "../../store/selectors/selectors";
 
 // const tempId = "";
 
@@ -22,6 +28,10 @@ export default function RTCHost() {
   const peer: any = useRef();
   const conn: any = useRef();
   const lastPeerId = useRef();
+  const { projectId } = useParams<Params>();
+  const dispatch = useAppDispatch();
+
+  const project = useAppSelector(getProjectSelector(projectId));
 
   function initialize() {
     peer.current = new Peer(undefined, {
@@ -61,6 +71,16 @@ export default function RTCHost() {
         }
 
         conn.current = c;
+        conn.current.on("data", function (data: Project) {
+          // console.log(data);
+          dispatch(
+            synchronizeProject({
+              synchronizeProject: data,
+              projectId: projectId,
+            })
+          );
+          // let tempList = [...messagesList.concat(data)];
+        });
         console.log("Connected to: " + conn.current.peer);
         setStatus("Connected");
 
@@ -112,14 +132,15 @@ export default function RTCHost() {
         "</span>  -  " +
         value
     );
-    console.log(value);
+    // console.log(value);
   }
 
   function sendMessage() {
     if (conn.current && conn.current.open) {
-      conn.current.send(value);
-      console.log("Sent: " + value);
+      // conn.current.send(value);
+      // console.log("Sent: " + value);
       addMessage(value);
+      conn.current.send(project);
     } else {
       console.log("Connection is closed");
     }
@@ -142,30 +163,30 @@ export default function RTCHost() {
         <br />
         <br />
       </div>
-      <InputTextarea
+      {/* <InputTextarea
         className={styles.inputChat}
         rows={2}
         cols={30}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-      />
+      /> */}
       <br />
       <Button
         className={styles.buttonChat}
-        label="Send message"
+        label="Synchronize"
         icon="pi pi-check"
         iconPos="right"
         onClick={() => sendMessage()}
       />
       <br />
-      <div className={styles.messagesArea}>
+      {/* <div className={styles.messagesArea}>
         <span>Text 1</span>
         <br />
         <span>Text 2</span>
         <br />
         <span>Text 3</span>
         <br />
-      </div>
+      </div> */}
     </div>
   );
 }

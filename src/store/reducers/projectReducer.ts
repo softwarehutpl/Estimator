@@ -192,6 +192,13 @@ const projectSlice = createSlice({
       state.projects[findIndexProject(state, action.payload.projectId)] =
         importedProject;
     },
+    synchronizeProject: (
+      state,
+      action: PayloadAction<{ synchronizeProject: Project; projectId: string }>
+    ) => {
+      state.projects[findIndexProject(state, action.payload.projectId)] =
+        JSON.parse(JSON.stringify(action.payload.synchronizeProject));
+    },
     addProject: (
       state,
       action: PayloadAction<{ projectName: string; projectId: string }>
@@ -528,6 +535,7 @@ export const {
   updateSection,
   updateSummaryTotal,
   reorder,
+  synchronizeProject,
 
   updateParts,
 } = projectSlice.actions;
