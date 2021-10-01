@@ -1,7 +1,11 @@
-import { Task } from '../types/Interface';
+import { Task } from "../types/Interface";
 
-export const calculateRisk = (maxValue: number, predictedValue: number): number => {
-  const resultValue = ((maxValue - predictedValue) / (predictedValue || 1)) * 100;
+export const calculateRisk = (
+  maxValue: number,
+  predictedValue: number
+): number => {
+  const resultValue =
+    ((maxValue - predictedValue) / (predictedValue || 1)) * 100;
 
   if (isNaN(resultValue)) return 0;
 
