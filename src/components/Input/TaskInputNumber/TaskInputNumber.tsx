@@ -1,12 +1,12 @@
-import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from 'react';
-import { useParams } from 'react-router';
+import { ChangeEvent, FC, KeyboardEvent, useState, useRef } from "react";
+import { useParams } from "react-router";
 
-import { useAppDispatch } from '../../../store/hooks';
-import { recalculateAfterInputChange } from '../../../store/reducers/projectReducer';
+import { useAppDispatch } from "../../../store/hooks";
+import { recalculateAfterInputChange } from "../../../store/reducers/projectReducer";
 
-import { Fields, Params, PressableKeys } from '../../../types/Interface';
+import { Fields, Params, PressableKeys } from "../../../types/Interface";
 
-import styles from './TaskInputNumber.module.scss';
+import styles from "./TaskInputNumber.module.scss";
 
 interface IProps {
   maxMd: number;
@@ -45,7 +45,7 @@ const TaskInputNumber: FC<IProps> = ({
         projectId,
         sectionName,
         taskId: parentTaskId || taskId,
-        subtaskId: (parentTaskId && taskId) || '',
+        subtaskId: (parentTaskId && taskId) || "",
         taskProps: role,
         updatedValue: inputValue,
       })
@@ -81,11 +81,11 @@ const TaskInputNumber: FC<IProps> = ({
   return (
     <div className={styles.inputWrapper}>
       <input
-        type='number'
+        type="number"
         ref={inputRef}
-        min='0'
-        max='100'
-        step='0.25'
+        min="0"
+        max="100"
+        step="0.25"
         onKeyDown={(e) => handleKeyDown(e)}
         onBlur={handleUpdateValue}
         onChange={(e) => handleInputChange(e)}
