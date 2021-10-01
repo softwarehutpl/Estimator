@@ -74,9 +74,9 @@ export const recalculateDevelopmentSum = createAsyncThunk(
     if (!main || !project) return;
 
     const newMain = RDSmain(project);
-    const newParts = RDSparts(project.rawDevelopmentEffortSum);
+    // const newParts = RDSparts(project.rawDevelopmentEffortSum);
 
-    dispatch(updateDevelopmentSum({ projectId, newMain, newParts }));
+    dispatch(updateDevelopmentSum({ projectId, newMain }));
 
     dispatch(recalculateTotal({ projectId }));
   }
@@ -189,11 +189,12 @@ const projectSlice = createSlice({
       state,
       action: PayloadAction<{ importedProject: Project; projectId: string }>
     ) => {
-      console.log("O tu");
-      console.log(action.payload.importedProject);
+      const importedProject = JSON.parse(
+        JSON.stringify(action.payload.importedProject)
+      );
 
       state.projects[findIndexProject(state, action.payload.projectId)] =
-        action.payload.importedProject;
+        importedProject;
     },
     addProject: (
       state,
@@ -474,16 +475,15 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         newMain: Main;
-        newParts: Part[];
+        // newParts: Part[];
       }>
     ) => {
-      const { projectId, newMain, newParts } = action.payload;
+      const { projectId, newMain } = action.payload;
       const project = state.projects[findIndexProject(state, projectId)];
 
       if (!project) return;
 
       project.rawDevelopmentEffortSum!.main = newMain;
-      project.rawDevelopmentEffortSum!.parts = newParts;
     },
     calculatePart: (state, action: PayloadAction<{ projectId: string }>) => {
       const project =
