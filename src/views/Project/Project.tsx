@@ -15,6 +15,7 @@ import { Params } from "../../types/Interface";
 
 //Styles
 import styles from "./project.module.scss";
+import WebRTCChat from "../../components/WebRTCChat/WebRTCChat";
 
 interface Props {}
 
@@ -32,6 +33,7 @@ const DataView: FC<Props> = () => {
       <EstimateTable projectId={projectId} project={project} />
       <DevelopmentEffortSummary data={project} />
       <ProjectSummary projectId={projectId} summary={project.summary} />
+      <WebRTCChat />
     </main>
   );
 };

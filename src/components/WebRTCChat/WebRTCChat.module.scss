@@ -1,0 +1,50 @@
+.projectChat {
+  position: fixed;
+  top: 450px;
+  right: 9%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.buttonsChat {
+  display: flex;
+  width: 400px;
+  padding: 20px;
+  flex-direction: column;
+  align-content: center;
+}
+
+.infoChat {
+  margin-bottom: 25px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.statusChat {
+  align-self: flex-start;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.inputChat {
+  max-width: 450px;
+  min-width: 450px;
+}
+
+.buttonChat {
+  width: 200px;
+}
+
+.messagesArea {
+  margin-top: 10px;
+  padding: 10px;
+  width: 450px;
+  height: 150px;
+  background-color: #ffffff;
+  font-size: 17px;
+  scroll-behavior: smooth;
+  overflow: scroll;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}

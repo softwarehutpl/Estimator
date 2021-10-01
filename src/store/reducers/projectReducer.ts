@@ -1,9 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  current,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import initialState from "../initials/initialState";
 import createProject from "../actions/createProject";
 import createTask from "../actions/createTask";
@@ -21,7 +16,6 @@ import {
   RawDevelopmentEffortSum,
   Main,
   Project,
-  Part,
 } from "../../types/Interface";
 import { RootState } from "../store";
 import { recalculateTask } from "../../utils/reclaculateTask";
@@ -31,7 +25,6 @@ import updateDevInput from "../actions/updateDevInput";
 import { RDSmain } from "../../utils/recalculateRDSMain";
 import { recalculateTotalValues } from "../../utils/recalculateTotalValues";
 import { updateTotal } from "../actions/updateTotal";
-import { RDSparts } from "../../utils/formulas/RawDevelopmentSummary/parts";
 import { updatePart } from "../actions/updatePart";
 
 export const recalculateTotal = createAsyncThunk(
@@ -195,6 +188,13 @@ const projectSlice = createSlice({
 
       state.projects[findIndexProject(state, action.payload.projectId)] =
         importedProject;
+    },
+    synchronizeProject: (
+      state,
+      action: PayloadAction<{ synchronizeProject: Project; projectId: string }>
+    ) => {
+      state.projects[findIndexProject(state, action.payload.projectId)] =
+        JSON.parse(JSON.stringify(action.payload.synchronizeProject));
     },
     addProject: (
       state,
@@ -558,6 +558,8 @@ export const {
   updateSection,
   updateSummaryTotal,
   reorder,
+  synchronizeProject,
+
   calculatePart,
   updateParts,
 } = projectSlice.actions;
