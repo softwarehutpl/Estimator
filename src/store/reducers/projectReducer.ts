@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, current, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import initialState from '../initials/initialState';
 import createProject from '../actions/createProject';
 import createTask from '../actions/createTask';
@@ -21,12 +21,13 @@ import { RootState } from '../store';
 import { recalculateTask } from '../../utils/reclaculateTask';
 import { sectionUpdate } from '../actions/sectionUpdate';
 import { recalculateRow } from '../../utils/recalculateRow';
-import updatePart from '../actions/updatePart';
+import { updatePart } from '../actions/updatePart';
 import { RDSmain } from '../../utils/recalculateRDSMain';
 import { recalculateTotalValues } from '../../utils/recalculateTotalValues';
 import { updateTotal } from '../actions/updateTotal';
 import { recalculatePerTeamMember } from '../../utils/recalculatePerTeamMember';
 import { recalculateBudget as budgetRecalc } from '../../utils/recalculateBudget';
+import updateDevInput from '../actions/updateDevInput';
 
 export const recalculateBudget = createAsyncThunk(
   'project/recalculateBudget',
@@ -149,6 +150,7 @@ export const recalculateDevelopmentSum = createAsyncThunk(
     if (!main || !project) return;
 
     const newMain = RDSmain(project);
+    // const newParts = RDSparts(project.rawDevelopmentEffortSum);
 
     dispatch(updateDevelopmentSum({ projectId, newMain }));
 
@@ -266,6 +268,14 @@ const projectSlice = createSlice({
       const importedProject = JSON.parse(JSON.stringify(action.payload.importedProject));
 
       state.projects[findIndexProject(state, action.payload.projectId)] = importedProject;
+    },
+    synchronizeProject: (
+      state,
+      action: PayloadAction<{ synchronizeProject: Project; projectId: string }>
+    ) => {
+      state.projects[findIndexProject(state, action.payload.projectId)] = JSON.parse(
+        JSON.stringify(action.payload.synchronizeProject)
+      );
     },
     addProject: (state, action: PayloadAction<{ projectName: string; projectId: string }>) => {
       action.payload.projectName.length === 0
@@ -523,6 +533,7 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         newMain: Main;
+        // newParts: Part[];
       }>
     ) => {
       const { projectId, newMain } = action.payload;
@@ -552,6 +563,27 @@ const projectSlice = createSlice({
 
       // updateProject(project, updatedValue);
     },
+    calculatePart: (state, action: PayloadAction<{ projectId: string }>) => {
+      const project = state.projects[findIndexProject(state, action.payload.projectId)];
+
+      let parts = project.rawDevelopmentEffortSum?.parts;
+
+      const result = parts.map((part) =>
+        updatePart({
+          minMd: part.minMd,
+          maxMd: part.maxMd,
+          role: part.role,
+          minMdFormula: part.minMdFormula,
+          maxMdFormula: part.maxMdFormula,
+          procent: part.procent,
+          predictedMd: part.predictedMd,
+          predictedMdFormula: part.predictedMdFormula,
+          name: part.name,
+        })
+      );
+
+      project.rawDevelopmentEffortSum.parts = result;
+    },
     updateParts: (
       state,
       action: PayloadAction<{
@@ -565,10 +597,12 @@ const projectSlice = createSlice({
 
       const rawDevelopmentEffortSum = project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
 
+      const main = rawDevelopmentEffortSum.main;
+
       const newState =
         rawDevelopmentEffortSum.parts.map((part) =>
           part.name === action.payload.partName
-            ? updatePart(part, action.payload.partProps, action.payload.updatedValue)
+            ? updateDevInput(part, main, action.payload.partProps, action.payload.updatedValue)
             : part
         ) || [];
 
@@ -596,7 +630,9 @@ export const {
   updateSection,
   updateSummaryTotal,
   reorder,
+  synchronizeProject,
 
+  calculatePart,
   updateParts,
 } = projectSlice.actions;
 
