@@ -14,7 +14,7 @@ import Import from "../Import/Import";
 //Types
 import { Params, Project } from "../../types/Interface";
 //Router
-import { Route, useParams, useHistory, Link } from "react-router-dom";
+import { Route, useParams, useHistory, Link, Redirect } from "react-router-dom";
 //Store
 import { useAppSelector } from "../../store/hooks";
 import {
@@ -34,7 +34,7 @@ const Nav: FC<Props> = () => {
   const projectsData = useAppSelector(getProjectsDataSelector());
   //Dialogs state
   const [selectedProject, setSelectedProject] = useState(
-    projectId && project.projectName
+    projectId && project?.projectName
   );
   const [importDialog, setImportDialog] = useState(false);
   const [exportDialog, setExportDialog] = useState(false);
@@ -52,7 +52,7 @@ const Nav: FC<Props> = () => {
   });
 
   useEffect(() => {
-    setSelectedProject(projectId && project.projectName);
+    setSelectedProject(projectId && project?.projectName);
   }, [projectId]);
 
   const selectHandler = (e: DropdownChangeParams) => {
