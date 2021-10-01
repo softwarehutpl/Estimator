@@ -20,20 +20,17 @@ interface Props {}
 
 const DataView: FC<Props> = () => {
   const { projectId } = useParams<Params>();
+
   const project: any = useAppSelector(getProjectSelector(projectId));
   if (!project) {
     return <Redirect to="/404" />;
   }
   const devData = project.rawDevelopmentEffortSum;
-  console.log(project);
+
   return (
     <main className={styles.contentWrapper}>
       <EstimateTable projectId={projectId} project={project} />
-      <DevelopmentEffortSummary
-        projectId={projectId}
-        summary={project.summary}
-        data={devData}
-      />
+      <DevelopmentEffortSummary data={project} />
       <ProjectSummary projectId={projectId} summary={project.summary} />
     </main>
   );
