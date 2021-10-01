@@ -25,6 +25,90 @@ import updatePart from '../actions/updatePart';
 import { RDSmain } from '../../utils/recalculateRDSMain';
 import { recalculateTotalValues } from '../../utils/recalculateTotalValues';
 import { updateTotal } from '../actions/updateTotal';
+import { recalculatePerTeamMember } from '../../utils/recalculatePerTeamMember';
+import { recalculateBudget as budgetRecalc } from '../../utils/recalculateBudget';
+
+export const recalculateBudget = createAsyncThunk(
+  'project/recalculateBudget',
+  async (props: { projectId: string }, { dispatch, getState }) => {
+    const { projectId } = props;
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const project = projects.projects.find((project) => project.projectId === projectId);
+
+    if (!project) return;
+
+    const result = budgetRecalc(project?.estStart, project?.estEns, project?.teamSize);
+
+    dispatch(
+      updateProjectHeader({ projectId, updatedValue: { field: 'timeBudget', value: result } })
+    );
+  }
+);
+
+export const recalculateTimeBudget = createAsyncThunk(
+  'project/recalculateTimeBudget',
+  async (
+    props: {
+      projectId: string;
+      updatedValue: {
+        field: string;
+        value: string;
+      };
+    },
+    { dispatch, getState }
+  ) => {
+    const { projectId, updatedValue } = props;
+
+    dispatch(updateProjectHeader({ projectId, updatedValue }));
+
+    if (updatedValue.field === 'estEns' || updatedValue.field === 'estStart') {
+      const { projects }: { projects: Projects } = getState() as RootState;
+
+      const project = projects.projects.find((project) => project.projectId === projectId);
+
+      if (!project) return;
+
+      const result = budgetRecalc(project?.estStart, project?.estEns, project?.teamSize);
+
+      dispatch(
+        updateProjectHeader({ projectId, updatedValue: { field: 'timeBudget', value: result } })
+      );
+    }
+  }
+);
+
+export const recalculatePerMember = createAsyncThunk(
+  'project/recalculatePerMember',
+  async (
+    props: { projectId: string; updatedValue: { field: string; value: number } | null },
+    { dispatch, getState }
+  ) => {
+    const { projectId, updatedValue } = props;
+
+    if (updatedValue) {
+      dispatch(updateProjectHeader({ projectId, updatedValue }));
+    }
+
+    const { projects }: { projects: Projects } = getState() as RootState;
+
+    const project = projects.projects.find((project) => project.projectId === projectId);
+    const summary = projects.projects.find((project) => project.projectId === projectId)?.summary;
+
+    const total = summary?.find((item) => item.name?.includes('Total'));
+    const perTeamMember = summary?.find((item) => item.name?.includes('Team'));
+
+    if (!total || !perTeamMember) return;
+
+    const newTeamSize = updatedValue ? updatedValue.value : project?.teamSize || 1;
+    const result = recalculatePerTeamMember(total, newTeamSize);
+
+    dispatch(updateSummaryPerMember({ projectId, updatedValues: result }));
+
+    dispatch(recalculateBudget({ projectId }));
+  }
+);
 
 export const recalculateTotal = createAsyncThunk(
   'project/recalculateTotal',
@@ -45,6 +129,8 @@ export const recalculateTotal = createAsyncThunk(
     const result = recalculateTotalValues(main, parts);
 
     dispatch(updateSummaryTotal({ projectId, updatedValues: result }));
+
+    dispatch(recalculatePerMember({ projectId, updatedValue: null }));
   }
 );
 
@@ -177,9 +263,6 @@ const projectSlice = createSlice({
       state,
       action: PayloadAction<{ importedProject: Project; projectId: string }>
     ) => {
-      console.log('O tu');
-      console.log(action.payload.importedProject);
-
       state.projects[findIndexProject(state, action.payload.projectId)] =
         action.payload.importedProject;
     },
@@ -256,9 +339,6 @@ const projectSlice = createSlice({
       const task = section.tasks[findIndexTask(section, action.payload.taskId)];
 
       const newSubtask = createTask(action.payload.sectionName, action.payload.subtaskName);
-
-      // one test faild -> fcn set new value in props index..
-      // test expected new value in last index of array
 
       if (task.type === Type.Group) {
         task.subtasks?.splice(setInIndex, 0, newSubtask);
@@ -377,6 +457,27 @@ const projectSlice = createSlice({
 
       sectionTasks?.splice(endIndex, 0, removedTask);
     },
+    updateSummaryPerMember: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        updatedValues: {
+          minMd: number;
+          maxMd: number;
+          predictedMd: number;
+        };
+      }>
+    ) => {
+      const { projectId, updatedValues } = action.payload;
+
+      const project = state.projects[findIndexProject(state, projectId)];
+
+      const newSummary = project.summary?.map((item) =>
+        item.name?.includes('Team') ? updateTotal(item, updatedValues) : item
+      );
+
+      project.summary = newSummary;
+    },
     updateSummaryTotal: (
       state,
       action: PayloadAction<{
@@ -430,6 +531,26 @@ const projectSlice = createSlice({
 
       project.rawDevelopmentEffortSum!.main = newMain;
     },
+    updateProjectHeader: (
+      state,
+      action: PayloadAction<{
+        projectId: string;
+        updatedValue: {
+          field: string;
+          value: string | number;
+        };
+      }>
+    ) => {
+      const { projectId, updatedValue } = action.payload;
+
+      const project = state.projects[findIndexProject(state, projectId)];
+      // if (project.hasOwnProperty(updatedValue.field)) {
+      //@ts-ignore
+      project[updatedValue.field] = updatedValue.value;
+      // }
+
+      // updateProject(project, updatedValue);
+    },
     updateParts: (
       state,
       action: PayloadAction<{
@@ -469,6 +590,8 @@ export const {
   updateSubtask,
   updateDeliveryDate,
   updateDevelopmentSum,
+  updateSummaryPerMember,
+  updateProjectHeader,
   updateSection,
   updateSummaryTotal,
   reorder,

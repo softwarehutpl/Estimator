@@ -14,6 +14,7 @@ import { Project, Params } from '../../types/Interface';
 
 //Styles
 import styles from './project.module.scss';
+import ProjectHeader from '../../components/ProjectHeader/ProjectHeader';
 
 interface Props {}
 
@@ -24,6 +25,7 @@ const DataView: FC<Props> = () => {
   console.log(project);
   return (
     <main className={styles.contentWrapper}>
+      <ProjectHeader project={project} />
       <EstimateTable projectId={projectId} project={project} />
       <DevelopmentEffortSummary projectId={projectId} summary={project.summary} data={devData} />
       <ProjectSummary projectId={projectId} summary={project.summary} />

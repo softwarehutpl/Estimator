@@ -8,7 +8,7 @@ export interface Project {
   projectName: string;
   projectId?: string;
   estimatedBy?: string;
-  estimationDate?: Object;
+  estimationDate?: string;
   verifiedBy?: string;
   verificationDate?: string;
   estStart?: string;
