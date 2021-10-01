@@ -21,15 +21,18 @@ import {
   RawDevelopmentEffortSum,
   Main,
   Project,
+  Part,
 } from "../../types/Interface";
 import { RootState } from "../store";
 import { recalculateTask } from "../../utils/reclaculateTask";
 import { sectionUpdate } from "../actions/sectionUpdate";
 import { recalculateRow } from "../../utils/recalculateRow";
-import updatePart from "../actions/updatePart";
+import updateDevInput from "../actions/updateDevInput";
 import { RDSmain } from "../../utils/recalculateRDSMain";
 import { recalculateTotalValues } from "../../utils/recalculateTotalValues";
 import { updateTotal } from "../actions/updateTotal";
+import { RDSparts } from "../../utils/formulas/RawDevelopmentSummary/parts";
+import { updatePart } from "../actions/updatePart";
 
 export const recalculateTotal = createAsyncThunk(
   "project/recalculateTotal",
@@ -71,6 +74,7 @@ export const recalculateDevelopmentSum = createAsyncThunk(
     if (!main || !project) return;
 
     const newMain = RDSmain(project);
+    // const newParts = RDSparts(project.rawDevelopmentEffortSum);
 
     dispatch(updateDevelopmentSum({ projectId, newMain }));
 
@@ -471,6 +475,7 @@ const projectSlice = createSlice({
       action: PayloadAction<{
         projectId: string;
         newMain: Main;
+        // newParts: Part[];
       }>
     ) => {
       const { projectId, newMain } = action.payload;
@@ -479,6 +484,28 @@ const projectSlice = createSlice({
       if (!project) return;
 
       project.rawDevelopmentEffortSum!.main = newMain;
+    },
+    calculatePart: (state, action: PayloadAction<{ projectId: string }>) => {
+      const project =
+        state.projects[findIndexProject(state, action.payload.projectId)];
+
+      let parts = project.rawDevelopmentEffortSum.parts;
+
+      const result = parts.map((part) =>
+        updatePart({
+          minMd: part.minMd,
+          maxMd: part.maxMd,
+          role: part.role,
+          minMdFormula: part.minMdFormula,
+          maxMdFormula: part.maxMdFormula,
+          procent: part.procent,
+          predictedMd: part.predictedMd,
+          predictedMdFormula: part.predictedMdFormula,
+          name: part.name,
+        })
+      );
+      console.log(result, parts, "part");
+      project.rawDevelopmentEffortSum.parts = result;
     },
     updateParts: (
       state,
@@ -495,11 +522,14 @@ const projectSlice = createSlice({
       const rawDevelopmentEffortSum =
         project.rawDevelopmentEffortSum as RawDevelopmentEffortSum;
 
+      const main = rawDevelopmentEffortSum.main;
+
       const newState =
         rawDevelopmentEffortSum.parts.map((part) =>
           part.name === action.payload.partName
-            ? updatePart(
+            ? updateDevInput(
                 part,
+                main,
                 action.payload.partProps,
                 action.payload.updatedValue
               )
@@ -528,7 +558,7 @@ export const {
   updateSection,
   updateSummaryTotal,
   reorder,
-
+  calculatePart,
   updateParts,
 } = projectSlice.actions;
 
