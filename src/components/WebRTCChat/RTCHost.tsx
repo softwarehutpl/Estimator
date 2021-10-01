@@ -152,7 +152,7 @@ export default function RTCHost() {
 
   return (
     <div className={styles.projectChat}>
-      <div className={styles.statusChat}>{`My connection ID: ${recvId}`}</div>
+      <div className={styles.statusChat}>{`My connection ${recvId}`}</div>
       <div>
         <Button
           className="p-button-sm"
