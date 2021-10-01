@@ -16,6 +16,7 @@ interface IProps {
 const HeaderInputDate: FC<IProps> = ({ field, projectId, title, value }) => {
   const [inputValue, setInputValue] = useState<string>(value);
 
+  console.log('DATE', value);
   const dispatch = useAppDispatch();
 
   const inputRef = useRef<HTMLInputElement>(null);

@@ -26,7 +26,6 @@ const HeaderInputText: FC<IProps> = ({ field, placeholder, projectId, title, val
 
   const handleSave = () => {
     if (!inputValue || inputValue === value) return;
-    console.log('saving');
 
     dispatch(
       updateProjectHeader({
