@@ -13,5 +13,6 @@ export default function createProject(projectName: string, projectId: string) {
       estimationDate: shortDate(),
     }
   );
-  return newProject;
+
+  return JSON.parse(JSON.stringify(newProject));
 }

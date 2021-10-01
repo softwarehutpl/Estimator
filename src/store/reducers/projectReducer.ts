@@ -263,8 +263,9 @@ const projectSlice = createSlice({
       state,
       action: PayloadAction<{ importedProject: Project; projectId: string }>
     ) => {
-      state.projects[findIndexProject(state, action.payload.projectId)] =
-        action.payload.importedProject;
+      const importedProject = JSON.parse(JSON.stringify(action.payload.importedProject));
+
+      state.projects[findIndexProject(state, action.payload.projectId)] = importedProject;
     },
     addProject: (state, action: PayloadAction<{ projectName: string; projectId: string }>) => {
       action.payload.projectName.length === 0
