@@ -6,7 +6,10 @@ import { Params } from "../../../types/Interface";
 import { InputText } from "primereact/inputtext";
 //Store
 import { useAppDispatch } from "../../../store/hooks";
-import { updateParts } from "../../../store/reducers/projectReducer";
+import {
+  calculatePart,
+  updateParts,
+} from "../../../store/reducers/projectReducer";
 //Styles
 import styles from "./devInput.module.scss";
 
@@ -36,6 +39,30 @@ const DevInputText: FC<Props> = ({ data, name, type }) => {
               projectId,
               partName: name,
               partProps: type === "procent" ? "procent" : "role",
+              updatedValue: e.target.value,
+            })
+          );
+          dispatch(
+            updateParts({
+              projectId,
+              partName: name,
+              partProps: "minMd",
+              updatedValue: e.target.value,
+            })
+          );
+          dispatch(
+            updateParts({
+              projectId,
+              partName: name,
+              partProps: "maxMd",
+              updatedValue: e.target.value,
+            })
+          );
+          dispatch(
+            updateParts({
+              projectId,
+              partName: name,
+              partProps: "predictedMd",
               updatedValue: e.target.value,
             })
           );
